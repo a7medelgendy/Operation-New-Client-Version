@@ -229,6 +229,7 @@ export default function FormDialog(props) {
                 <VirtualizedAutoComplete
                   options={unitTags}
                   getOptionLabel={(option) => option.TAG ?? option}
+                  defaultValue=""
                   renderInput={(params) => (
                     <TextField {...params} label="15,000 Tag" />
                   )}
