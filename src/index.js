@@ -6,8 +6,10 @@ import App from "./layout/App";
 import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 
-import "bootstrap/dist/css/bootstrap.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap'
 import reportWebVitals from "./reportWebVitals";
+import Test from "./Test";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -20,6 +22,7 @@ root.render(
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
+    {/* <Test /> */}
   </React.StrictMode>
 );
 
@@ -27,3 +30,5 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+

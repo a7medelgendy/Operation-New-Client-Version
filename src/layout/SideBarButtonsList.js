@@ -20,7 +20,8 @@ export default function SideBarButtonList() {
       setActiveIndex(id)
       navigate("main");
     }
-  }]
+  },
+]
 
   const SideBarListComponent = SideBarList.map((ele, idx) => {
     return (<div className="row sidebar-button-container" key={idx}>

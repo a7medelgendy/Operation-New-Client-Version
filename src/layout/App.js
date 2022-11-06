@@ -6,7 +6,7 @@ import { Paper } from "@mui/material";
 
 export default function App() {
   return (
-    <div className="container-fluid container-style  d-flex flex-column">
+    <div className="container-fluid container-style">
       <div className="row container-row">
         <div className="sidebar-style">
           <SideBar />

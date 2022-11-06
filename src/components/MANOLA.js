@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
+import "../styles/datatablestyle.css"
 
 const columns = ["Name", "Company", "City", "State", "Name", "Company", "City", "State", "Name", "Company", "City", "State"];
 
@@ -49,7 +50,32 @@ const data = [
 ];
 
 const options = {
-  filterType: 'checkbox',
+  fixedHeader: true,
+  fixedSelectColumn: false,
+  rowHover: true,
+
+  setRowProps: (row, dataIndex, rowIndex) => {
+    var currentRowBg = "data-table-row-odd"
+
+    if(rowIndex%2 == 0){
+      currentRowBg = "data-table-row-even"
+    }
+
+    return {
+      class: + currentRowBg,
+    };
+  },
+
+  setTableProps: () => {
+    return {
+      // class:"data-table",
+      padding: 'default',
+    };
+  },
+
+  
+
+  print: false,
 };
 
 
@@ -63,16 +89,22 @@ function MANOLA() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <MUIDataTable
-        title={"Employee List"}
-        data={data}
-        columns={columns}
-        options={options}
-      />
-    </div>
+    <MUIDataTable
+      data={data}
+      columns={columns}
+      options={options}
+    />
+
 
   );
 }
 
 export default MANOLA;
+
+
+
+
+
+
+
+

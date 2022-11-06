@@ -6,10 +6,13 @@
     -webkit-box-sizing: 0px 20px 50px 5px rgba(50, 52, 132, 0.66);
     -moz-box-shadow: 0px 20px 50px 5px rgba(50, 52, 132, 0.66);
     box-shadow: 0px 20px 50px 5px rgba(50, 52, 132, 0.66);
+    
+    overflow-y: auto !important;
+    overflow-x: hidden !important; 
 }
 
 .sidebar-logo-container {
-    background-color: #8BB8A2;
+    /* background-color: #8BB8A2; */
     border-radius: 20px;
     height: 100px !important;
     margin: 2px !important;

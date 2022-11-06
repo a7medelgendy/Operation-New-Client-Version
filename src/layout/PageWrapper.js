@@ -4,7 +4,8 @@ import "./styles/pagewrapper.css";
 
 import MANOLA from "../components/MANOLA";
 import Login from "../pages/Login";
-import Main from "../components/Main";
+import Main from "../components/shift_log/Main";
+import Test from "../Test";
 
 export default function PageWrapper() {
   return (

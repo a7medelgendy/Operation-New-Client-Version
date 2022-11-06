@@ -1,0 +1,19 @@
+.data-table000{
+
+}
+
+.data-table-row {
+    /* border-left: 5px solid transparent;
+    border-right: 10px solid transparent  */
+
+    border-bottom: 0px !important;
+}
+
+.data-table-row-even {
+    background-color: white !important;
+}
+
+.data-table-row-odd {
+    background-color: #fafafc !important;
+}
+

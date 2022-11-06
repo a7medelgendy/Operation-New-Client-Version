@@ -1,11 +1,12 @@
 {
   "name": "Na7ola-client",
   "version": "0.1.0",
-  "proxy": "http://localhost:8000",
+  "proxy": "http://10.10.6.162:8000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@flk/events": "^2.0.2",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.11",
     "@mui/styled-engine-sc": "^5.10.6",

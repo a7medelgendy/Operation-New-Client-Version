@@ -5,7 +5,7 @@ import PageWrapper from "./PageWrapper";
 
 export default function Container() {
   return (
-    <div className="container-fluid main-section-container p-0 d-flex flex-column">
+    <div className="container-fluid main-section-container">
       {/* <div className="row p-3 appbar-container">
         <AppBar />
       </div> */}
