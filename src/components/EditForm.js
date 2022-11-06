@@ -14,25 +14,23 @@ import axios from "axios";
 import VirtualizedAutoComplete from "../VirtualizedAutoComplete";
 
 export default function EditForm(props) {
-  console.log(props.rowData);
   const [open, setOpen] = useState(false);
-
   //form value
-  const [groupID, setGroupID] = useState("");
-  const [area, setArea] = useState("");
-  const [unit, setUnit] = useState("");
+  const [groupID, setGroupID] = useState(props.rowData.CODE_SHIFT);
+  const [area, setArea] = useState(props.rowData.CODE_AREA);
+  const [unit, setUnit] = useState(props.rowData.CODE_UNIT);
   const [timeOpened, setTimeOpened] = useState(
-    new Date().toJSON().slice(0, 16)
+    new Date(props.rowData.TIME_OPEN)
   );
   const [timeClosed, setTimeClosed] = useState(
-    new Date().toJSON().slice(0, 16)
+    new Date(props.rowData.TIME_CLOSED)
   );
-  const [openedBy, setOpenedBy] = useState("");
-  const [closedBy, setClosedBy] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [tag, setTag] = useState("");
-  const [exeEdara, setExeEdara] = useState("");
+  const [openedBy, setOpenedBy] = useState(props.rowData.OPENED_BY_EMPN);
+  const [closedBy, setClosedBy] = useState(props.rowData.CLOSED_BY_EMPN);
+  const [description, setDescription] = useState(props.rowData.DESCREPTION);
+  const [status, setStatus] = useState(props.rowData.CODE_STATUS);
+  const [tag, setTag] = useState(props.rowData.EQUIBMENT);
+  const [exeEdara, setExeEdara] = useState(props.rowData.CODE_EDARA);
   const [unitTags, setUnitTags] = useState([]);
 
   const [dropDownData, setdropDownData] = useState({});
@@ -42,7 +40,8 @@ export default function EditForm(props) {
   };
 
   const handleSubmit = () => {
-    var dbOjectAdd = {
+    var dbOject = {
+      id: props.rowData.ID ? props.rowData.ID : "",
       groupID: groupID,
       area: area,
       unit: unit,
@@ -57,15 +56,15 @@ export default function EditForm(props) {
     };
 
     axios({
-      method: "post",
+      method: "put",
       url: "/api/shiftLog",
-      data: dbOjectAdd,
+      data: dbOject,
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
         //handle success
         if ((res.status = 200)) {
-          props.callBackNewRow(dbOjectAdd);
+          props.callBackNewRow(dbOject);
           setOpen(false);
         } else {
           // setError(" Error user name or password");
@@ -179,9 +178,9 @@ export default function EditForm(props) {
                   }}
                   sx={{ width: 250 }}
                   getOptionLabel={(option) => option.TXT_SHIFT}
-                  isOptionEqualToValue={(option, value) => {
+                  /*   isOptionEqualToValue={(option, value) => {
                     return option.id === value.id;
-                  }}
+                  }} */
                   onChange={(_, object) => {
                     handleOnChange(object.CODE_SHIFT, setGroupID);
                   }}
@@ -257,7 +256,8 @@ export default function EditForm(props) {
                     .slice(0, 16)}
                   sx={{ width: 250 }}
                   onChange={(e) => {
-                    handleOnChange(e.target.value, setTimeOpened);
+                    var t = new Date(e.target.value);
+                    handleOnChange(props.rowData.TIME_OPEN, setTimeOpened);
                   }}
                   InputLabelProps={{
                     shrink: true,
@@ -271,7 +271,7 @@ export default function EditForm(props) {
                     .toJSON()
                     .slice(0, 16)}
                   onChange={(e) => {
-                    handleOnChange(e.target.value, setTimeClosed);
+                    handleOnChange(props.rowData.TIME_CLOSE, setTimeClosed);
                   }}
                   sx={{ width: 250 }}
                   InputLabelProps={{
@@ -386,7 +386,7 @@ export default function EditForm(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>New Log</Button>
+            <Button onClick={handleSubmit}>Update</Button>
           </DialogActions>
         </Dialog>
       </div>

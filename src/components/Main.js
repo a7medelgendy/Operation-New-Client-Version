@@ -70,7 +70,6 @@ const Main = (props) => {
   };
 
   const getDataByIndex = (index) => {
-    console.log(dbData[index]);
     return dbData[index];
   };
 
@@ -101,7 +100,10 @@ const Main = (props) => {
           return (
             <EditForm
               rowData={tableMeta.tableData[tableMeta.rowIndex]}
-              rowindex={tableMeta.rowIndex}
+              rowIndex={tableMeta.rowIndex}
+              callBackNewRow={(editObject) => {
+                getTableData();
+              }}
             />
           );
         },
