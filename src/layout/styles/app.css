@@ -1,0 +1,34 @@
+.container-style {
+    height: 100vh;
+    padding: 20px !important;
+    overflow: hidden;
+}
+
+.container-row {
+    background-color: white !important;
+    height: 100%;
+    border-radius: 20px;
+    -webkit-box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+    -moz-box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+    box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+}
+
+.sidebar-style {
+    width: 250px !important;
+    padding-left: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    height: 100%;
+    display: grid !important;
+}
+
+.page-wrapper-container {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 60px;
+    padding-bottom: 0px;
+
+    display: table !important;
+    width: 100%;
+    table-layout: fixed !important;
+}

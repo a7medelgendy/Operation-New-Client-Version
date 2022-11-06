@@ -1,0 +1,8 @@
+.main-section-container{
+    height: 100%;
+    overflow-y: auto;
+}
+
+.appbar-container{ 
+    height: 120px;
+}

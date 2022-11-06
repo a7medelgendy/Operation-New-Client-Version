@@ -2,21 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
-import App from "./App";
+import App from "./layout/App";
+import Login from "./pages/Login";
+import NoPage from "./pages/NoPage";
+
 import "bootstrap/dist/css/bootstrap.css";
 import reportWebVitals from "./reportWebVitals";
-import Login from "./components/Login";
-import Main from "./components/Main";
-import NoPage from "./components/NoPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="Login" element={<Login />} />
-        <Route path="main" element={<Main />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/app/*" element={<App />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
