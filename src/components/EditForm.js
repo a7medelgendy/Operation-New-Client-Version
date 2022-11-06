@@ -256,8 +256,7 @@ export default function EditForm(props) {
                     .slice(0, 16)}
                   sx={{ width: 250 }}
                   onChange={(e) => {
-                    var t = new Date(e.target.value);
-                    handleOnChange(props.rowData.TIME_OPEN, setTimeOpened);
+                    handleOnChange(e.target.value, setTimeOpened);
                   }}
                   InputLabelProps={{
                     shrink: true,
@@ -271,7 +270,7 @@ export default function EditForm(props) {
                     .toJSON()
                     .slice(0, 16)}
                   onChange={(e) => {
-                    handleOnChange(props.rowData.TIME_CLOSE, setTimeClosed);
+                    handleOnChange(e.target.value, setTimeClosed);
                   }}
                   sx={{ width: 250 }}
                   InputLabelProps={{

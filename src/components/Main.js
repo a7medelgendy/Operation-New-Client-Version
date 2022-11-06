@@ -54,6 +54,7 @@ const Main = (props) => {
               };
             });
 
+            console.log(res.data.result.columnsData);
             var columnKeys = columnsDbTitle.concat(columnActions);
             setdbData(res.data.result.columnsData);
             setdbColumns(columnKeys);
