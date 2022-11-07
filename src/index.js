@@ -10,17 +10,16 @@ import Main from "./components/Main";
 import NoPage from "./components/NoPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="Login" element={<Login />} />
-        <Route path="main" element={<Main />} />
-        <Route path="*" element={<NoPage />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="Login" element={<Login />} />
+      <Route path="main" element={<Main />} />
+      <Route path="*" element={<NoPage />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

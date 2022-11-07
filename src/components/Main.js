@@ -8,6 +8,8 @@ import { TextField } from "@mui/material";
 import { CompressOutlined } from "@mui/icons-material";
 import ShowForm from "./ShowForm";
 import EditForm from "./EditForm";
+import { baseUrl } from "../shared/staticData.js";
+
 const NOServerData = (props) => {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,12 +36,16 @@ const Main = (props) => {
   }, []);
 
   const getTableData = () => {
+    console.log("before axios");
+
     axios({
       method: "get",
-      url: "/api/shiftLog",
+      url: baseUrl + "/api/shiftLog",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
+        console.log("after then");
+        console.log(res.data);
         //handle success
         if ((res.status = 200)) {
           if (res.data.result.columnsData.length > 0) {
@@ -64,6 +70,7 @@ const Main = (props) => {
         }
       })
       .catch(function (res) {
+        console.log(res);
         //handle error
         setError(" Error user name or password");
         return;

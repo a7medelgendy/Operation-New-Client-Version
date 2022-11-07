@@ -12,7 +12,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import axios from "axios";
 import VirtualizedAutoComplete from "../VirtualizedAutoComplete";
-
+import { baseUrl } from "../shared/staticData.js";
 export default function EditForm(props) {
   const [open, setOpen] = useState(false);
   //form value
@@ -57,7 +57,7 @@ export default function EditForm(props) {
 
     axios({
       method: "put",
-      url: "/api/shiftLog",
+      url: baseUrl + "/api/shiftLog",
       data: dbOject,
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
@@ -95,7 +95,7 @@ export default function EditForm(props) {
   const equibmentsData = () => {
     axios({
       method: "get",
-      url: "api/equibments",
+      url: baseUrl + "api/equibments",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -118,7 +118,7 @@ export default function EditForm(props) {
   const masterData = () => {
     axios({
       method: "get",
-      url: "api/addShift/masterData",
+      url: baseUrl + "api/addShift/masterData",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {

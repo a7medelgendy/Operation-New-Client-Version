@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "./components/Layout.js";
 import Login from "./components/Login";
 import axios from "axios";
+import { baseUrl } from "./shared/staticData.js";
 
 export default function App() {
   const [message, setMessage] = useState("");
@@ -12,10 +13,12 @@ export default function App() {
       .then((data) => setMessage(data.message));
   }, []); */
 
-  useEffect(() => {
+  const funco = () => {
+    window.alert("sal;dk;lsakd;l");
+    window.alert(baseUrl + "/api/message");
     axios({
       method: "get",
-      url: "/api/message",
+      url: "http://10.10.6.162:8000/api/message",
       params: {
         foo: "bar",
       },
@@ -23,6 +26,9 @@ export default function App() {
     }).then((res) => {
       setMessage(res.data.message);
     });
+  };
+  useEffect(() => {
+    funco();
   });
 
   return (

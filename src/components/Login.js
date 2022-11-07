@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import MuiAlert from "@mui/material/Alert";
+import { baseUrl } from "../shared/staticData.js";
 
 import {
   Checkbox,
@@ -55,7 +56,7 @@ const Login = () => {
 
     axios({
       method: "post",
-      url: "/api/login",
+      url: baseUrl + "/api/login",
       data: { userName: userName, password: password },
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
