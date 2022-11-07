@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+import axios from "axios";
 import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import Box from "@mui/material/Box";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
-import axios from "axios";
-import VirtualizedAutoComplete from "../../VirtualizedAutoComplete";
+import Button from "@mui/material/Button";
+
+import TextFieldValidator from "../form/TextfieldValidator";
+import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
+
+import "../../styles/add-shift-log-form.css";
 
 export default function FormDialog(props) {
   const [open, setOpen] = useState(false);
@@ -33,7 +30,6 @@ export default function FormDialog(props) {
   const [tag, setTag] = useState("");
   const [exeEdara, setExeEdara] = useState("");
   const [unitTags, setUnitTags] = useState([]);
-
   const [dropDownData, setdropDownData] = useState({});
 
   const handleOnChange = (value, stateSetter) => {
@@ -80,18 +76,11 @@ export default function FormDialog(props) {
       });
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // useEffect(() => {
+  //   masterData();
+  //   equibmentsData();
+  // }, []);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    masterData();
-    equibmentsData();
-  }, []);
   const equibmentsData = () => {
     axios({
       method: "get",
@@ -137,231 +126,280 @@ export default function FormDialog(props) {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-4 m-2">
-          <Button
-            variant="contained"
-            endIcon={<AddCircleOutlineOutlinedIcon />}
-            onClick={handleClickOpen}
-          >
-            NEW
-          </Button>
+    <form className="container-fluid pt-1">
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <Autocomplete
+            id="combo-box-demo"
+            options={
+              dropDownData.hasOwnProperty("shiftGroups")
+                ? dropDownData.shiftGroups.recordset
+                : []
+            }
+            size="small"
+            getOptionLabel={(option) => option.TXT_SHIFT}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(_, object) => {
+              handleOnChange(object.CODE_SHIFT, setGroupID);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                className="input-rounded"
+                label="Group Id"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Group Id is required"]}
+              />
+            )}
+          />
         </div>
 
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>ADD NEW SHIFT LOG</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              kindly add new work orders today.
-            </DialogContentText>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <div>
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={
-                    dropDownData.hasOwnProperty("shiftGroups")
-                      ? dropDownData.shiftGroups.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  getOptionLabel={(option) => option.TXT_SHIFT}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  onChange={(_, object) => {
-                    handleOnChange(object.CODE_SHIFT, setGroupID);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Group-ID" />
-                  )}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="area"
-                  options={
-                    dropDownData.hasOwnProperty("areas")
-                      ? dropDownData.areas.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  getOptionLabel={(option) => option.TXT_AREA}
-                  /*  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  } */
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.CODE_AREA, setArea);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Area" />
-                  )}
-                />
-
-                <Autocomplete
-                  disablePortal
-                  id="units"
-                  options={
-                    dropDownData.hasOwnProperty("units")
-                      ? dropDownData.units.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  /*                   isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  } */
-                  getOptionLabel={(option) => option.TXT_UNIT}
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.CODE_UNIT, setUnit);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="UNIT" />
-                  )}
-                />
-
-                <VirtualizedAutoComplete
-                  options={unitTags}
-                  getOptionLabel={(option) => option.TAG ?? option}
-                  renderInput={(params) => (
-                    <TextField {...params} label="15,000 Tag" />
-                  )}
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.TAG, setTag);
-                  }}
-                />
-
-                <TextField
-                  id="timeOpened"
-                  label="time opened"
-                  type="datetime-local"
-                  defaultValue={new Date().toJSON().slice(0, 16)}
-                  sx={{ width: 250 }}
-                  onChange={(e) => {
-                    handleOnChange(e.target.value, setTimeOpened);
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <TextField
-                  id="timeClosed"
-                  label="time closed"
-                  type="datetime-local"
-                  defaultValue={new Date().toJSON().slice(0, 16)}
-                  onChange={(e) => {
-                    handleOnChange(e.target.value, setTimeClosed);
-                  }}
-                  sx={{ width: 250 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="openedBy"
-                  options={
-                    dropDownData.hasOwnProperty("users")
-                      ? dropDownData.users.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  /*                   isOptionEqualToValue={(option, value) => {
-                    return option.ID === value.ID;
-                  }} */
-                  getOptionLabel={(option) => option.USER_NAME}
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.EMPN, setOpenedBy);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Opended By" />
-                  )}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="closedBy"
-                  options={
-                    dropDownData.hasOwnProperty("users")
-                      ? dropDownData.users.recordset
-                      : []
-                  }
-                  getOptionLabel={(option) => option.USER_NAME}
-                  sx={{ width: 250 }}
-                  /*                   isOptionEqualToValue={(option, value) =>
-                    option.ID === value.ID
-                  } */
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.EMPN, setClosedBy);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Closed By" />
-                  )}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={
-                    dropDownData.hasOwnProperty("exeEdara")
-                      ? dropDownData.exeEdara.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  getOptionLabel={(option) => option.TXT_EDARA}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Executed Edara" />
-                  )}
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.CODE_EDARA, setExeEdara);
-                  }}
-                />
-
-                <TextareaAutosize
-                  type="search"
-                  maxRows={9}
-                  label="description"
-                  aria-label="maximum height"
-                  placeholder="Maximum 4 rows"
-                  defaultValue="Description"
-                  onChange={(e) => {
-                    handleOnChange(e.target.value, setDescription);
-                  }}
-                />
-
-                <Autocomplete
-                  disablePortal
-                  id="status"
-                  options={
-                    dropDownData.hasOwnProperty("status")
-                      ? dropDownData.status.recordset
-                      : []
-                  }
-                  sx={{ width: 250 }}
-                  /*                   isOptionEqualToValue={(option, value) => {
-                    return option.ID === value.ID;
-                  }} */
-                  getOptionLabel={(option) => option.TXT_STATUS}
-                  onChange={(_, object) => {
-                    if (object) handleOnChange(object.CODE_STATUS, setStatus);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Status" />
-                  )}
-                />
-              </div>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>New Log</Button>
-          </DialogActions>
-        </Dialog>
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="area"
+            options={
+              dropDownData.hasOwnProperty("areas")
+                ? dropDownData.areas.recordset
+                : []
+            }
+            size="small"
+            getOptionLabel={(option) => option.TXT_AREA}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.CODE_AREA, setArea);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                className="input-rounded"
+                label="Area"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Area is required"]}
+              />
+            )}
+          />
+        </div>
       </div>
-    </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="units"
+            options={
+              dropDownData.hasOwnProperty("units")
+                ? dropDownData.units.recordset
+                : []
+            }
+            size="small"
+            getOptionLabel={(option) => option.TXT_UNIT}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.CODE_UNIT, setUnit);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Unit"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Unit is required"]}
+              />
+            )}
+          />
+        </div>
+
+        <div className="col">
+          <VirtualizedAutoComplete
+            options={unitTags}
+            getOptionLabel={(option) => option.TAG ?? option}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.TAG, setTag);
+            }}
+            size="small"
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Equipment"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Equipment is required"]}
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <TextFieldValidator
+            id="timeOpened"
+            label="Time Opened"
+            type="datetime-local"
+            defaultValue={new Date().toJSON().slice(0, 16)}
+            size="small"
+            onChange={(e) => {
+              handleOnChange(e.target.value, setTimeOpened);
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            className="input-rounded date-picker"
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Time Opened is required"]}
+          />
+        </div>
+        <div className="col">
+          <TextFieldValidator
+            id="timeClosed"
+            label="Time Closed"
+            type="datetime-local"
+            defaultValue={new Date().toJSON().slice(0, 16)}
+            onChange={(e) => {
+              handleOnChange(e.target.value, setTimeClosed);
+            }}
+            size="small"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            className="input-rounded date-picker"
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Time Closed is required"]}
+          />
+        </div>
+      </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="openedBy"
+            options={
+              dropDownData.hasOwnProperty("users")
+                ? dropDownData.users.recordset
+                : []
+            }
+            getOptionLabel={(option) => option.USER_NAME}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.EMPN, setOpenedBy);
+            }}
+            size="small"
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Opended By"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Opended By is required"]}
+              />
+            )}
+          />
+        </div>
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="closedBy"
+            options={
+              dropDownData.hasOwnProperty("users")
+                ? dropDownData.users.recordset
+                : []
+            }
+            getOptionLabel={(option) => option.USER_NAME}
+            size="small"
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.EMPN, setClosedBy);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Closed By"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Closed By is required"]}
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={
+              dropDownData.hasOwnProperty("exeEdara")
+                ? dropDownData.exeEdara.recordset
+                : []
+            }
+            size="small"
+            getOptionLabel={(option) => option.TXT_EDARA}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.CODE_EDARA, setExeEdara);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Executed Departement"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Executed Departement is required"]}
+              />
+            )}
+          />
+        </div>
+        <div className="col">
+          <Autocomplete
+            disablePortal
+            id="status"
+            options={
+              dropDownData.hasOwnProperty("status")
+                ? dropDownData.status.recordset
+                : []
+            }
+            size="small"
+            getOptionLabel={(option) => option.TXT_STATUS}
+            onChange={(_, object) => {
+              if (object) handleOnChange(object.CODE_STATUS, setStatus);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Status"
+                className="input-rounded"
+                validation_rules={[{ rule: "isRequired" }]}
+                validation_messages={["Status is required"]}
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <TextField
+            className="multi-line-input-rounded multi-line-text"
+            id="outlined-multiline-static"
+            label="Notes"
+            multiline
+            rows={8}
+            defaultValue=""
+            onChange={(e) => {
+              handleOnChange(e.target.value, setDescription);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col d-flex justify-content-end">
+          <Button type="submit" variant="text" className="rounded-btn cancel-btn">
+            Cancel
+          </Button>
+          <Button type="submit" variant="contained" className="rounded-btn save-btn">
+            Save
+          </Button>
+        </div>
+      </div>
+    </form>
   );
 }

@@ -5,8 +5,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+ 
   overflow: hidden;
+}
+
+html *
+{
+  font-family: "Roboto-Black" !important;
+  text-transform: none !important;
+}
+
+@font-face {
+  font-family: 'Roboto-Black'; /*a name to be used later*/
+  src: url('./assets/Roboto-Black.ttf'); /*URL to font*/
 }
 
 code {

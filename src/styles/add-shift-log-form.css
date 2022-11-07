@@ -1,0 +1,65 @@
+.input-rounded .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-radius: 50px;
+  border: 3px solid;
+
+  border-color: #00000099;
+}
+
+.input-rounded
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-radius: 50px;
+  border: 3px solid;
+
+  border-color: #323484 !important;
+}
+
+.multi-line-input-rounded
+  .MuiOutlinedInput-root
+  .MuiOutlinedInput-notchedOutline {
+  border-radius: 20px !important;
+  border: 3px solid;
+
+  border-color: #00000099;
+}
+
+.multi-line-input-rounded
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-radius: 50px;
+  border: 3px solid;
+
+  border-color: #323484 !important;
+}
+
+.date-picker {
+  width: 100%;
+}
+
+.form-between-rows-distance {
+  margin-bottom: 30px !important;
+}
+
+.multi-line-text {
+  width: 100% !important;
+}
+
+
+.rounded-btn {
+  border-radius: 50px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  margin-left: 20px !important;
+}
+
+.save-btn{
+  background-color: #323484 !important;
+}
+
+.cancel-btn{
+  color: #323484 !important;
+}
+
+.save-btn:hover {
+  background-color: #645eb4 !important;
+}

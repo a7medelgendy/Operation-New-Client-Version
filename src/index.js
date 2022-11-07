@@ -13,7 +13,6 @@ import Test from "./Test";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -22,8 +21,6 @@ root.render(
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
-    {/* <Test /> */}
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

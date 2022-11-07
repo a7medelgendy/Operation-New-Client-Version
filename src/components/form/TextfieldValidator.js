@@ -19,24 +19,44 @@ export default class TextFieldValidator extends React.Component {
     setTimeout(() => {
       this.init();
     }, 0);
+
+    this.inputReference = React.createRef(); // createRef
+    this.ready = this.ready.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.setValidationError = this.setValidationError.bind(this);
   }
 
-  inputReference = React.createRef(); // createRef
+  componentDidMount() {
+    this.ready();
+  }
+
+  setValidationError(state) {
+    this.setState({
+      validationError: state,
+    });
+  }
 
   /**
    * {@inheritdoc}
    */
   init() {
-    // events.on("form.validation", (form, stateSetter) => {
-    //   // validate the input
-    //   this.handleChange(
-    //     {
-    //       target: this.props.value,
-    //     },
-    //     this.props.validation_rules,
-    //     this.props.validation_messages
-    //   );
-    // });
+    var inputField = this.input.children[0].children[1];
+    events.on("form.validation", (form) => {
+      // validate the input
+      var error = this.handleChange(
+        {
+          target: inputField,
+        },
+        this.props.validation_rules,
+        this.props.validation_messages
+      );
+
+      this.setValidationError(error);
+
+      if (error !== null) {
+        form.isValidForm = false;
+      }
+    });
   }
 
   /**
@@ -80,21 +100,12 @@ export default class TextFieldValidator extends React.Component {
 
       if (!this.validator(validation_rules[i].rule, validate_data)) {
         if (validation_message && i < validation_message.length) {
-          this.setState({
-            validationError: validation_message[i],
-          });
-
-          console.log(this.state.validationError)
+          return validation_message[i];
         } else {
-          this.setState({
-            validationError: "Error",
-          });
+          return "Error";
         }
-        return;
       } else {
-        this.setState({
-          validationError: null,
-        });
+        return null;
       }
     }
   }
@@ -115,16 +126,18 @@ export default class TextFieldValidator extends React.Component {
         className={this.props.className}
         InputProps={this.props.InputProps}
         onChange={(e) => {
-          this.handleChange(
+          var error = this.handleChange(
             e,
             this.props.validation_rules,
             this.props.validation_messages
           );
+
           if (this.props.hasOwnProperty("custome_change")) {
             this.props.custome_change(e);
           }
 
-          setFieldState(e.target.value,this.state.validationError !== null ? true : false);
+          this.setValidationError(error);
+          setFieldState(e.target.value);
         }}
         error={this.state.validationError !== null ? true : false}
         helperText={this.state.validationError}

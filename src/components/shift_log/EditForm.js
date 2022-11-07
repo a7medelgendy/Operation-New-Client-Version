@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import axios from "axios";
-import VirtualizedAutoComplete from "../../VirtualizedAutoComplete";
+import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
 export default function EditForm(props) {
   console.log(props.rowData);

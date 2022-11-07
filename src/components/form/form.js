@@ -2,24 +2,8 @@ import events from "@flk/events";
 import React from "react";
 
 export default class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    // Don't call this.setState() here!
-    this.state = {
-      isValidForm: false,
-    };
-
-    this.formElement = null;
-    this.setIsvalidForm = this.setIsvalidForm.bind(this);
-  }
-
-  componentDidMount() {
-    this.setIsvalidForm = this.setIsvalidForm.bind(this);
-  }
-
-  setIsvalidForm(state) {
-    this.setState({ isValidForm: state });
-  }
+  isValidForm = true;
+  formElement = null;
 
   /**
    * Submit form
@@ -27,31 +11,20 @@ export default class Form extends React.Component {
   triggerSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
-     this.setState({ isValidForm: true });
+
+    this.isValidForm = true; // make sure its is reset
 
     // validate all inputs
-    events.trigger("form.validation", this, this.setIsvalidForm);
+    events.trigger("form.validation", this);
 
     // check if the form is valid
     // if not, then do not submit
-
-    if (this.state.isValidForm === false) {
-      return;
-    }
+    if (this.isValidForm === false) return;
 
     if (this.props.onSubmit) {
       let formElement = e.target;
       this.props.onSubmit(e, formElement);
     }
-  }
-
-  /**
-   * Trigger form submission programmatically
-   *
-   * @returns {void}
-   */
-  submit() {
-    this.formElement.requestSubmit();
   }
 
   /**

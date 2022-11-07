@@ -98,10 +98,6 @@ const StyledPopper = styled(Popper)({
   },
 });
 
-/* const OPTIONS = Array.from(new Array(10000))
-  .map(() => random(10 + Math.ceil(Math.random() * 20)))
-  .sort((a, b) => a.toUpperCase().localeCompare(b.toUpperCase())); */
-
 function renderRow(props) {
   const { data, index, style } = props;
   const dataSet = data[index];
@@ -126,35 +122,21 @@ function renderRow(props) {
 }
 
 export default function VirtualizedAutoComplete(props) {
+  const {options,getOptionLabel,renderInput,defaultValue,onChange,...rest} = props
   return (
     <Autocomplete
       id="virtualize-demo"
-      sx={{ width: 300 }}
       disableListWrap
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
-      options={props.options}
-      getOptionLabel={props.getOptionLabel}
+      options={options}
+      getOptionLabel={getOptionLabel}
       //groupBy={(option) => option.ID}
-      renderInput={props.renderInput}
-      defaultValue={{ TAG: props.defaultValue }}
+      renderInput={renderInput}
       renderOption={(props, option) => [props, option]}
-      // TODO: Post React 18 update - validate this conversion, look like a hidden bug
       renderGroup={(params) => params}
-      onChange={props.onChange}
+      onChange={onChange}
+      {...rest}
     />
   );
 }
-
-/* const OPTIONS = [
-  { label: "Group-1", ID: 1 },
-  { label: "Group-2", ID: 2 },
-  { label: "Group-3", ID: 3 },
-  { label: "Group-4", ID: 4 },
-]; */
-
-/* const OPTIONS = [
-  ["GROUP-2", "200"],
-  ["GROUP-2", "412"],
-  ["GROUP-2", "412"],
-] */

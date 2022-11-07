@@ -14,6 +14,7 @@ const tableActions = {
 
 export default function DataTable(props) {
   let { tableConfig, data } = props;
+  console.log(tableConfig);
   if (tableConfig.actions !== undefined && !tableConfig.actionsIsAdded) {
     var actions = {
       name: "action",
@@ -28,7 +29,12 @@ export default function DataTable(props) {
             return (
               <React.Fragment key={idx}>
                 <ActionButton
-                  onClick={() => ele.clickEvent(tableMeta.tableData[tableMeta.rowIndex], tableMeta.rowIndex)}
+                  onClick={() =>
+                    ele.clickEvent(
+                      tableMeta.tableData[tableMeta.rowIndex],
+                      tableMeta.rowIndex
+                    )
+                  }
                 />
               </React.Fragment>
             );
@@ -49,12 +55,7 @@ export default function DataTable(props) {
   const options = tableConfig.options;
 
   return (
-    <MUIDataTable
-      data={data}
-      columns={columns}
-      options={options}
-      {...props}
-    />
+    <MUIDataTable data={data} columns={columns} options={options} {...props} />
   );
 }
 
