@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./styles/pagewrapper.css";
+import "../styles/layout/pagewrapper.css";
 
 import ShiftLog from "../pages/ShiftLog";
 

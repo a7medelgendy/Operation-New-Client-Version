@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
-import "../layout/styles/sidebar.css";
+import "../../styles/layout/sidebar.css";
 
 export default function SideBarButton(props) {
   const currStyle = props.isActive ? "sidebar-button-active" :"sidebar-button-inactive"

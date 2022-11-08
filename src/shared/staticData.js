@@ -1,3 +1,4 @@
+export const baseUrl ="http://10.10.6.162:8000"
 export const executedEdara = [
   { label: "تحكم", ID: "850" },
   { label: "كهربا", ID: "800" },

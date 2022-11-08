@@ -5,7 +5,8 @@ import Toolbar from "@mui/material/Toolbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import "../../styles/form-title-modal.css";
+
+import "../../styles/modal/form-title-modal.css";
 
 export default function FormModalTitle(props) {
   return (

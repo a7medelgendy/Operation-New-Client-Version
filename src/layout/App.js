@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/app.css";
+import "../styles/layout/app.css";
 import SideBar from "./SideBar";
 import Container from "./Container";
 import { Paper } from "@mui/material";

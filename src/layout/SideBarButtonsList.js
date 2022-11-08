@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import SideBarButton from "../components/SideBarButton";
-import "./styles/sidebar.css";
+import SideBarButton from "../components/sidebar/SideBarButton";
+import "../styles/layout/sidebar.css";
 
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
