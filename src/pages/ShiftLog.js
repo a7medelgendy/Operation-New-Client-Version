@@ -15,7 +15,7 @@ const options = {
   filter: true,
   filterType: "dropdown",
   responsive: "vertical",
-  selectableRows:"none"
+  selectableRows: "none",
   // onColumnSortChange: (changedColumn, direction) =>
   //   console.log("changedColumn: ", changedColumn, "direction: ", direction),
   // onChangeRowsPerPage: (numberOfRows) =>
@@ -121,7 +121,14 @@ export default function ShiftLog(props) {
 
   useEffect(() => {
     getTableData();
-    setTableConfig(getTableCOnfig)
+    setTableConfig(getTableCOnfig);
+    const loggedInUser = localStorage.getItem("isLoggedIn");
+    if (loggedInUser) {
+      // const foundUser = JSON.parse(loggedInUser);
+      console.log("-----------------");
+      console.dir(loggedInUser);
+      console.log("-----------------");
+    }
   }, [isLoading]);
 
   return (

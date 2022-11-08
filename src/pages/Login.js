@@ -39,7 +39,9 @@ function LoginFormToast() {
     })
       .then((res) => {
         //handle success
-        if ((res.status = 200)) {
+        if ((res.status = 200 && res.data.success)) {
+          localStorage.setItem("isLoggedIn", true);
+
           return navigate("app", { state: { id: 1, name: userName } });
         } else {
           addToast(" Error user name or password", {
