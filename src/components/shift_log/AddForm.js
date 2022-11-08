@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import TextFieldValidator from "../form/TextfieldValidator";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
-import "../../styles/add-shift-log-form.css";
+import "../../styles/shift_log/add-shift-log-form.css";
 
 export default function FormDialog(props) {
   const [open, setOpen] = useState(false);
@@ -379,7 +379,7 @@ export default function FormDialog(props) {
           <TextField
             className="multi-line-input-rounded multi-line-text"
             id="outlined-multiline-static"
-            label="Notes"
+            label="Notes..."
             multiline
             rows={8}
             defaultValue=""

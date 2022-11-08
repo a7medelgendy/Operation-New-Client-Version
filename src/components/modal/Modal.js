@@ -5,25 +5,25 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Is from "@flk/supportive-is";
-import Typography from "@mui/material/Typography";
-import "../../styles/modal.css";
-import "../../styles/form-title-modal.css";
+import "../../styles/modal/modal.css";
+import "../../styles/modal/form-title-modal.css";
 
 function DefaultModalTitle(props) {
   return (
     <div className="container-fluid modal-title">
       <DialogTitle disableTypography style={{ padding: "0px" }}>
         <div className="container-fluid d-flex flex-row justify-content-between align-items-center">
-          <Typography variant="h6" className="title">
-            {props.title}
-          </Typography>
+          <div className="title align-items-center">
+            <h5>{props.title}</h5>
+          </div>
+
           {props.onClose ? (
             <IconButton
               aria-label="close"
               className="modal-title-closeBtn"
               onClick={props.onClose}
             >
-              <CloseIcon className="close-button"/>
+              <CloseIcon className="close-button" />
             </IconButton>
           ) : null}
         </div>

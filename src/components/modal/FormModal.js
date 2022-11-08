@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "./Modal";
-import "../../styles/modal.css";
+
+import "../../styles/modal/modal.css";
 
 function FormTitle(props) {
   return <h3>{props.title}</h3>;

@@ -1,6 +1,6 @@
 import React from "react";
 import SideBarButtonList from "./SideBarButtonsList";
-import "./styles/sidebar.css";
+import "../styles/layout/sidebar.css";
 
 export default function SideBar() {
   return (

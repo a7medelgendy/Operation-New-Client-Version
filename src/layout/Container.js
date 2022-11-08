@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/container.css";
+import "../styles/layout/container.css";
 import AppBar from "./AppBar";
 import PageWrapper from "./PageWrapper";
 

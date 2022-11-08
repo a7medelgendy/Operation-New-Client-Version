@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
+
 import {
   TableViewButton,
   TableDeleteButton,
@@ -14,7 +15,7 @@ const tableActions = {
 
 export default function DataTable(props) {
   let { tableConfig, data } = props;
-  console.log(tableConfig);
+
   if (tableConfig.actions !== undefined && !tableConfig.actionsIsAdded) {
     var actions = {
       name: "action",

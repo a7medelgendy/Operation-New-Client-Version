@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "./Modal";
 import  Button  from "@mui/material/Button";
-import "../../styles/confirm-modal.css";
+import "../../styles/modal/confirm-modal.css";
 
 export default function ConfirmModal(props) {
   let { cancleClick, confirmClick, open, message, title } = props;

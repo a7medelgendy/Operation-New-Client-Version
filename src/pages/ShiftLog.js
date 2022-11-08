@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/datatable/DataTable";
 import axios from "axios";
 import MuiAlert from "@mui/material/Alert";
 import AddForm from "../components/shift_log/AddForm";
@@ -9,7 +9,9 @@ import ShowForm from "../components/shift_log/ShowForm";
 import EditForm from "../components/shift_log/EditForm";
 import ConfirmModal from "../components/modal/confirm";
 import FormModal from "../components/modal/FormModal";
-import "../styles/shiftlog.css";
+
+import "../styles/shift_log/shiftlog.css";
+import { baseUrl } from "../shared/staticData";
 
 const options = {
   filter: true,
@@ -47,7 +49,7 @@ export default function ShiftLog(props) {
   const getTableData = () => {
     axios({
       method: "get",
-      url: "/api/shiftLog",
+      url: baseUrl + "/api/shiftLog",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
