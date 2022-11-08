@@ -5,15 +5,15 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
 
+import Form from "../../components/form/form";
 import TextFieldValidator from "../form/TextfieldValidator";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
 import "../../styles/shift_log/add-shift-log-form.css";
+import { baseUrl } from "../../shared/staticData";
+import AutoCompleteValidator from "../form/AutoCompleteValidator";
 
-export default function FormDialog(props) {
-  const [open, setOpen] = useState(false);
-
-  //form value
+export default function ShiftLogForm(props) {
   const [groupID, setGroupID] = useState("");
   const [area, setArea] = useState("");
   const [unit, setUnit] = useState("");
@@ -36,55 +36,15 @@ export default function FormDialog(props) {
     stateSetter(value);
   };
 
-  const handleSubmit = () => {
-    var dbOjectAdd = {
-      groupID: groupID,
-      area: area,
-      unit: unit,
-      openedBy: openedBy,
-      closedBy: closedBy,
-      description: description,
-      status: status,
-      tag: tag,
-      exeEdara: exeEdara,
-      timeOpened: timeOpened,
-      timeClosed: timeClosed,
-    };
-
-    axios({
-      method: "post",
-      url: "/api/shiftLog",
-      data: dbOjectAdd,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          props.callBackNewRow(dbOjectAdd);
-          setOpen(false);
-        } else {
-          // setError(" Error user name or password");
-          alert("error");
-          return;
-        }
-      })
-      .catch(function (res) {
-        //handle error
-        //setError(" Error user name or password");
-        alert("error");
-        return;
-      });
-  };
-
-  // useEffect(() => {
-  //   masterData();
-  //   equibmentsData();
-  // }, []);
+  useEffect(() => {
+    masterData();
+    equibmentsData();
+  }, []);
 
   const equibmentsData = () => {
     axios({
       method: "get",
-      url: "api/equibments",
+      url: baseUrl + "/api/equibments",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -107,7 +67,7 @@ export default function FormDialog(props) {
   const masterData = () => {
     axios({
       method: "get",
-      url: "api/addShift/masterData",
+      url: baseUrl + "/api/addShift/masterData",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -118,19 +78,43 @@ export default function FormDialog(props) {
           // setError(" Error user name or password");
         }
       })
-      .catch(function (res) {
+      .catch((e) => {
         //handle error
         // setError(" Error user name or password");
         return;
       });
   };
 
+  const onSubmit = () => {
+    var dbOjectAdd = {
+      groupID: groupID,
+      area: area,
+      unit: unit,
+      openedBy: openedBy,
+      closedBy: closedBy,
+      description: description,
+      status: status,
+      tag: tag,
+      exeEdara: exeEdara,
+      timeOpened: timeOpened,
+      timeClosed: timeClosed,
+    };
+
+    const res = props.formHandlerFuncs.onSubmit(
+      dbOjectAdd,
+      props.alertHandler,
+      props.updateLoader
+    );
+
+    props.onCloseForm();
+  };
+
   return (
-    <form className="container-fluid pt-1">
+    <Form onSubmit={onSubmit} className="container-fluid pt-1">
       <div className="row form-between-rows-distance">
         <div className="col">
-          <Autocomplete
-            id="combo-box-demo"
+          <AutoCompleteValidator
+            id="shiftGroup"
             options={
               dropDownData.hasOwnProperty("shiftGroups")
                 ? dropDownData.shiftGroups.recordset
@@ -138,24 +122,27 @@ export default function FormDialog(props) {
             }
             size="small"
             getOptionLabel={(option) => option.TXT_SHIFT}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(_, object) => {
-              handleOnChange(object.CODE_SHIFT, setGroupID);
+              if (object) handleOnChange(object.CODE_SHIFT, setGroupID);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                className="input-rounded"
-                label="Group Id"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Group Id is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Group Id is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  className="input-rounded"
+                  label="Group Id"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
 
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
             id="area"
             options={
@@ -168,22 +155,26 @@ export default function FormDialog(props) {
             onChange={(_, object) => {
               if (object) handleOnChange(object.CODE_AREA, setArea);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                className="input-rounded"
-                label="Area"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Area is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Group Id is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  className="input-rounded"
+                  label="Area"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
       </div>
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
             id="units"
             options={
@@ -196,46 +187,59 @@ export default function FormDialog(props) {
             onChange={(_, object) => {
               if (object) handleOnChange(object.CODE_UNIT, setUnit);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Unit"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Unit is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Unit is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Area"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
 
         <div className="col">
           <VirtualizedAutoComplete
+            id="Equipment"
             options={unitTags}
             getOptionLabel={(option) => option.TAG ?? option}
             onChange={(_, object) => {
               if (object) handleOnChange(object.TAG, setTag);
             }}
             size="small"
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Equipment"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Equipment is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Unit is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Equipment"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
       </div>
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <TextFieldValidator
+          <TextField
             id="timeOpened"
             label="Time Opened"
             type="datetime-local"
-            defaultValue={new Date().toJSON().slice(0, 16)}
+            defaultValue={(() => {
+              var d = new Date();
+              d.setHours(d.getHours() + 2);
+              return d.toJSON().slice(0, 16);
+            })()}
             size="small"
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeOpened);
@@ -244,16 +248,18 @@ export default function FormDialog(props) {
               shrink: true,
             }}
             className="input-rounded date-picker"
-            validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Time Opened is required"]}
           />
         </div>
         <div className="col">
-          <TextFieldValidator
+          <TextField
             id="timeClosed"
             label="Time Closed"
             type="datetime-local"
-            defaultValue={new Date().toJSON().slice(0, 16)}
+            defaultValue={(() => {
+              var d = new Date();
+              d.setHours(d.getHours() + 2);
+              return d.toJSON().slice(0, 16);
+            })()}
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeClosed);
             }}
@@ -262,15 +268,13 @@ export default function FormDialog(props) {
               shrink: true,
             }}
             className="input-rounded date-picker"
-            validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Time Closed is required"]}
           />
         </div>
       </div>
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
             id="openedBy"
             options={
@@ -283,19 +287,23 @@ export default function FormDialog(props) {
               if (object) handleOnChange(object.EMPN, setOpenedBy);
             }}
             size="small"
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Opended By"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Opended By is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Unit is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Opended By"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
             id="closedBy"
             options={
@@ -304,28 +312,32 @@ export default function FormDialog(props) {
                 : []
             }
             getOptionLabel={(option) => option.USER_NAME}
-            size="small"
             onChange={(_, object) => {
               if (object) handleOnChange(object.EMPN, setClosedBy);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Closed By"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Closed By is required"]}
-              />
-            )}
+            size="small"
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Unit is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Closed By"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
       </div>
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
-            id="combo-box-demo"
+            id="department"
             options={
               dropDownData.hasOwnProperty("exeEdara")
                 ? dropDownData.exeEdara.recordset
@@ -336,19 +348,23 @@ export default function FormDialog(props) {
             onChange={(_, object) => {
               if (object) handleOnChange(object.CODE_EDARA, setExeEdara);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Executed Departement"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Executed Departement is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Executed Departement is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Executed Departement"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
         <div className="col">
-          <Autocomplete
+          <AutoCompleteValidator
             disablePortal
             id="status"
             options={
@@ -361,15 +377,19 @@ export default function FormDialog(props) {
             onChange={(_, object) => {
               if (object) handleOnChange(object.CODE_STATUS, setStatus);
             }}
-            renderInput={(params) => (
-              <TextFieldValidator
-                {...params}
-                label="Status"
-                className="input-rounded"
-                validation_rules={[{ rule: "isRequired" }]}
-                validation_messages={["Status is required"]}
-              />
-            )}
+            validation_rules={[{ rule: "isRequired" }]}
+            validation_messages={["Status is required"]}
+            renderInputComponent={(params, error, helperText) => {
+              return (
+                <TextField
+                  {...params}
+                  label="Status"
+                  className="input-rounded"
+                  error={error}
+                  helperText={helperText}
+                />
+              );
+            }}
           />
         </div>
       </div>
@@ -392,14 +412,22 @@ export default function FormDialog(props) {
 
       <div className="row">
         <div className="col d-flex justify-content-end">
-          <Button type="submit" variant="text" className="rounded-btn cancel-btn">
+          <Button
+            variant="text"
+            className="rounded-btn cancel-btn"
+            onClick={props.onCloseForm}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" className="rounded-btn save-btn">
+          <Button
+            type="submit"
+            variant="contained"
+            className="rounded-btn save-btn"
+          >
             Save
           </Button>
         </div>
       </div>
-    </form>
+    </Form>
   );
 }

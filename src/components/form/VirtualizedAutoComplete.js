@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import TextField from "@mui/material/TextField";
 import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ListSubheader from "@mui/material/ListSubheader";
 import Popper from "@mui/material/Popper";
 import { useTheme, styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
+import AutoCompleteValidator from "./AutoCompleteValidator";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -115,28 +112,25 @@ function renderRow(props) {
   }
 
   return (
-    <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle}>
+    <li key={index} {...dataSet[0]} style={inlineStyle}>
       {dataSet[1].TAG}
-    </Typography>
+    </li>
   );
 }
 
 export default function VirtualizedAutoComplete(props) {
-  const {options,getOptionLabel,renderInput,defaultValue,onChange,...rest} = props
   return (
-    <Autocomplete
+    <AutoCompleteValidator
       id="virtualize-demo"
       disableListWrap
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
-      options={options}
-      getOptionLabel={getOptionLabel}
       //groupBy={(option) => option.ID}
-      renderInput={renderInput}
+
       renderOption={(props, option) => [props, option]}
       renderGroup={(params) => params}
-      onChange={onChange}
-      {...rest}
+      
+      {...props}
     />
   );
 }

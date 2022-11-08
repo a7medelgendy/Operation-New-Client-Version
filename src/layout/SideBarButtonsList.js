@@ -8,17 +8,17 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 export default function SideBarButtonList() {
-  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const navigate = useNavigate();
   const SideBarList = [{
     name: "Dashboard", icon: <DashboardRoundedIcon style={{ marginLeft: "30px" }} />, callBack: (id) => {
       setActiveIndex(id)
-      navigate("manola");
+      navigate("dashboard");
     }
   }, {
     name: "Shift Log", icon: <PendingActionsIcon sx={{ fontSize: 27 }} style={{ marginLeft: "30px" }} />, callBack: (id) => {
       setActiveIndex(id)
-      navigate("main");
+      navigate("shiftlog");
     }
   },
 ]

@@ -15,7 +15,6 @@ const tableActions = {
 
 export default function DataTable(props) {
   let { tableConfig, data } = props;
-
   if (tableConfig.actions !== undefined && !tableConfig.actionsIsAdded) {
     var actions = {
       name: "action",
