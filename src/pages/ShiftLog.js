@@ -25,7 +25,7 @@ const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   })
     .then((res) => {
       //handle success
-      if (res.status = 200) {
+      if ((res.status = 200)) {
         alertHandler("Shift log added successfully", {
           appearance: "success",
           autoDismiss: true,
@@ -86,13 +86,18 @@ export default function ShiftLog(props) {
   let [isLoading, updateLoader] = useState(true);
 
   const [formType, setFormType] = useState("add");
+  const [formLoadData, setFormLoadData] = useState(null);
+
   const [removeModalIsOpen, setRemoveModalDisplay] = useState(false);
   const [controlModalIsOpen, setControlModalIsOpen] = useState(false);
+
   const { addToast } = useToasts();
 
-  const triggerControllModal = () => {
-    setFormType("add");
+  const triggerControllModal = (formData = null) => {
+    setFormType(formType);
     setControlModalIsOpen(!controlModalIsOpen);
+    setFormLoadData(formData);
+    
   };
 
   const triggerRemoveModal = () => {
@@ -145,11 +150,9 @@ export default function ShiftLog(props) {
         {
           type: "edit",
           clickEvent: (rowData, rowIndex) => {
-            // console.log(rowIndex);
-            window.alert(
-              `Clicked "Edit" for row ${rowIndex} with  of ${rowData}`
-            );
+
             setFormType("edit");
+            triggerControllModal(rowData);
           },
         },
         {
@@ -211,6 +214,7 @@ export default function ShiftLog(props) {
                   alertHandler={addToast}
                   updateLoader={updateLoader}
                   onCloseForm={triggerControllModal}
+                  formLoadData={formLoadData}
                 />
               );
             })()}

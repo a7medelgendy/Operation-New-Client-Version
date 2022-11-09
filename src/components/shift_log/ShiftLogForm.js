@@ -37,6 +37,16 @@ export default function ShiftLogForm(props) {
     equibmentsData();
   }, []);
 
+  const handleFormDefaultData = (obj) => {
+    var temp = obj;
+    console.log(temp);
+    if (props.formLoadData !== null) {
+      temp[Object.keys(temp)[0]] = props.formLoadData[Object.keys(temp)[0]];
+      temp[Object.keys(temp)[1]] = props.formLoadData[Object.keys(temp)[1]];
+    } else {
+      return {};
+    }
+  };
   const equibmentsData = () => {
     axios({
       method: "get",
@@ -117,6 +127,7 @@ export default function ShiftLogForm(props) {
                 : []
             }
             size="small"
+            defaultValue={{ id: 1, CODE_SHIFT: "1", TXT_SHIFT: "Shift-1" }}
             getOptionLabel={(option) => option.TXT_SHIFT}
             onChange={(_, object) => {
               if (object) handleOnChange(object.CODE_SHIFT, setGroupID);
