@@ -12,16 +12,26 @@ import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 import "../../styles/shift_log/add-shift-log-form.css";
 import { baseUrl } from "../../shared/staticData";
 import AutoCompleteValidator from "../form/AutoCompleteValidator";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+//import { LocalizationProvider } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { ContactsOutlined } from "@mui/icons-material";
 
 export default function ShiftLogForm(props) {
+  var currentTime = new Date();
+  currentTime.setHours(currentTime.getHours() + 2);
+
   const [groupID, setGroupID] = useState("");
   const [area, setArea] = useState("");
   const [unit, setUnit] = useState("");
   const [timeOpened, setTimeOpened] = useState(
-    new Date().toJSON().slice(0, 16)
+    currentTime.toJSON().slice(0, 16)
   );
   const [timeClosed, setTimeClosed] = useState(
-    new Date().toJSON().slice(0, 16)
+    currentTime.toJSON().slice(0, 16)
   );
   const [openedBy, setOpenedBy] = useState("");
   const [closedBy, setClosedBy] = useState("");
@@ -33,6 +43,8 @@ export default function ShiftLogForm(props) {
   const [dropDownData, setdropDownData] = useState({});
 
   const handleOnChange = (value, stateSetter) => {
+    console.log(value);
+
     stateSetter(value);
   };
 
@@ -235,12 +247,11 @@ export default function ShiftLogForm(props) {
             id="timeOpened"
             label="Time Opened"
             type="datetime-local"
-            defaultValue={(() => {
-              var d = new Date();
-              d.setHours(d.getHours() + 2);
-              return d.toJSON().slice(0, 16);
-            })()}
+            defaultValue={currentTime.toJSON().slice(0, 16)}
             size="small"
+            inputProps={{
+              max: currentTime.toJSON().slice(0, 16),
+            }}
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeOpened);
             }}
@@ -250,16 +261,16 @@ export default function ShiftLogForm(props) {
             className="input-rounded date-picker"
           />
         </div>
+
         <div className="col">
           <TextField
             id="timeClosed"
             label="Time Closed"
             type="datetime-local"
-            defaultValue={(() => {
-              var d = new Date();
-              d.setHours(d.getHours() + 2);
-              return d.toJSON().slice(0, 16);
-            })()}
+            /* inputProps={{
+              min: currentTime.toJSON().slice(0, 16),
+            }} */
+            defaultValue={currentTime.toJSON().slice(0, 16)}
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeClosed);
             }}
