@@ -1,0 +1,55 @@
+.dashboard-container {
+  padding-left: 45px !important;
+}
+.card-container {
+  padding-right: 70px !important;
+}
+.chart-container {
+  padding-right: 70px !important;
+}
+.dashboard-chart {
+  width: 99% !important;
+  height: 400px !important;
+  padding-top: 30px !important;
+  border-radius: 10px !important;
+  color: white;
+  font-size: 30px !important;
+
+  -webkit-box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+  box-shadow: -4px 4px 40px 11px rgba(0, 0, 0, 0.22);
+}
+
+.dahsboard-card {
+  width: 100% !important;
+  height: 104px !important;
+  border-radius: 10px !important;
+  color: white;
+  font-size: 30px !important;
+}
+
+.card1 {
+  background-image: linear-gradient(to right, #fcb0f3, #3d05dd);
+}
+
+.card2 {
+  background-image: linear-gradient(to right, #9bafd9, #103783);
+}
+
+.card3 {
+  background-image: linear-gradient(to right, #f8997d, #ad336d);
+}
+
+.card4 {
+  background-image: linear-gradient(to right, #fdb32f, #f78356);
+}
+
+.dashboard-row-distance {
+  margin-bottom: 50px !important;
+}
+
+
+.chart{
+  width: 100% !important;
+  height: 100% !important;
+}

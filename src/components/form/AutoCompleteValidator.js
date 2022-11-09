@@ -1,6 +1,6 @@
 import React from "react";
 import events from "@flk/events";
-import { TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -8,7 +8,7 @@ const minLength = (len) => (val) => val && val.length >= len;
 const isNumber = (val) => !isNaN(Number(val));
 const isEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-export default class TextFieldValidator extends React.Component {
+export default class AutoCompleteValidator extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
@@ -40,8 +40,7 @@ export default class TextFieldValidator extends React.Component {
    * {@inheritdoc}
    */
   init() {
-    var inputField = this.input.children[0].children[1];
-
+    var inputField = this.input.children[0].children[1].children[0];
     events.on("form.validation", (form) => {
       // validate the input
       var error = this.handleChange(
@@ -115,40 +114,41 @@ export default class TextFieldValidator extends React.Component {
    * {@inheritdoc}
    */
   render() {
-    var { setFieldState, ...rest } = this.props;
+    var { renderInputComponent, ...rest } = this.props;
+
     return (
-      <TextField
+      <Autocomplete
         ref={this.inputReference}
-        name={this.props.name}
         id={this.props.id}
-        type={this.props.type}
-        placeholder={this.props.placeholder}
-        variant={this.props.variant}
-        className={this.props.className}
-        InputProps={this.props.InputProps}
-        onChange={(e) => {
+        options={this.props.options}
+        size={this.props.size}
+        getOptionLabel={this.props.getOptionLabel}
+        isOptionEqualToValue={this.props.isOptionEqualToValue}
+        onChange={this.props.onChange}
+        onInputChange={(e, value, reason) => {
+          var event = { target: { value: value } };
           var error = this.handleChange(
-            e,
+            event,
             this.props.validation_rules,
             this.props.validation_messages
           );
-
           if (this.props.hasOwnProperty("custome_change")) {
             this.props.custome_change(e);
           }
-
           this.setValidationError(error);
-
-          setFieldState(e.target.value);
         }}
-        error={this.state.validationError !== null ? true : false}
-        helperText={this.state.validationError}
+        renderInput={(props) => {
+          var error = this.state.validationError !== null ? true : false;
+          var helper_text = this.state.validationError;
+
+          return this.props.renderInputComponent(props, error, helper_text);
+        }}
         {...rest}
       />
     );
   }
 }
 
-TextFieldValidator.defaultProps = {
-  type: "text",
-};
+// TextFieldValidator.defaultProps = {
+//   type: "text",
+// };

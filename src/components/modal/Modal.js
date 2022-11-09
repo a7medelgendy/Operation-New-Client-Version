@@ -11,7 +11,7 @@ import "../../styles/modal/form-title-modal.css";
 function DefaultModalTitle(props) {
   return (
     <div className="container-fluid modal-title">
-      <DialogTitle disableTypography style={{ padding: "0px" }}>
+      <DialogTitle style={{ padding: "0px" }}>
         <div className="container-fluid d-flex flex-row justify-content-between align-items-center">
           <div className="title align-items-center">
             <h5>{props.title}</h5>
@@ -55,10 +55,15 @@ export default function Modal(props) {
     <div>
       <Dialog
         fullWidth
-        disableBackdropClick={!backdrop}
         disableEscapeKeyDown={!esc}
         maxWidth={size}
-        onClose={onClose}
+        onClose={(event, reason) => {
+          if (reason == "backdropClick" && !backdrop) {
+            return;
+          } else {
+            onClose();
+          }
+        }}
         {...otherDialogProps}
       >
         {modalTitle}
@@ -71,6 +76,6 @@ export default function Modal(props) {
 Modal.defaultProps = {
   size: "xs",
   esc: true, //if set to false, then the esc button will not close the modal
-  backdrop: true, //if set to false, then the backdrop click will not close the modal
+  backdrop: false, //if set to false, then the backdrop click will not close the modal
   fullScreen: false,
 };
