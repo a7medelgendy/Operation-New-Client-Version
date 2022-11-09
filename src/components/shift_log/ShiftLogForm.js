@@ -17,12 +17,8 @@ export default function ShiftLogForm(props) {
   const [groupID, setGroupID] = useState("");
   const [area, setArea] = useState("");
   const [unit, setUnit] = useState("");
-  const [timeOpened, setTimeOpened] = useState(
-    new Date().toJSON().slice(0, 16)
-  );
-  const [timeClosed, setTimeClosed] = useState(
-    new Date().toJSON().slice(0, 16)
-  );
+  const [timeOpened, setTimeOpened] = useState();
+  const [timeClosed, setTimeClosed] = useState();
   const [openedBy, setOpenedBy] = useState("");
   const [closedBy, setClosedBy] = useState("");
   const [description, setDescription] = useState("");
