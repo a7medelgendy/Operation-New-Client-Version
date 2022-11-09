@@ -25,7 +25,7 @@ const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   })
     .then((res) => {
       //handle success
-      if (res.status = 200) {
+      if ((res.status = 200)) {
         alertHandler("Shift log added successfully", {
           appearance: "success",
           autoDismiss: true,
@@ -146,10 +146,10 @@ export default function ShiftLog(props) {
           type: "edit",
           clickEvent: (rowData, rowIndex) => {
             // console.log(rowIndex);
-            window.alert(
+            /*             window.alert(
               `Clicked "Edit" for row ${rowIndex} with  of ${rowData}`
-            );
-            setFormType("edit");
+            ); */
+            // setFormType("edit");
           },
         },
         {
@@ -233,7 +233,11 @@ export default function ShiftLog(props) {
           message={"Confirm Delete"}
           title={"Confirm"}
         />
-        <DataTable tableConfig={tableConfig} data={dbData} />
+        <DataTable
+          title={"Corrective Maintenance Log"}
+          tableConfig={tableConfig}
+          data={dbData}
+        />
       </div>
     </div>
   );
