@@ -26,6 +26,7 @@ export default function DataTable(props) {
         customBodyRender: (value, tableMeta, updateValue) => {
           const RenderTableActions = tableConfig.actions.map((ele, idx) => {
             const ActionButton = tableActions[ele.type];
+
             return (
               <React.Fragment key={idx}>
                 <ActionButton
