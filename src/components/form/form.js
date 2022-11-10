@@ -19,6 +19,7 @@ export default class Form extends React.Component {
 
     // check if the form is valid
     // if not, then do not submit
+
     if (this.isValidForm === false) return;
 
     if (this.props.onSubmit) {

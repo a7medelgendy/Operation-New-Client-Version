@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
 
-import Form from "../../components/form/form";
-import TextFieldValidator from "../form/TextfieldValidator";
+import Form from "../form/form";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
 import "../../styles/shift_log/add-shift-log-form.css";
@@ -20,27 +17,34 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ContactsOutlined } from "@mui/icons-material";
 
-export default function ShiftLogForm(props) {
-  var currentTime = new Date();
-  currentTime.setHours(currentTime.getHours() + 2);
 
-  const [groupID, setGroupID] = useState("");
-  const [area, setArea] = useState("");
-  const [unit, setUnit] = useState("");
+export default function ShiftLogControlForm(props) {
+  const [groupID, setGroupID] = useState({ TXT_SHIFT: "", CODE_SHIFT: "" });
+  const [area, setArea] = useState({ TXT_AREA: "", CODE_AREA: "" });
+  const [unit, setUnit] = useState({ TXT_UNIT: "", CODE_UNIT: "" });
   const [timeOpened, setTimeOpened] = useState(
-    currentTime.toJSON().slice(0, 16)
+    (() => {
+      var obj = new Date();
+      obj.setHours(obj.getHours() + 2);
+      return obj.toJSON().slice(0, 16);
+    })()
   );
   const [timeClosed, setTimeClosed] = useState(
-    currentTime.toJSON().slice(0, 16)
+    (() => {
+      var obj = new Date();
+      obj.setHours(obj.getHours() + 2);
+      return obj.toJSON().slice(0, 16);
+    })()
   );
-  const [openedBy, setOpenedBy] = useState("");
-  const [closedBy, setClosedBy] = useState("");
+  const [openedBy, setOpenedBy] = useState({ EMPN: 0, USER_NAME: "" });
+  const [closedBy, setClosedBy] = useState({ EMPN: 0, USER_NAME: "" });
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [tag, setTag] = useState("");
-  const [exeEdara, setExeEdara] = useState("");
+  const [status, setStatus] = useState({ CODE_STATUS: "", TXT_STATUS: "" });
+  const [tag, setTag] = useState({ TAG: "" });
+  const [exeEdara, setExeEdara] = useState({ CODE_EDARA: "", TXT_EDARA: "" });
   const [unitTags, setUnitTags] = useState([]);
   const [dropDownData, setdropDownData] = useState({});
+  const [isReadOnlyForm, setIsReadOnlyForm] = useState(true);
 
   const handleOnChange = (value, stateSetter) => {
     console.log(value);
@@ -51,7 +55,63 @@ export default function ShiftLogForm(props) {
   useEffect(() => {
     masterData();
     equibmentsData();
+    handleFormDefaultData();
   }, []);
+
+  const handleFormDefaultData = () => {
+    if (props.formLoadData) {
+      setGroupID({
+        CODE_SHIFT: props.formLoadData.CODE_SHIFT,
+        TXT_SHIFT: props.formLoadData.TXT_SHIFT,
+      });
+
+      setArea({
+        CODE_AREA: props.formLoadData.CODE_AREA,
+        TXT_AREA: props.formLoadData.TXT_AREA,
+      });
+
+      setUnit({
+        CODE_UNIT: props.formLoadData.CODE_UNIT,
+        TXT_UNIT: props.formLoadData.TXT_UNIT,
+      });
+
+      setTag({
+        TAG: props.formLoadData.EQUIBMENT,
+      });
+
+      setTimeOpened(
+        new Date(props.formLoadData.TIME_OPEN).toJSON().slice(0, 16)
+      );
+
+      setTimeClosed(
+        new Date(props.formLoadData.TIME_CLOSE).toJSON().slice(0, 16)
+      );
+
+      setOpenedBy({
+        EMPN: props.formLoadData.OPENED_BY_EMPN,
+        USER_NAME: props.formLoadData.OPENED_BY,
+      });
+
+      setClosedBy({
+        EMPN: props.formLoadData.CLOSED_BY_EMPN,
+        USER_NAME: props.formLoadData.CLOSED_BY,
+      });
+
+      setExeEdara({
+        CODE_EDARA: props.formLoadData.CODE_EDARA,
+        TXT_EDARA: props.formLoadData.TXT_EDARA,
+      });
+
+      setStatus({
+        CODE_STATUS: props.formLoadData.CODE_STATUS,
+        TXT_STATUS: props.formLoadData.TXT_STATUS,
+      });
+
+      setDescription(props.formLoadData.DESCREPTION);
+    }
+
+    setIsReadOnlyForm(props.type == "view" ? true : false);
+  };
 
   const equibmentsData = () => {
     axios({
@@ -98,22 +158,27 @@ export default function ShiftLogForm(props) {
   };
 
   const onSubmit = () => {
-    var dbOjectAdd = {
-      groupID: groupID,
-      area: area,
-      unit: unit,
-      openedBy: openedBy,
-      closedBy: closedBy,
+    var dbOject = {
+      groupID: groupID.CODE_SHIFT,
+      area: area.CODE_AREA,
+      unit: unit.CODE_UNIT,
+      openedBy: openedBy.EMPN,
+      closedBy: closedBy.EMPN,
       description: description,
-      status: status,
-      tag: tag,
-      exeEdara: exeEdara,
+      status: status.CODE_STATUS,
+      tag: tag.TAG,
+      exeEdara: exeEdara.CODE_EDARA,
       timeOpened: timeOpened,
       timeClosed: timeClosed,
     };
 
+    console.log(dbOject);
+    if (props.formLoadData) {
+      dbOject.id = props.formLoadData.ID;
+    }
+
     const res = props.formHandlerFuncs.onSubmit(
-      dbOjectAdd,
+      dbOject,
       props.alertHandler,
       props.updateLoader
     );
@@ -132,10 +197,15 @@ export default function ShiftLogForm(props) {
                 ? dropDownData.shiftGroups.recordset
                 : []
             }
+            readOnly={isReadOnlyForm}
             size="small"
+            value={groupID}
+            isOptionEqualToValue={(option, value) => {
+              return option.CODE_SHIFT == value.CODE_SHIFT;
+            }}
             getOptionLabel={(option) => option.TXT_SHIFT}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.CODE_SHIFT, setGroupID);
+              if (object) handleOnChange(object, setGroupID);
             }}
             validation_rules={[{ rule: "isRequired" }]}
             validation_messages={["Group Id is required"]}
@@ -152,23 +222,27 @@ export default function ShiftLogForm(props) {
             }}
           />
         </div>
-
         <div className="col">
           <AutoCompleteValidator
             disablePortal
             id="area"
+            readOnly={isReadOnlyForm}
             options={
               dropDownData.hasOwnProperty("areas")
                 ? dropDownData.areas.recordset
                 : []
             }
+            value={area}
+            isOptionEqualToValue={(option, value) => {
+              return option.CODE_AREA == value.CODE_AREA;
+            }}
             size="small"
             getOptionLabel={(option) => option.TXT_AREA}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.CODE_AREA, setArea);
+              if (object) handleOnChange(object, setArea);
             }}
             validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Group Id is required"]}
+            validation_messages={["Area is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
                 <TextField
@@ -194,10 +268,15 @@ export default function ShiftLogForm(props) {
                 ? dropDownData.units.recordset
                 : []
             }
+            readOnly={isReadOnlyForm}
+            value={unit}
+            isOptionEqualToValue={(option, value) => {
+              return option.CODE_UNIT == value.CODE_UNIT;
+            }}
             size="small"
             getOptionLabel={(option) => option.TXT_UNIT}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.CODE_UNIT, setUnit);
+              if (object) handleOnChange(object, setUnit);
             }}
             validation_rules={[{ rule: "isRequired" }]}
             validation_messages={["Unit is required"]}
@@ -205,7 +284,7 @@ export default function ShiftLogForm(props) {
               return (
                 <TextField
                   {...params}
-                  label="Area"
+                  label="Unit"
                   className="input-rounded"
                   error={error}
                   helperText={helperText}
@@ -214,18 +293,22 @@ export default function ShiftLogForm(props) {
             }}
           />
         </div>
-
         <div className="col">
           <VirtualizedAutoComplete
             id="Equipment"
+            readOnly={isReadOnlyForm}
             options={unitTags}
+            value={tag}
+            isOptionEqualToValue={(option, value) => {
+              return option.TAG == value.TAG;
+            }}
             getOptionLabel={(option) => option.TAG ?? option}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.TAG, setTag);
+              if (object) handleOnChange(object, setTag);
             }}
             size="small"
             validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Unit is required"]}
+            validation_messages={["Equipment is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
                 <TextField
@@ -245,9 +328,14 @@ export default function ShiftLogForm(props) {
         <div className="col">
           <TextField
             id="timeOpened"
+            readOnly={isReadOnlyForm}
             label="Time Opened"
             type="datetime-local"
+<<<<<<< HEAD:src/components/shift_log/ShiftLogForm.js
             defaultValue={currentTime.toJSON().slice(0, 16)}
+=======
+            value={timeOpened}
+>>>>>>> 81b0f93c3bc9fb196fc7371f7ecf1536d50ab036:src/components/shift_log/ShiftLogControlForm.js
             size="small"
             inputProps={{
               max: currentTime.toJSON().slice(0, 16),
@@ -265,12 +353,17 @@ export default function ShiftLogForm(props) {
         <div className="col">
           <TextField
             id="timeClosed"
+            readOnly={isReadOnlyForm}
             label="Time Closed"
             type="datetime-local"
+<<<<<<< HEAD:src/components/shift_log/ShiftLogForm.js
             /* inputProps={{
               min: currentTime.toJSON().slice(0, 16),
             }} */
             defaultValue={currentTime.toJSON().slice(0, 16)}
+=======
+            value={timeClosed}
+>>>>>>> 81b0f93c3bc9fb196fc7371f7ecf1536d50ab036:src/components/shift_log/ShiftLogControlForm.js
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeClosed);
             }}
@@ -288,18 +381,23 @@ export default function ShiftLogForm(props) {
           <AutoCompleteValidator
             disablePortal
             id="openedBy"
+            readOnly={isReadOnlyForm}
             options={
               dropDownData.hasOwnProperty("users")
                 ? dropDownData.users.recordset
                 : []
             }
+            value={openedBy}
+            isOptionEqualToValue={(option, value) => {
+              return option.EMPN == value.EMPN;
+            }}
             getOptionLabel={(option) => option.USER_NAME}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.EMPN, setOpenedBy);
+              if (object) handleOnChange(object, setOpenedBy);
             }}
             size="small"
             validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Unit is required"]}
+            validation_messages={["Opended by emp is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
                 <TextField
@@ -317,18 +415,23 @@ export default function ShiftLogForm(props) {
           <AutoCompleteValidator
             disablePortal
             id="closedBy"
+            readOnly={isReadOnlyForm}
             options={
               dropDownData.hasOwnProperty("users")
                 ? dropDownData.users.recordset
                 : []
             }
+            value={closedBy}
+            isOptionEqualToValue={(option, value) => {
+              return option.EMPN == value.EMPN;
+            }}
             getOptionLabel={(option) => option.USER_NAME}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.EMPN, setClosedBy);
+              if (object) handleOnChange(object, setClosedBy);
             }}
             size="small"
             validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Unit is required"]}
+            validation_messages={["Closed by emp is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
                 <TextField
@@ -349,15 +452,20 @@ export default function ShiftLogForm(props) {
           <AutoCompleteValidator
             disablePortal
             id="department"
+            readOnly={isReadOnlyForm}
             options={
               dropDownData.hasOwnProperty("exeEdara")
                 ? dropDownData.exeEdara.recordset
                 : []
             }
+            value={exeEdara}
+            isOptionEqualToValue={(option, value) => {
+              return option.CODE_EDARA == value.CODE_EDARA;
+            }}
             size="small"
             getOptionLabel={(option) => option.TXT_EDARA}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.CODE_EDARA, setExeEdara);
+              if (object) handleOnChange(object, setExeEdara);
             }}
             validation_rules={[{ rule: "isRequired" }]}
             validation_messages={["Executed Departement is required"]}
@@ -378,15 +486,20 @@ export default function ShiftLogForm(props) {
           <AutoCompleteValidator
             disablePortal
             id="status"
+            readOnly={isReadOnlyForm}
             options={
               dropDownData.hasOwnProperty("status")
                 ? dropDownData.status.recordset
                 : []
             }
+            value={status}
+            isOptionEqualToValue={(option, value) => {
+              return option.CODE_STATUS == value.CODE_STATUS;
+            }}
             size="small"
             getOptionLabel={(option) => option.TXT_STATUS}
             onChange={(_, object) => {
-              if (object) handleOnChange(object.CODE_STATUS, setStatus);
+              if (object) handleOnChange(object, setStatus);
             }}
             validation_rules={[{ rule: "isRequired" }]}
             validation_messages={["Status is required"]}
@@ -410,10 +523,13 @@ export default function ShiftLogForm(props) {
           <TextField
             className="multi-line-input-rounded multi-line-text"
             id="outlined-multiline-static"
-            label="Notes..."
+            InputProps={{
+              readOnly: isReadOnlyForm,
+            }}
+            label="Excuted Notes..."
             multiline
             rows={8}
-            defaultValue=""
+            value={description}
             onChange={(e) => {
               handleOnChange(e.target.value, setDescription);
             }}
@@ -430,13 +546,16 @@ export default function ShiftLogForm(props) {
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            className="rounded-btn save-btn"
-          >
-            Save
-          </Button>
+
+          {!isReadOnlyForm && (
+            <Button
+              type="submit"
+              variant="contained"
+              className="rounded-btn save-btn"
+            >
+              Save
+            </Button>
+          )}
         </div>
       </div>
     </Form>
