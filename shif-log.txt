@@ -1,3 +1,0 @@
-
-config.web
-https://dev.to/sumitkharche/how-to-deploy-react-application-on-iis-server-1ied
