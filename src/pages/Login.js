@@ -17,6 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import "../styles/login/login.css";
 import { baseUrl } from "../shared/staticData";
+import user from "../shared/user";
 
 import TextFieldValidator from "../components/form/TextfieldValidator";
 import Form from "../components/form/form";
@@ -48,10 +49,9 @@ function LoginFormToast() {
     })
       .then((res) => {
         //handle success
-        if ((res.status = 200 && res.data.success)) {
-          return navigate("app/dashboard", {
-            state: { id: 1, name: states.userName },
-          });
+        if ((res.status = 200)) {
+          user.login(res.data.result);
+          return navigate("app/dashboard");
         } else {
           addToast(" Error user name or password", {
             appearance: "error",
@@ -144,7 +144,7 @@ function LoginFormToast() {
                 Log In
               </Button>
             </div>
-            <div className="row login-form-row">
+            {/* <div className="row login-form-row">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -156,7 +156,7 @@ function LoginFormToast() {
                 }
                 label="Keep me logged in"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

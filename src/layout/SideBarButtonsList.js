@@ -8,6 +8,7 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import { Avatar } from "@mui/material";
+import user from "../shared/user";
 
 export default function SideBarButtonList() {
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -65,13 +66,16 @@ export default function SideBarButtonList() {
                 color: "#323484",
               }}
             >
-              AE
+              {user.userData.USER_NAME.split(".")[0][0] +
+                user.userData.USER_NAME.split(".")[1][0]}
             </Avatar>
           </div>
 
           <div className="col-9 mt-0 p-2 d-flex align-items-center">
             <span style={{ color: "#D7DAFF", fontSize: "18px" }}>
-              Ali.AbdElnabi
+              {user.userData.USER_NAME.split(".")[0] +
+                " " +
+                user.userData.USER_NAME.split(".")[1]}
             </span>
           </div>
         </div>
@@ -86,14 +90,7 @@ export default function SideBarButtonList() {
             />
           }
           callBack={() => {
-            localStorage.setItem("isLoggedIn", false);
-            const loggedInUser = localStorage.getItem("isLoggedIn");
-            if (loggedInUser) {
-              // const foundUser = JSON.parse(loggedInUser);
-              console.log("-----------------");
-              console.dir(loggedInUser);
-              console.log("-----------------");
-            }
+            user.logout();
             navigate("/");
           }}
           isActive={false}

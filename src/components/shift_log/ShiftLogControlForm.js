@@ -9,13 +9,7 @@ import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 import "../../styles/shift_log/add-shift-log-form.css";
 import { baseUrl } from "../../shared/staticData";
 import AutoCompleteValidator from "../form/AutoCompleteValidator";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-//import { LocalizationProvider } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { ContactsOutlined } from "@mui/icons-material";
+import { Autocomplete } from "@mui/material";
 
 export default function ShiftLogControlForm(props) {
   const [groupID, setGroupID] = useState({ TXT_SHIFT: "", CODE_SHIFT: "" });
@@ -35,8 +29,8 @@ export default function ShiftLogControlForm(props) {
       return obj.toJSON().slice(0, 16);
     })()
   );
-  const [openedBy, setOpenedBy] = useState({ EMPN: 0, USER_NAME: "" });
-  const [closedBy, setClosedBy] = useState({ EMPN: 0, USER_NAME: "" });
+  const [openedBy, setOpenedBy] = useState({ EMPN: null, USER_NAME: "" });
+  const [closedBy, setClosedBy] = useState({ EMPN: null, USER_NAME: "" });
   const [reqDescription, setReqDescription] = useState("");
   const [exeDescription, setExeDescription] = useState("");
   const [status, setStatus] = useState({ CODE_STATUS: "", TXT_STATUS: "" });
@@ -92,10 +86,14 @@ export default function ShiftLogControlForm(props) {
         USER_NAME: props.formLoadData.OPENED_BY,
       });
 
-      setClosedBy({
-        EMPN: props.formLoadData.CLOSED_BY_EMPN,
-        USER_NAME: props.formLoadData.CLOSED_BY,
-      });
+      if (props.formLoadData.CLOSED_BY_EMPN) {
+        setClosedBy({
+          EMPN: props.formLoadData.CLOSED_BY_EMPN,
+          USER_NAME: props.formLoadData.CLOSED_BY,
+        });
+      } else {
+        setClosedBy({ EMPN: null, USER_NAME: "" });
+      }
 
       setExeEdara({
         CODE_EDARA: props.formLoadData.CODE_EDARA,
@@ -107,7 +105,7 @@ export default function ShiftLogControlForm(props) {
         TXT_STATUS: props.formLoadData.TXT_STATUS,
       });
 
-      setReqDescription(props.formLoadData.DESCRIPTION_REQUESTED);
+      setReqDescription(props.formLoadData.DESCREPTION_REQUESTED);
       setExeDescription(props.formLoadData.DESCREPTION_RESPONSED);
     }
 
@@ -403,7 +401,7 @@ export default function ShiftLogControlForm(props) {
           />
         </div>
         <div className="col">
-          <AutoCompleteValidator
+          <Autocomplete
             disablePortal
             id="closedBy"
             readOnly={isReadOnlyForm}
@@ -421,16 +419,12 @@ export default function ShiftLogControlForm(props) {
               if (object) handleOnChange(object, setClosedBy);
             }}
             size="small"
-            validation_rules={[{ rule: "isRequired" }]}
-            validation_messages={["Closed by emp is required"]}
-            renderInputComponent={(params, error, helperText) => {
+            renderInput={(params) => {
               return (
                 <TextField
                   {...params}
                   label="Closed By"
                   className="input-rounded"
-                  error={error}
-                  helperText={helperText}
                 />
               );
             }}
