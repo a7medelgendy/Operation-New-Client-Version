@@ -7,6 +7,7 @@ import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Avatar } from "@mui/material";
+import user from "../shared/user";
 
 export default function SideBarButtonList() {
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -63,13 +64,16 @@ export default function SideBarButtonList() {
                 color: "#323484",
               }}
             >
-              A.R
+              {user.userData.USER_NAME.split(".")[0][0] +
+                user.userData.USER_NAME.split(".")[1][0]}
             </Avatar>
           </div>
 
           <div className="col-9 mt-0 p-2 d-flex align-items-center">
             <span style={{ color: "#D7DAFF", fontSize: "18px" }}>
-              Ahmed.Rashad
+              {user.userData.USER_NAME.split(".")[0] +
+                " " +
+                user.userData.USER_NAME.split(".")[1]}
             </span>
           </div>
         </div>
@@ -84,6 +88,7 @@ export default function SideBarButtonList() {
             />
           }
           callBack={() => {
+            user.logout();
             navigate("/");
           }}
           isActive={false}
@@ -91,7 +96,9 @@ export default function SideBarButtonList() {
       </div>
       <div className="row sidebar-button-container">
         <div className="d-flex justify-content-center align-items-center">
-          <span style={{fontSize:"12.5px", color:"#B2F9B2"}}>Made By ANRPC IT-Team @2022</span>
+          <span style={{ fontSize: "12.5px", color: "#B2F9B2" }}>
+            Made By ANRPC IT-Team @2022
+          </span>
         </div>
       </div>
     </div>

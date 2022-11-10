@@ -13,7 +13,7 @@ import FormModal from "../components/modal/FormModal";
 
 import "../styles/shift_log/shiftlog.css";
 import { baseUrl } from "../shared/staticData";
-import { type } from "@testing-library/user-event/dist/type";
+
 
 const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   axios({
@@ -135,7 +135,7 @@ export default function ShiftLog(props) {
   const [tableConfig, setTableConfig] = useState({});
   const [dbData, setdbData] = useState([]);
   const [dbColumns, setdbColumns] = useState([]);
-  let [isLoading, updateLoader] = useState(false);
+  let [isLoading, updateLoader] = useState(true);
 
   const [formType, setFormType] = useState("add");
   const [formLoadData, setFormLoadData] = useState(null);
@@ -184,7 +184,6 @@ export default function ShiftLog(props) {
               };
 
               if ((title.key == "TXT_STATUS")) {
-                console.log("a7a")
                 obj.customBodyRender = (states) =>
                   states.map((state, index) => (
                     <Chip key={index} label={state} />

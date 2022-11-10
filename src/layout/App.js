@@ -3,8 +3,15 @@ import "../styles/layout/app.css";
 import SideBar from "./SideBar";
 import Container from "./Container";
 import { Paper } from "@mui/material";
+import { Navigate } from "react-router-dom";
+
+import user from "../shared/user";
 
 export default function App() {
+  if (!user.isLoggedIn()) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className="container-fluid container-style">
       <div className="row container-row">
