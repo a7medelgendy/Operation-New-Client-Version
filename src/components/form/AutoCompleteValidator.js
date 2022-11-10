@@ -41,6 +41,7 @@ export default class AutoCompleteValidator extends React.Component {
    */
   init() {
     var inputField = this.input.children[0].children[1].children[0];
+
     events.on("form.validation", (form) => {
       // validate the input
       var error = this.handleChange(
