@@ -17,7 +17,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ContactsOutlined } from "@mui/icons-material";
 
-
 export default function ShiftLogControlForm(props) {
   const [groupID, setGroupID] = useState({ TXT_SHIFT: "", CODE_SHIFT: "" });
   const [area, setArea] = useState({ TXT_AREA: "", CODE_AREA: "" });
@@ -331,15 +330,11 @@ export default function ShiftLogControlForm(props) {
             readOnly={isReadOnlyForm}
             label="Time Opened"
             type="datetime-local"
-<<<<<<< HEAD:src/components/shift_log/ShiftLogForm.js
-            defaultValue={currentTime.toJSON().slice(0, 16)}
-=======
             value={timeOpened}
->>>>>>> 81b0f93c3bc9fb196fc7371f7ecf1536d50ab036:src/components/shift_log/ShiftLogControlForm.js
             size="small"
-            inputProps={{
+            /*             inputProps={{
               max: currentTime.toJSON().slice(0, 16),
-            }}
+            }} */
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeOpened);
             }}
@@ -356,14 +351,7 @@ export default function ShiftLogControlForm(props) {
             readOnly={isReadOnlyForm}
             label="Time Closed"
             type="datetime-local"
-<<<<<<< HEAD:src/components/shift_log/ShiftLogForm.js
-            /* inputProps={{
-              min: currentTime.toJSON().slice(0, 16),
-            }} */
-            defaultValue={currentTime.toJSON().slice(0, 16)}
-=======
             value={timeClosed}
->>>>>>> 81b0f93c3bc9fb196fc7371f7ecf1536d50ab036:src/components/shift_log/ShiftLogControlForm.js
             onChange={(e) => {
               handleOnChange(e.target.value, setTimeClosed);
             }}
