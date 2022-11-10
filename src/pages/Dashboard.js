@@ -836,7 +836,8 @@ function LiveChart() {
   function fetchNewData() {
     const axisData = new Date().toLocaleTimeString().replace(/^\D*/, "");
     const newOption = JSON.parse(JSON.stringify(option)); // immutable
-    newOption.title.text = "Hello Echarts-for-react." + new Date().getSeconds();
+    newOption.title.text =
+      "Anrpc live graph analysis." + new Date().getSeconds();
     const data0 = newOption.series[0].data;
     const data1 = newOption.series[1].data;
     data0.shift();

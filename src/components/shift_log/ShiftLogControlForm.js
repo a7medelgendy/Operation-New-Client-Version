@@ -41,8 +41,6 @@ export default function ShiftLogControlForm(props) {
   const [isReadOnlyForm, setIsReadOnlyForm] = useState(true);
 
   const handleOnChange = (value, stateSetter) => {
-    console.log(value);
-
     stateSetter(value);
   };
 
@@ -172,7 +170,7 @@ export default function ShiftLogControlForm(props) {
       timeClosed: timeClosed,
     };
 
-    //console.log(dbOject);
+    //\\console.log(dbOject);
     if (props.formLoadData) {
       dbOject.id = props.formLoadData.ID;
     }

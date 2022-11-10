@@ -123,10 +123,10 @@ const options = {
   responsive: "vertical",
   selectableRows: "none",
   // onColumnSortChange: (changedColumn, direction) =>
-  //   //console.log("changedColumn: ", changedColumn, "direction: ", direction),
+  //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
   // onChangeRowsPerPage: (numberOfRows) =>
-  //   //console.log("numberOfRows: ", numberOfRows),
-  // onChangePage: (currentPage) => //console.log("currentPage: ", currentPage),
+  //   //\\console.log("numberOfRows: ", numberOfRows),
+  // onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
 };
 
 export default function ShiftLog(props) {
@@ -182,12 +182,12 @@ export default function ShiftLog(props) {
                 },
               };
 
-              if (title.key == "TXT_STATUS") {
-                obj.customBodyRender = (states) =>
-                  states.map((state, index) => (
-                    <Chip key={index} label={state} />
-                  ));
-              }
+              // if (title.key == "TXT_STATUS") {
+              //   obj.customBodyRender = (states) =>
+              //     states.map((state, index) => (
+              //       <Chip key={index} label={state} />
+              //     ));
+              // }
               return obj;
             });
 
@@ -241,13 +241,6 @@ export default function ShiftLog(props) {
   useEffect(() => {
     getTableData();
     setTableConfig(getTableCOnfig);
-    const loggedInUser = localStorage.getItem("isLoggedIn");
-    if (loggedInUser) {
-      // const foundUser = JSON.parse(loggedInUser);
-      console.log("-----------------");
-      console.dir(loggedInUser);
-      console.log("-----------------");
-    }
   }, [isLoading]);
 
   return (

@@ -17,8 +17,8 @@ export default function DataTable(props) {
   let { tableConfig, data } = props;
   if (tableConfig.actions !== undefined && !tableConfig.actionsIsAdded) {
     var actions = {
-      name: "action",
-      label: "Actions",
+      name: "",
+      label: "",
       options: {
         filter: false,
         sort: false,
@@ -123,10 +123,10 @@ export default function DataTable(props) {
 //         filterType: "dropdown",
 //         responsive: "vertical",
 //         onColumnSortChange: (changedColumn, direction) =>
-//             //console.log("changedColumn: ", changedColumn, "direction: ", direction),
+//             //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
 //         onChangeRowsPerPage: (numberOfRows) =>
-//             //console.log("numberOfRows: ", numberOfRows),
-//         onChangePage: (currentPage) => //console.log("currentPage: ", currentPage),
+//             //\\console.log("numberOfRows: ", numberOfRows),
+//         onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
 //     };
 
 //     return (

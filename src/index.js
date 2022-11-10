@@ -6,26 +6,24 @@ import App from "./layout/App";
 import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap";
 import reportWebVitals from "./reportWebVitals";
 import Test from "./Test";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/app/*" element={<App />} />
-        <Route path="*" element={<NoPage />} />
-      </Routes>
-    </BrowserRouter>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/app/*" element={<App />} />
+      <Route path="*" element={<NoPage />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(//console.log))
+// to log results (for example: reportWebVitals(//\\console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-

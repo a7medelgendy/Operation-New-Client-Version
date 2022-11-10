@@ -14,7 +14,7 @@ import axios from "axios";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
 export default function EditForm(props) {
-  //console.log(props.rowData);
+  //\\console.log(props.rowData);
   const [open, setOpen] = useState(false);
 
   //form value
@@ -55,9 +55,7 @@ export default function EditForm(props) {
       timeOpened: timeOpened,
       timeClosed: timeClosed,
     };
-
   };
-
 
   const handleClickOpen = () => {
     setOpen(true);

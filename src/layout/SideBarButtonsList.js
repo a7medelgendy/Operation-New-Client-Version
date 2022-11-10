@@ -9,9 +9,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import { Avatar } from "@mui/material";
 import user from "../shared/user";
+import cache from "../shared/cache";
 
 export default function SideBarButtonList() {
-  const [activeIndex, setActiveIndex] = React.useState(0);
   const navigate = useNavigate();
 
   const SideBarList = [
@@ -19,7 +19,7 @@ export default function SideBarButtonList() {
       name: "Dashboard",
       icon: <DashboardRoundedIcon style={{ marginLeft: "30px" }} />,
       callBack: (id) => {
-        setActiveIndex(id);
+        cache.set("activeIndex", id);
         navigate("dashboard");
       },
     },
@@ -32,7 +32,7 @@ export default function SideBarButtonList() {
         />
       ),
       callBack: (id) => {
-        setActiveIndex(id);
+        cache.set("activeIndex", id);
         navigate("shiftlog");
       },
     },
@@ -46,7 +46,7 @@ export default function SideBarButtonList() {
           buttonName={ele.name}
           startIcon={ele.icon}
           callBack={ele.callBack}
-          isActive={activeIndex == idx ? true : false}
+          isActive={cache.get("activeIndex") == idx ? true : false}
         />
       </div>
     );

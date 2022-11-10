@@ -25,6 +25,7 @@ class User {
   login(userData) {
     this.userData = userData;
     cache.set("user", userData);
+    cache.set("activeIndex", 0);
   }
 
   /**
