@@ -23,7 +23,7 @@ const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   })
     .then((res) => {
       //handle success
-      if ((res.status = 200)) {
+      if (res.data.success && (res.status = 200)) {
         alertHandler("Shift log added successfully", {
           appearance: "success",
           autoDismiss: true,
@@ -67,7 +67,7 @@ const handleSubmitEdit = (dbOjectEdit, alertHandler, updateLoader) => {
   })
     .then(function (res) {
       //handle success
-      if ((res.status = 200)) {
+      if (res.data.success && (res.status = 200)) {
         alertHandler("Shift log edit successfully", {
           appearance: "success",
           autoDismiss: true,
@@ -123,10 +123,10 @@ const options = {
   responsive: "vertical",
   selectableRows: "none",
   // onColumnSortChange: (changedColumn, direction) =>
-  //   console.log("changedColumn: ", changedColumn, "direction: ", direction),
+  //   //console.log("changedColumn: ", changedColumn, "direction: ", direction),
   // onChangeRowsPerPage: (numberOfRows) =>
-  //   console.log("numberOfRows: ", numberOfRows),
-  // onChangePage: (currentPage) => console.log("currentPage: ", currentPage),
+  //   //console.log("numberOfRows: ", numberOfRows),
+  // onChangePage: (currentPage) => //console.log("currentPage: ", currentPage),
 };
 
 export default function ShiftLog(props) {
@@ -188,12 +188,12 @@ export default function ShiftLog(props) {
             updateLoader(false);
           }
         } else {
-          setError(" Error user name or password");
+         //setError(" Error user name or password");
         }
       })
       .catch(function (res) {
         //handle error
-        setError(" Error user name or password");
+       // setError(" Error user name or password");
         return;
       });
   };

@@ -37,7 +37,8 @@ export default function ShiftLogControlForm(props) {
   );
   const [openedBy, setOpenedBy] = useState({ EMPN: 0, USER_NAME: "" });
   const [closedBy, setClosedBy] = useState({ EMPN: 0, USER_NAME: "" });
-  const [description, setDescription] = useState("");
+  const [reqDescription, setReqDescription] = useState("");
+  const [exeDescription, setExeDescription] = useState("");
   const [status, setStatus] = useState({ CODE_STATUS: "", TXT_STATUS: "" });
   const [tag, setTag] = useState({ TAG: "" });
   const [exeEdara, setExeEdara] = useState({ CODE_EDARA: "", TXT_EDARA: "" });
@@ -106,7 +107,8 @@ export default function ShiftLogControlForm(props) {
         TXT_STATUS: props.formLoadData.TXT_STATUS,
       });
 
-      setDescription(props.formLoadData.DESCREPTION);
+      setReqDescription(props.formLoadData.DESCRIPTION_REQUESTED);
+      setExeDescription(props.formLoadData.DESCREPTION_RESPONSED);
     }
 
     setIsReadOnlyForm(props.type == "view" ? true : false);
@@ -163,7 +165,8 @@ export default function ShiftLogControlForm(props) {
       unit: unit.CODE_UNIT,
       openedBy: openedBy.EMPN,
       closedBy: closedBy.EMPN,
-      description: description,
+      descriptionRequested: reqDescription,
+      descriptionResponsed: exeDescription,
       status: status.CODE_STATUS,
       tag: tag.TAG,
       exeEdara: exeEdara.CODE_EDARA,
@@ -171,7 +174,7 @@ export default function ShiftLogControlForm(props) {
       timeClosed: timeClosed,
     };
 
-    console.log(dbOject);
+    //console.log(dbOject);
     if (props.formLoadData) {
       dbOject.id = props.formLoadData.ID;
     }
@@ -514,12 +517,29 @@ export default function ShiftLogControlForm(props) {
             InputProps={{
               readOnly: isReadOnlyForm,
             }}
+            label="Requested Notes..."
+            value={reqDescription}
+            onChange={(e) => {
+              handleOnChange(e.target.value, setReqDescription);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="row form-between-rows-distance">
+        <div className="col">
+          <TextField
+            className="multi-line-input-rounded multi-line-text"
+            id="outlined-multiline-static"
+            InputProps={{
+              readOnly: isReadOnlyForm,
+            }}
             label="Excuted Notes..."
             multiline
             rows={8}
-            value={description}
+            value={exeDescription}
             onChange={(e) => {
-              handleOnChange(e.target.value, setDescription);
+              handleOnChange(e.target.value, setExeDescription);
             }}
           />
         </div>
