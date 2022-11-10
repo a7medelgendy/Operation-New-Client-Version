@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import DataTable from "../components/datatable/DataTable";
@@ -135,7 +135,7 @@ export default function ShiftLog(props) {
   const [tableConfig, setTableConfig] = useState({});
   const [dbData, setdbData] = useState([]);
   const [dbColumns, setdbColumns] = useState([]);
-  let [isLoading, updateLoader] = useState(true);
+  let [isLoading, updateLoader] = useState(false);
 
   const [formType, setFormType] = useState("add");
   const [formLoadData, setFormLoadData] = useState(null);
@@ -174,7 +174,7 @@ export default function ShiftLog(props) {
         if ((res.status = 200)) {
           if (res.data.result.columnsData.length > 0) {
             var columnsDbTitle = res.data.result.showedColumns.map((title) => {
-              return {
+              var obj = {
                 name: title.key,
                 label: title.en,
                 options: {
@@ -182,6 +182,15 @@ export default function ShiftLog(props) {
                   sort: true,
                 },
               };
+
+              if ((title.key == "TXT_STATUS")) {
+                console.log("a7a")
+                obj.customBodyRender = (states) =>
+                  states.map((state, index) => (
+                    <Chip key={index} label={state} />
+                  ));
+              }
+              return obj;
             });
 
             setdbData(res.data.result.columnsData);
@@ -189,12 +198,12 @@ export default function ShiftLog(props) {
             updateLoader(false);
           }
         } else {
-         //setError(" Error user name or password");
+          //setError(" Error user name or password");
         }
       })
       .catch(function (res) {
         //handle error
-       // setError(" Error user name or password");
+        // setError(" Error user name or password");
         return;
       });
   };
