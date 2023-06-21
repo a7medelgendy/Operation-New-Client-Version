@@ -7,9 +7,40 @@ import Form from "../form/form";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
 
 import "../../styles/shift_log/add-shift-log-form.css";
+import "../../styles/shift_log/shift-log-form-view.css";
+
 import { baseUrl } from "../../shared/staticData";
 import AutoCompleteValidator from "../form/AutoCompleteValidator";
 import { Autocomplete } from "@mui/material";
+
+function TextWrapper({ viewType, ...props }) {
+  const { InputProps, ...restProps } = props;
+  //InputLabelProps, InputProps,inputProps
+  console.log(props.className + "-view");
+
+  const classess = props.className.map((ele) => {
+    var className = ele;
+    if (viewType == "view") {
+      className += "-view";
+    }
+
+    return className;
+  });
+
+  const className = classess.join(" ");
+
+  return viewType == "view" ? (
+    <TextField
+      {...restProps}
+      InputProps={{
+        readOnly: true,
+      }}
+      className={className}
+    />
+  ) : (
+    <TextField {...props} className={className} />
+  );
+}
 
 export default function ShiftLogControlForm(props) {
   const [groupID, setGroupID] = useState({ TXT_SHIFT: "", CODE_SHIFT: "" });
@@ -209,12 +240,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Group Id is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   label="Group Id"
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -243,12 +275,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Area is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   label="Area"
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -280,12 +313,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Unit is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Unit"
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -309,12 +343,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Equipment is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Equipment"
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -324,7 +359,7 @@ export default function ShiftLogControlForm(props) {
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <TextField
+          <TextWrapper
             id="timeOpened"
             readOnly={isReadOnlyForm}
             label="Time Opened"
@@ -340,12 +375,13 @@ export default function ShiftLogControlForm(props) {
             InputLabelProps={{
               shrink: true,
             }}
-            className="input-rounded date-picker"
+            className={["input-rounded", "date-picker"]}
+            viewType={props.type}
           />
         </div>
 
         <div className="col">
-          <TextField
+          <TextWrapper
             id="timeClosed"
             readOnly={isReadOnlyForm}
             label="Time Closed"
@@ -358,7 +394,8 @@ export default function ShiftLogControlForm(props) {
             InputLabelProps={{
               shrink: true,
             }}
-            className="input-rounded date-picker"
+            className={["input-rounded", "date-picker"]}
+            viewType={props.type}
           />
         </div>
       </div>
@@ -387,12 +424,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Opended by emp is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Opended By"
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -419,10 +457,11 @@ export default function ShiftLogControlForm(props) {
             size="small"
             renderInput={(params) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Closed By"
-                  className="input-rounded"
+                  className={["input-rounded"]}
+                  viewType={props.type}
                 />
               );
             }}
@@ -454,12 +493,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Executed Departement is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Executed Departement"
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -488,12 +528,13 @@ export default function ShiftLogControlForm(props) {
             validation_messages={["Status is required"]}
             renderInputComponent={(params, error, helperText) => {
               return (
-                <TextField
+                <TextWrapper
                   {...params}
                   label="Status"
-                  className="input-rounded"
+                  className={["input-rounded"]}
                   error={error}
                   helperText={helperText}
+                  viewType={props.type}
                 />
               );
             }}
@@ -503,36 +544,32 @@ export default function ShiftLogControlForm(props) {
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <TextField
-            className="multi-line-input-rounded multi-line-text"
+          <TextWrapper
+            className={["multi-line-input-rounded", "multi-line-text"]}
             id="outlined-multiline-static"
-            InputProps={{
-              readOnly: isReadOnlyForm,
-            }}
             label="Requested Notes..."
             value={reqDescription}
             onChange={(e) => {
               handleOnChange(e.target.value, setReqDescription);
             }}
+            viewType={props.type}
           />
         </div>
       </div>
 
       <div className="row form-between-rows-distance">
         <div className="col">
-          <TextField
-            className="multi-line-input-rounded multi-line-text"
+          <TextWrapper
+            className={["multi-line-input-rounded", "multi-line-text"]}
             id="outlined-multiline-static"
-            InputProps={{
-              readOnly: isReadOnlyForm,
-            }}
             label="Excuted Notes..."
             multiline
-            rows={8}
+            rows={4}
             value={exeDescription}
             onChange={(e) => {
               handleOnChange(e.target.value, setExeDescription);
             }}
+            viewType={props.type}
           />
         </div>
       </div>

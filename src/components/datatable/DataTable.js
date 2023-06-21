@@ -23,19 +23,15 @@ export default function DataTable(props) {
         filter: false,
         sort: false,
         empty: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
+        print:false,
+        customBodyRenderLite: (dataIndex, rowIndex) => {
           const RenderTableActions = tableConfig.actions.map((ele, idx) => {
             const ActionButton = tableActions[ele.type];
 
             return (
               <React.Fragment key={idx}>
                 <ActionButton
-                  onClick={() =>
-                    ele.clickEvent(
-                      tableMeta.tableData[tableMeta.rowIndex],
-                      tableMeta.rowIndex
-                    )
-                  }
+                  onClick={() => ele.clickEvent(data[dataIndex],dataIndex)}
                 />
               </React.Fragment>
             );

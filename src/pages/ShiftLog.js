@@ -13,6 +13,8 @@ import FormModal from "../components/modal/FormModal";
 
 import { baseUrl } from "../shared/staticData";
 import "../styles/shift_log/shiftlog.css";
+import { data } from "autoprefixer";
+
 
 const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   axios({
@@ -120,7 +122,7 @@ const modalFormTypes = {
 const options = {
   filter: true,
   filterType: "dropdown",
-  responsive: "vertical",
+  responsive: "standard",
   selectableRows: "none",
   // onColumnSortChange: (changedColumn, direction) =>
   //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
@@ -211,13 +213,13 @@ export default function ShiftLog(props) {
       actions: [
         {
           type: "edit",
-          clickEvent: (rowData, rowIndex) => {
+          clickEvent: (rowData, dataIndex) => {
             handleMode("edit", rowData);
           },
         },
         {
           type: "remove",
-          clickEvent: (rowData, rowIndex) => {
+          clickEvent: (rowData, dataIndex) => {
             triggerRemoveModal();
             // triggerRemoveModal();
             // setCurrentIdx(rowIndex);
@@ -225,7 +227,7 @@ export default function ShiftLog(props) {
         },
         {
           type: "view",
-          clickEvent: (rowData, rowIndex) => {
+          clickEvent: (rowData, dataIndex) => {
             handleMode("view", rowData);
           },
         },

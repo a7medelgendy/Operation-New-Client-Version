@@ -67,6 +67,7 @@ import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 
 import "../styles/dashboard/dashboard.css";
 import { baseUrl } from "../shared/staticData";
+import { json } from "react-router-dom";
 
 // Register the required components
 echarts.use([
@@ -707,7 +708,7 @@ app.config = {
   },
 };
 const labelOption = {
-  show: true,
+  show: false,
   position: app.config.position,
   distance: app.config.distance,
   align: app.config.align,
@@ -720,91 +721,16 @@ const labelOption = {
   },
 };
 
-const BAR_LABEL_ROUTA = {
-  tooltip: {
-    trigger: "axis",
-    axisPointer: {
-      type: "shadow",
-    },
-  },
-  legend: {
-    data: ["Forest", "Steppe", "Desert", "Wetland"],
-  },
-  toolbox: {
-    show: true,
-    orient: "vertical",
-    left: "right",
-    top: "center",
-    feature: {
-      mark: { show: true },
-      dataView: { show: true, readOnly: false },
-      magicType: { show: true, type: ["line", "bar", "stack"] },
-      restore: { show: true },
-      saveAsImage: { show: true },
-    },
-  },
-  xAxis: [
-    {
-      type: "category",
-      axisTick: { show: false },
-      data: ["2012", "2013", "2014", "2015", "2016"],
-    },
-  ],
-  yAxis: [
-    {
-      type: "value",
-    },
-  ],
-  series: [
-    {
-      name: "Forest",
-      type: "bar",
-      barGap: 0,
-      label: labelOption,
-      emphasis: {
-        focus: "series",
-      },
-      data: [320, 332, 301, 334, 390],
-    },
-    {
-      name: "Steppe",
-      type: "bar",
-      label: labelOption,
-      emphasis: {
-        focus: "series",
-      },
-      data: [220, 182, 191, 234, 290],
-    },
-    {
-      name: "Desert",
-      type: "bar",
-      label: labelOption,
-      emphasis: {
-        focus: "series",
-      },
-      data: [150, 232, 201, 154, 190],
-    },
-    {
-      name: "Wetland",
-      type: "bar",
-      label: labelOption,
-      emphasis: {
-        focus: "series",
-      },
-      data: [98, 77, 101, 99, 40],
-    },
-  ],
-};
-
 function DashBoardCard(props) {
   return (
     <div
       className={
-        "d-flex justify-content-center align-items-center dahsboard-card " +
+        "d-flex flex-column justify-content-center align-items-center dahsboard-card " +
         props.cardStyle
       }
     >
-      <p>{props.label}</p>
+      <p>{props.title}</p>
+      <p>{props.value}</p>
     </div>
   );
 }
@@ -878,12 +804,50 @@ function LiveChart() {
 function Chart(props) {
   const instance = useRef(null);
 
+  const BAR_LABEL_ROUTA = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {
+      data: props.data.legend,
+    },
+    toolbox: {
+      show: true,
+      orient: "vertical",
+      left: "right",
+      top: "center",
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        magicType: { show: true, type: ["line", "bar", "stack"] },
+        restore: { show: true },
+        saveAsImage: { show: true },
+      },
+    },
+    xAxis: [
+      {
+        type: "category",
+        axisTick: { show: false },
+        data: props.data.xAxis,
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+      },
+    ],
+    series: props.data.series,
+  };
+
   return (
     <div className="d-flex align-items-stretch dashboard-chart">
       <ReactEChartsCore
         ref={instance}
         echarts={echarts}
-        option={props.option}
+        option={BAR_LABEL_ROUTA}
         notMerge={true}
         lazyUpdate={true}
         className="chart"
@@ -893,56 +857,117 @@ function Chart(props) {
 }
 
 export default function Dashboard(props) {
-  let [isLoading, updateLoader] = useState(true);
+  const [isLoading, updateLoader] = useState(true);
+  const [cardsData, setCardsData] = useState(null);
+  const [departmentStatusChart, setDepartmentStatusChart] = useState(null);
 
-  useEffect(() => {}, [isLoading]);
+  const getData = () => {
+    axios({
+      method: "get",
+      url: baseUrl + "/api/dashboard",
+      config: { headers: { "Content-Type": "multipart/form-data" } },
+    })
+      .then(function (res) {
+        //handle success
+        if ((res.status = 200)) {
+          let data = res.data.result;
+          if (data.hasOwnProperty("cards")) {
+            let cards = JSON.parse(JSON.stringify(data.cards));
+            setCardsData(cards);
+          }
+
+          if (data.hasOwnProperty("charts")) {
+            let charts = data.charts;
+            if (charts.hasOwnProperty("departementChart")) {
+              let series = charts.departementChart.series.map((ele, idx) => {
+                var x = {
+                  ...ele,
+                  type: "bar",
+                  barGap: 0,
+                  label: labelOption,
+                  emphasis: {
+                    focus: "series",
+                  },
+                };
+                
+                return x;
+              });
+
+              let chart = {
+                xAxis: charts.departementChart.edarat,
+                legend: charts.departementChart.status,
+                series: series,
+              };
+
+              chart = JSON.parse(JSON.stringify(chart));
+              setDepartmentStatusChart(chart);
+            }
+          }
+          updateLoader(false);
+        } else {
+          //setError(" Error user name or password");
+        }
+      })
+      .catch(function (res) {
+        //handle error
+        // setError(" Error user name or password");
+        return;
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, [isLoading]);
+
+  let cards = null;
+  if (cardsData != null) {
+    cards = cardsData.map((ele, idx) => {
+      return (
+        <div key={idx} className="col card-container">
+          <DashBoardCard
+            cardStyle={"card" + (idx + 1)}
+            title={ele.TXT_STATUS}
+            value={ele.count}
+          />
+        </div>
+      );
+    });
+  }
 
   return (
     <div className="container-fluid dashboard-container">
-      <div className="row dashboard-row-distance">
-        <div className="col card-container">
-          <DashBoardCard cardStyle={"card1"} label={"Inprogress"} />
-        </div>
-        <div className="col card-container">
-          <DashBoardCard cardStyle={"card2"} label={"Completed"} />
-        </div>
-        <div className="col card-container">
-          <DashBoardCard cardStyle={"card3"} label={"58"} />
-        </div>
-        <div className="col card-container">
-          <DashBoardCard cardStyle={"card4"} label={"101"} />
-        </div>
+      <div className="row dashboard-row-distance d-flex justify-content-center align-items-center">
+        {cards}
       </div>
 
-      <div className="row dashboard-row-distance">
-        <div className="col chart-container">
-          <Chart option={BAR_CHART_OPTION} />
+      {departmentStatusChart && (
+        <div className="row dashboard-row-distance">
+          <div className="col chart-container">
+            <Chart data={departmentStatusChart} />
+          </div>
         </div>
-        <div className="col chart-container">
-          <Chart option={PIE_CHART_OPTION} />
-        </div>
-      </div>
-
-      <div className="row dashboard-row-distance">
-        <div className="col chart-container">
-          <Chart option={GUAGE_CHART_OPTION} />
-        </div>
-        <div className="col chart-container">
-          <Chart option={BAR_LABEL_ROUTA} />
-        </div>
-      </div>
-
-      <div className="row dashboard-row-distance">
-        <div className="col chart-container">
-          <LiveChart />
-        </div>
-      </div>
-
-      <div className="row pb-5">
-        <div className="col chart-container">
-          {/* <ZoneChart option={ZONE_CHART_OPTION} /> */}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
+
+// <div className="row dashboard-row-distance">
+// <div className="col chart-container">
+//   <Chart option={GUAGE_CHART_OPTION} />
+// </div>
+// <div className="col chart-container">
+//   <Chart option={PIE_CHART_OPTION} />
+// </div>
+// </div>
+
+// <div className="row dashboard-row-distance">
+// <div className="col chart-container">
+//   <LiveChart />
+// </div>
+// </div>
+
+// <div className="row pb-5">
+// <div className="col chart-container">
+//   {/* <ZoneChart option={ZONE_CHART_OPTION} /> */}
+// </div>
+// </div>
