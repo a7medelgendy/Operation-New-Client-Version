@@ -13,8 +13,6 @@ import FormModal from "../components/modal/FormModal";
 
 import { baseUrl } from "../shared/staticData";
 import "../styles/shift_log/shiftlog.css";
-import { data } from "autoprefixer";
-
 
 const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
   axios({
@@ -184,12 +182,16 @@ export default function ShiftLog(props) {
                 },
               };
 
-              // if (title.key == "TXT_STATUS") {
-              //   obj.customBodyRender = (states) =>
-              //     states.map((state, index) => (
-              //       <Chip key={index} label={state} />
-              //     ));
-              // }
+              if (title.key == "TXT_STATUS") {
+                obj.options.customBodyRender = (value) => {
+                  let bgColorClass = {
+                    Completed: "bg-success",
+                    InProgress: "bg-warning",
+                    Canceled: "bg-danger",
+                  };
+                  return <Chip label={value} className={bgColorClass[value]} />;
+                };
+              }
               return obj;
             });
 
