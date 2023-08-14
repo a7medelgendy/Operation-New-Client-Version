@@ -11,26 +11,28 @@ import Box from "@mui/material/Box";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import axios from "axios";
-import VirtualizedAutoComplete from "../VirtualizedAutoComplete";
-import { baseUrl } from "../shared/staticData.js";
+import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
+
 export default function EditForm(props) {
+  //\\console.log(props.rowData);
   const [open, setOpen] = useState(false);
+
   //form value
-  const [groupID, setGroupID] = useState(props.rowData.CODE_SHIFT);
-  const [area, setArea] = useState(props.rowData.CODE_AREA);
-  const [unit, setUnit] = useState(props.rowData.CODE_UNIT);
+  const [groupID, setGroupID] = useState("");
+  const [area, setArea] = useState("");
+  const [unit, setUnit] = useState("");
   const [timeOpened, setTimeOpened] = useState(
-    new Date(props.rowData.TIME_OPEN)
+    new Date().toJSON().slice(0, 16)
   );
   const [timeClosed, setTimeClosed] = useState(
-    new Date(props.rowData.TIME_CLOSED)
+    new Date().toJSON().slice(0, 16)
   );
-  const [openedBy, setOpenedBy] = useState(props.rowData.OPENED_BY_EMPN);
-  const [closedBy, setClosedBy] = useState(props.rowData.CLOSED_BY_EMPN);
-  const [description, setDescription] = useState(props.rowData.DESCREPTION);
-  const [status, setStatus] = useState(props.rowData.CODE_STATUS);
-  const [tag, setTag] = useState(props.rowData.EQUIBMENT);
-  const [exeEdara, setExeEdara] = useState(props.rowData.CODE_EDARA);
+  const [openedBy, setOpenedBy] = useState("");
+  const [closedBy, setClosedBy] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
+  const [tag, setTag] = useState("");
+  const [exeEdara, setExeEdara] = useState("");
   const [unitTags, setUnitTags] = useState([]);
 
   const [dropDownData, setdropDownData] = useState({});
@@ -40,8 +42,7 @@ export default function EditForm(props) {
   };
 
   const handleSubmit = () => {
-    var dbOject = {
-      id: props.rowData.ID ? props.rowData.ID : "",
+    var dbOjectAdd = {
       groupID: groupID,
       area: area,
       unit: unit,
@@ -54,30 +55,6 @@ export default function EditForm(props) {
       timeOpened: timeOpened,
       timeClosed: timeClosed,
     };
-
-    axios({
-      method: "put",
-      url: baseUrl + "/api/shiftLog",
-      data: dbOject,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          props.callBackNewRow(dbOject);
-          setOpen(false);
-        } else {
-          // setError(" Error user name or password");
-          alert("error");
-          return;
-        }
-      })
-      .catch(function (res) {
-        //handle error
-        //setError(" Error user name or password");
-        alert("error");
-        return;
-      });
   };
 
   const handleClickOpen = () => {
@@ -95,7 +72,7 @@ export default function EditForm(props) {
   const equibmentsData = () => {
     axios({
       method: "get",
-      url: baseUrl + "api/equibments",
+      url: "api/equibments",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -118,7 +95,7 @@ export default function EditForm(props) {
   const masterData = () => {
     axios({
       method: "get",
-      url: baseUrl + "api/addShift/masterData",
+      url: "api/addShift/masterData",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -178,9 +155,9 @@ export default function EditForm(props) {
                   }}
                   sx={{ width: 250 }}
                   getOptionLabel={(option) => option.TXT_SHIFT}
-                  /*   isOptionEqualToValue={(option, value) => {
+                  isOptionEqualToValue={(option, value) => {
                     return option.id === value.id;
-                  }} */
+                  }}
                   onChange={(_, object) => {
                     handleOnChange(object.CODE_SHIFT, setGroupID);
                   }}
@@ -385,7 +362,7 @@ export default function EditForm(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Update</Button>
+            <Button onClick={handleSubmit}>New Log</Button>
           </DialogActions>
         </Dialog>
       </div>

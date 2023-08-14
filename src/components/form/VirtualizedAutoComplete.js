@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import TextField from "@mui/material/TextField";
 import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ListSubheader from "@mui/material/ListSubheader";
 import Popper from "@mui/material/Popper";
 import { useTheme, styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
+import AutoCompleteValidator from "./AutoCompleteValidator";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -98,10 +95,6 @@ const StyledPopper = styled(Popper)({
   },
 });
 
-/* const OPTIONS = Array.from(new Array(10000))
-  .map(() => random(10 + Math.ceil(Math.random() * 20)))
-  .sort((a, b) => a.toUpperCase().localeCompare(b.toUpperCase())); */
-
 function renderRow(props) {
   const { data, index, style } = props;
   const dataSet = data[index];
@@ -119,42 +112,25 @@ function renderRow(props) {
   }
 
   return (
-    <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle}>
+    <li key={index} {...dataSet[0]} style={inlineStyle}>
       {dataSet[1].TAG}
-    </Typography>
+    </li>
   );
 }
 
 export default function VirtualizedAutoComplete(props) {
   return (
-    <Autocomplete
+    <AutoCompleteValidator
       id="virtualize-demo"
-      sx={{ width: 300 }}
       disableListWrap
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
-      options={props.options}
-      getOptionLabel={props.getOptionLabel}
       //groupBy={(option) => option.ID}
-      renderInput={props.renderInput}
-      defaultValue={{ TAG: props.defaultValue }}
+
       renderOption={(props, option) => [props, option]}
-      // TODO: Post React 18 update - validate this conversion, look like a hidden bug
       renderGroup={(params) => params}
-      onChange={props.onChange}
+      
+      {...props}
     />
   );
 }
-
-/* const OPTIONS = [
-  { label: "Group-1", ID: 1 },
-  { label: "Group-2", ID: 2 },
-  { label: "Group-3", ID: 3 },
-  { label: "Group-4", ID: 4 },
-]; */
-
-/* const OPTIONS = [
-  ["GROUP-2", "200"],
-  ["GROUP-2", "412"],
-  ["GROUP-2", "412"],
-] */

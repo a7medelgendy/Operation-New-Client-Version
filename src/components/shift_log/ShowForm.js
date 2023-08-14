@@ -10,8 +10,8 @@ export default function ShowForm(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    console.log(props.rowData);
-    console.log(props.rowIndex);
+    //\\console.log(props.rowData);
+    //\\console.log(props.rowIndex);
 
     setOpen(true);
   };

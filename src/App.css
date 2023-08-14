@@ -32,7 +32,21 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.main{
+  margin-left: 310px !important;
+  margin-right: 10px;
+}
+
+.sidebar-styleo {
+  transform: none !important;
+  visibility: visible !important;
+  top: 56px !important;
+  height: calc(100% - var(--56px)) !important;
+  width: 300px !important;
 }

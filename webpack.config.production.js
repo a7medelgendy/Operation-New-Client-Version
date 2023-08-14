@@ -34,31 +34,16 @@ module.exports = {
         use: ["babel-loader"],
       },
       {
-        test: /\.css$/,
-        use: [
-          {
-            // We configure 'MiniCssExtractPlugin'
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-              // Allows to configure how many loaders
-              // before css-loader should be applied
-              // to @import(ed) resources
-              importLoaders: 1,
-              //localsConvention: "camelCase",
-              // Create source maps for CSS files
-              sourceMap: true,
-            },
-          },
-          {
-            // PostCSS will run before css-loader and will
-            // minify and autoprefix our CSS rules.
-            loader: "postcss-loader",
-          },
-        ],
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
       },
     ],
   },
@@ -68,6 +53,12 @@ module.exports = {
         styles: {
           name: "styles",
           test: /\.css$/,
+          chunks: "all",
+          enforce: true,
+        },
+        assets: {
+          name: "assets",
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
           chunks: "all",
           enforce: true,
         },

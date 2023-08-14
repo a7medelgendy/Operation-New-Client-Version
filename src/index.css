@@ -5,9 +5,64 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+ 
+  overflow: hidden;
+}
+
+html *
+{
+  font-family: "Roboto-Black" !important;
+  text-transform: none !important;
+}
+
+@font-face {
+  font-family: 'Roboto-Black'; /*a name to be used later*/
+  src: url('./assets/Roboto-Black.ttf'); /*URL to font*/
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 30px;
+  height: 30px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb:vertical {
+  background-color: #d6dee1;
+
+  background-color: #323484;
+  
+
+  border-radius: 20px;
+  border: 10px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #d6dee1;
+
+  background-color: #323484;
+  
+
+  border-radius: 20px;
+  border: 10px solid transparent;
+
+  background-clip: content-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+  background-color: #645eb4;
 }

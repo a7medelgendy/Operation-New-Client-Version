@@ -1,5 +1,5 @@
 export const baseUrl = "http://10.10.6.162:8000";
-
+//export const baseUrl = "http://172.18.8.103:8000";
 export const executedEdara = [
   { label: "تحكم", ID: "850" },
   { label: "كهربا", ID: "800" },
@@ -50,12 +50,12 @@ export const areas = [
 ];
 
 /*     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build",
 
 
 
-    "start": "webpack serve --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
 
 
 */

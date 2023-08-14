@@ -1,0 +1,22 @@
+.custome-modal-size-xs .MuiDialog-paperWidthXs {
+  max-width: 360px !important;
+  border-radius: 20px !important;
+}
+
+.custome-modal-size-md .MuiDialog-paperWidthXs {
+  max-width: 703px !important;
+  border-radius: 20px !important;
+}
+
+.modal-title-closeBtn {
+  position: "absolute";
+  /* right: theme.spacing(1),
+  top: theme.spacing(1), */
+  color: green;
+}
+.modal-title {
+  background-color: #323484 !important;
+  height: 58px !important;
+  padding: 10px !important;
+  margin: 0px !important;
+}

@@ -1,0 +1,15 @@
+.main-section-container {
+    height: 100%;
+    padding: 20px !important;
+    padding-right: 30px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+
+
+
+
+/* .appbar-container{ 
+    height: 120px;
+} */
