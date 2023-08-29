@@ -141,9 +141,6 @@ export default function ShiftLog(props) {
 
   const { addToast } = useToasts();
 
-
-  console.log(dbData.length);
-
   const options = {
     filter: true,
     filterType: "dropdown",
@@ -185,7 +182,6 @@ export default function ShiftLog(props) {
   };
 
   const getTableData = (page = 0, perPage = 10, search = "") => {
-    console.log("get data");
     axios({
       method: "get",
       url: `${baseUrl}/api/shiftLog?page=${page}&perPage=${perPage}&search=${search}`,
@@ -194,35 +190,35 @@ export default function ShiftLog(props) {
       .then(function (res) {
         //handle success
         if ((res.status = 200)) {
-          if (res.data.result.columnsData.length > 0) {
-            var columnsDbTitle = res.data.result.showedColumns.map((title) => {
-              var obj = {
-                name: title.key,
-                label: title.en,
-                options: {
-                  filter: true,
-                  sort: true,
-                },
-              };
 
-              if (title.key == "TXT_STATUS") {
-                obj.options.customBodyRender = (value) => {
-                  let bgColorClass = {
-                    Completed: "bg-success",
-                    InProgress: "bg-warning",
-                    Canceled: "bg-danger",
-                  };
-                  return <Chip label={value} className={bgColorClass[value]} />;
+          var columnsDbTitle = res.data.result.showedColumns.map((title) => {
+            var obj = {
+              name: title.key,
+              label: title.en,
+              options: {
+                filter: true,
+                sort: true,
+              },
+            };
+
+            if (title.key == "TXT_STATUS") {
+              obj.options.customBodyRender = (value) => {
+                let bgColorClass = {
+                  Completed: "bg-success",
+                  InProgress: "bg-warning",
+                  Canceled: "bg-danger",
                 };
-              }
-              return obj;
-            });
+                return <Chip label={value} className={bgColorClass[value]} />;
+              };
+            }
+            return obj;
+          });
 
-            setdbData(res.data.result.columnsData);
-            setTotalRowsNumber(res.data.result.total)
-            setdbColumns(columnsDbTitle);
-            updateLoader(false);
-          }
+          setdbData(res.data.result.columnsData);
+          setTotalRowsNumber(res.data.result.total)
+          setdbColumns(columnsDbTitle);
+          updateLoader(false);
+
         } else {
           console.log("errrodddddr empty")
           //setError(" Error user name or password");
@@ -230,21 +226,21 @@ export default function ShiftLog(props) {
       })
       .catch(error => {
         //handle error
-        setdbData([]);
-        updateLoader(false);
+        // setdbData([]);
+        // updateLoader(true);
+        console.log("testsaaaaaaaaaa")
         return;
       });
   };
 
   const changePage = (page) => {
     setPage(page)
-    updateLoader(!isLoading)
+    updateLoader(true)
   }
 
   const handleSearch = (search) => {
-    console.log(search)
     setSearchString(search == null ? "" : search)
-    updateLoader(!isLoading)
+    updateLoader(true)
   }
 
 
@@ -294,7 +290,7 @@ export default function ShiftLog(props) {
 
   useEffect(() => {
     getTableData(page, options.rowsPerPage, searchString);
-    setTableConfig(getTableCOnfig);
+    setTableConfig(getTableCOnfig())
   }, [isLoading]);
 
   return (
@@ -348,11 +344,14 @@ export default function ShiftLog(props) {
           message={"Confirm Delete"}
           title={"Confirm"}
         />
+
         <DataTable
           title={"Corrective Maintenance Log"}
           tableConfig={tableConfig}
           data={dbData}
         />
+
+
       </div>
     </div>
   );
