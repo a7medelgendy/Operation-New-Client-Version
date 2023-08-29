@@ -167,7 +167,7 @@ export default function Dashboard(props) {
     const [cardsData, setCardsData] = useState(null);
     const [departmentStatusChart, setDepartmentStatusChart] = useState(null);
 
-    const getData = () => {
+    const getBarChartData = () => {
         axios({
             method: "get",
             url: baseUrl + "/api/dashboard",
@@ -222,7 +222,7 @@ export default function Dashboard(props) {
     };
 
     useEffect(() => {
-        getData();
+        getBarChartData();
     }, [isLoading]);
 
     let cards = null;
@@ -253,6 +253,16 @@ export default function Dashboard(props) {
                     </div>
                 </div>
             )}
+
+            {departmentStatusChart && <div className="row dashboard-row-distance mb-3">
+                <div className="col-12 col-xl chart-container">
+                    <ChartHandler data={departmentStatusChart} type={"pie-chart"} />
+                </div>
+                <div className="col-12 col-xl chart-container">
+                    <ChartHandler data={departmentStatusChart} type={"pie-chart"} />
+                </div>
+            </div>}
+
         </div>
     );
 }
