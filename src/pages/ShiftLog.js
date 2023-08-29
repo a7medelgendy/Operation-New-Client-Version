@@ -117,23 +117,20 @@ const modalFormTypes = {
   },
 };
 
-const options = {
-  filter: true,
-  filterType: "dropdown",
-  responsive: "standard",
-  selectableRows: "none",
-  // onColumnSortChange: (changedColumn, direction) =>
-  //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
-  // onChangeRowsPerPage: (numberOfRows) =>
-  //   //\\console.log("numberOfRows: ", numberOfRows),
-  // onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
-};
+
 
 export default function ShiftLog(props) {
+
+
+
   const [error, setError] = useState("");
   const [tableConfig, setTableConfig] = useState({});
   const [dbData, setdbData] = useState([]);
   const [dbColumns, setdbColumns] = useState([]);
+  const [totalRowsNumber, setTotalRowsNumber] = useState(1)
+  const [page, setPage] = useState(0)
+  const [searchString, setSearchString] = useState("")
+
   let [isLoading, updateLoader] = useState(true);
 
   const [formType, setFormType] = useState("add");
@@ -143,6 +140,31 @@ export default function ShiftLog(props) {
   const [controlModalIsOpen, setControlModalIsOpen] = useState(false);
 
   const { addToast } = useToasts();
+
+
+  console.log(dbData.length);
+
+  const options = {
+    filter: true,
+    filterType: "dropdown",
+    responsive: "standard",
+    selectableRows: "none",
+    serverSide: true,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [],
+
+    textLabels: {
+      body: {
+        noMatch: dbData.length !== 0 ? 'Loading data...' : 'No matching records found',
+      },
+    }
+    // onColumnSortChange: (changedColumn, direction) =>
+    //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
+    // onChangeRowsPerPage: (numberOfRows) =>
+    //   //\\console.log("numberOfRows: ", numberOfRows),
+    // onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
+  };
+
 
   const triggerControllModal = () => {
     setControlModalIsOpen(!controlModalIsOpen);
@@ -162,10 +184,11 @@ export default function ShiftLog(props) {
     triggerRemoveModal();
   };
 
-  const getTableData = () => {
+  const getTableData = (page = 0, perPage = 10, search = "") => {
+    console.log("get data");
     axios({
       method: "get",
-      url: baseUrl + "/api/shiftLog",
+      url: `${baseUrl}/api/shiftLog?page=${page}&perPage=${perPage}&search=${search}`,
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then(function (res) {
@@ -196,21 +219,48 @@ export default function ShiftLog(props) {
             });
 
             setdbData(res.data.result.columnsData);
+            setTotalRowsNumber(res.data.result.total)
             setdbColumns(columnsDbTitle);
             updateLoader(false);
           }
         } else {
+          console.log("errrodddddr empty")
           //setError(" Error user name or password");
         }
       })
-      .catch(function (res) {
+      .catch(error => {
         //handle error
-        // setError(" Error user name or password");
+        setdbData([]);
+        updateLoader(false);
         return;
       });
   };
 
+  const changePage = (page) => {
+    setPage(page)
+    updateLoader(!isLoading)
+  }
+
+  const handleSearch = (search) => {
+    console.log(search)
+    setSearchString(search == null ? "" : search)
+    updateLoader(!isLoading)
+  }
+
+
   const getTableCOnfig = () => {
+
+    const onTableChange = (action, tableState) => {
+      switch (action) {
+        case 'changePage':
+          changePage(tableState.page)
+          break;
+        default:
+          break;
+      }
+    }
+
+    const tablOptions = { ...options, count: totalRowsNumber, onTableChange: onTableChange, onSearchChange: handleSearch, onSearchOpen: () => { handleSearch("") } }
     const tableConfig = {
       actions: [
         {
@@ -236,14 +286,14 @@ export default function ShiftLog(props) {
       ], // table button actions
 
       columns: dbColumns,
-      options: options,
+      options: tablOptions,
     };
 
     return tableConfig;
   };
 
   useEffect(() => {
-    getTableData();
+    getTableData(page, options.rowsPerPage, searchString);
     setTableConfig(getTableCOnfig);
   }, [isLoading]);
 
@@ -265,7 +315,7 @@ export default function ShiftLog(props) {
           <FormModal
             open={controlModalIsOpen}
             cancleClick={triggerControllModal}
-            confirmClick={() => {}}
+            confirmClick={() => { }}
             title={
               "Shift Log" +
               " - " +
