@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "../styles/dashboard/dashboard.css";
 import { baseUrl } from "../shared/staticData";
 import ChartHandler from "../components/charts";
+import Cards from "../components/charts/Cards";
+
+
 
 var app = {};
 
@@ -82,19 +84,6 @@ const labelOption = {
     },
 };
 
-function DashBoardCard(props) {
-    return (
-        <div
-            className={
-                "d-flex flex-column justify-content-center align-items-center dahsboard-card " +
-                props.cardStyle
-            }
-        >
-            <p>{props.title}</p>
-            <p>{props.value}</p>
-        </div>
-    );
-}
 
 // function ZoneChart(props) {
 //   const instance = useRef(null);
@@ -166,7 +155,10 @@ export default function Dashboard(props) {
     const [isLoading, updateLoader] = useState(true);
     const [cardsData, setCardsData] = useState(null);
     const [departmentStatusChart, setDepartmentStatusChart] = useState(null);
-
+    const [topEquipmentChart, setTopEquipmentChart] = useState(null);
+    const [topOperationUnitsChart, setTopOperationUnitsChart] = useState(null);
+    const [operationUnitsLogsChart, setOperationUnitsLogsChart] = useState(null);
+    const [unitsLogChart, setUnitsLogChart] = useState(null);
     const getBarChartData = () => {
         axios({
             method: "get",
@@ -178,11 +170,13 @@ export default function Dashboard(props) {
                 if ((res.status = 200)) {
                     let data = res.data.result;
                     if (data.hasOwnProperty("cards")) {
-                        let cards = JSON.parse(JSON.stringify(data.cards));
-                        setCardsData(cards);
+                        //let cards = JSON.parse(JSON.stringify(data.cards));
+                        setCardsData(data.cards);
                     }
 
+
                     if (data.hasOwnProperty("charts")) {
+                        const colors = ["#2e7d32", '#ed6c02', '#d32f2f'];
                         let charts = data.charts;
                         if (charts.hasOwnProperty("departementChart")) {
                             let series = charts.departementChart.series.map((ele, idx) => {
@@ -194,6 +188,7 @@ export default function Dashboard(props) {
                                     emphasis: {
                                         focus: "series",
                                     },
+                                    color: colors[idx]
                                 };
 
                                 return x;
@@ -205,9 +200,62 @@ export default function Dashboard(props) {
                                 series: series,
                             };
 
-                            chart = JSON.parse(JSON.stringify(chart));
                             setDepartmentStatusChart(chart);
                         }
+                        if (charts.hasOwnProperty("topEquipmentChart")) {
+                            let chart = {
+                                text: "Top Equipment Chart",
+                                subtext: "",
+                                values: charts.topEquipmentChart,
+                                radius: "70%"
+                            }
+                            setTopEquipmentChart(chart);
+                        }
+                        if (charts.hasOwnProperty("compeletedOperationUnitsChart")) {
+                            let chart = {
+                                text: " Units According Compeleted Work orders",
+                                subtext: "",
+                                values: charts.compeletedOperationUnitsChart,
+                                radius: "40%"
+                            }
+                            setTopOperationUnitsChart(chart);
+                        }
+
+                        if (charts.hasOwnProperty("operationUnitsLogsChart")) {
+                            let chart = {
+                                text: " Units according All Work orders",
+                                subtext: "",
+                                values: charts.operationUnitsLogsChart,
+                                radius: "40%"
+                            }
+                            setOperationUnitsLogsChart(chart);
+                        }
+
+                        if (charts.hasOwnProperty("unitsLogChart")) {
+                            let series = charts.unitsLogChart.series.map((ele, idx) => {
+                                var x = {
+                                    ...ele,
+                                    type: "bar",
+                                    barGap: 0,
+                                    label: labelOption,
+                                    emphasis: {
+                                        focus: "series",
+                                    },
+                                    color: colors[idx]
+                                };
+
+                                return x;
+                            });
+
+                            let chart = {
+                                xAxis: charts.unitsLogChart.Units,
+                                legend: charts.unitsLogChart.status,
+                                series: series,
+                            };
+
+                            setUnitsLogChart(chart);
+                        }
+
                     }
                     updateLoader(false);
                 } else {
@@ -230,7 +278,8 @@ export default function Dashboard(props) {
         cards = cardsData.map((ele, idx) => {
             return (
                 <div key={idx} className="col card-container">
-                    <DashBoardCard
+                    <Cards
+
                         cardStyle={"card" + (idx + 1)}
                         title={ele.TXT_STATUS}
                         value={ele.count}
@@ -248,18 +297,39 @@ export default function Dashboard(props) {
 
             {departmentStatusChart && (
                 <div className="row dashboard-row-distance">
+                    <h5 className="d-flex justify-content-center ">Maintenance Work orders according to the execution department. </h5>
                     <div className="col chart-container">
                         <ChartHandler data={departmentStatusChart} type={"bar-chart"} />
                     </div>
                 </div>
             )}
 
+
+
+
+
             {departmentStatusChart && <div className="row dashboard-row-distance mb-3">
-                <div className="col-12 col-xl chart-container">
-                    <ChartHandler data={departmentStatusChart} type={"pie-chart"} />
+                <div className="col-12  chart-container">
+                    <ChartHandler data={topEquipmentChart} type={"pie-chart"} />
                 </div>
-                <div className="col-12 col-xl chart-container">
-                    <ChartHandler data={departmentStatusChart} type={"pie-chart"} />
+
+            </div>}
+
+
+
+            {topOperationUnitsChart && operationUnitsLogsChart && <div className="row dashboard-row-distance mb-3">
+                <div className="col-12 col-xl-6  chart-container">
+                    <ChartHandler data={topOperationUnitsChart} type={"pie-chart"} />
+                </div>
+                <div className="col-12 col-xl-6  chart-container">
+                    <ChartHandler data={operationUnitsLogsChart} type={"pie-chart"} />
+                </div>
+            </div>}
+
+            {unitsLogChart && <div className="row dashboard-row-distance mb-3">
+                <div className="col-12  chart-container">
+                    <h5 className="d-flex justify-content-center p-10 ">Maintenance Work orders according to the Units. </h5>
+                    <ChartHandler data={unitsLogChart} type={"bar-chart"} />
                 </div>
             </div>}
 

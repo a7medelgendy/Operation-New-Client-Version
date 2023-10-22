@@ -11,7 +11,12 @@ body {
 
 html *
 {
-  font-family: "Roboto-Black" !important;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Roboto-Black', Courier, monospace;
+  box-sizing: border-box; 
+  
+  font-family: "Roboto-Black" ;
   text-transform: none !important;
 }
 

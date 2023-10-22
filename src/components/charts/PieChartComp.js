@@ -7,8 +7,8 @@ export default function PieChartComp(props) {
 
     var option = {
         title: {
-            text: 'Referer of a Website',
-            subtext: 'Fake Data',
+            text: props.data.text,
+            subtext: props.data.subtext,
             left: 'center'
         },
         tooltip: {
@@ -20,16 +20,10 @@ export default function PieChartComp(props) {
         },
         series: [
             {
-                name: 'Access From',
+                //name: 'Access From',
                 type: 'pie',
-                radius: '50%',
-                data: [
-                    { value: 1048, name: 'Search Engine' },
-                    { value: 735, name: 'Direct' },
-                    { value: 580, name: 'Email' },
-                    { value: 484, name: 'Union Ads' },
-                    { value: 300, name: 'Video Ads' }
-                ],
+                radius: props.data.radius,
+                data: props.data.values,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
