@@ -220,7 +220,7 @@ export default function ShiftLog(props) {
           updateLoader(false);
 
         } else {
-          console.log("errrodddddr empty")
+          console.log("errror empty")
           //setError(" Error user name or password");
         }
       })
@@ -240,6 +240,7 @@ export default function ShiftLog(props) {
 
   const handleSearch = (search) => {
     setSearchString(search == null ? "" : search)
+    setPage(0)
     updateLoader(true)
   }
 
