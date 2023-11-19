@@ -211,11 +211,11 @@ export default function Dashboard(props) {
                             }
                             setTopEquipmentChart(chart);
                         }
-                        if (charts.hasOwnProperty("compeletedOperationUnitsChart")) {
+                        if (charts.hasOwnProperty("shiftLogChart")) {
                             let chart = {
-                                text: " Units According Compeleted Work orders",
+                                text: "   Total Work Orders Per Shift",
                                 subtext: "",
-                                values: charts.compeletedOperationUnitsChart,
+                                values: charts.shiftLogChart,
                                 radius: "40%"
                             }
                             setTopOperationUnitsChart(chart);
