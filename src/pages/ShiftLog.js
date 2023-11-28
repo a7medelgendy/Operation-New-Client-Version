@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Chip } from "@mui/material";
+import { Button, Checkbox, Chip, FormControl, InputLabel, ListItemText, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 
@@ -130,7 +130,7 @@ export default function ShiftLog(props) {
   const [totalRowsNumber, setTotalRowsNumber] = useState(1)
   const [page, setPage] = useState(0)
   const [searchString, setSearchString] = useState("")
-
+  const [filterData, setFilterData] = useState([])
   let [isLoading, updateLoader] = useState(true);
 
   const [formType, setFormType] = useState("add");
@@ -142,7 +142,8 @@ export default function ShiftLog(props) {
   const { addToast } = useToasts();
 
   const options = {
-    filter: true,
+    filter: false,
+    serverSide: true,
     filterType: "dropdown",
     responsive: "standard",
     selectableRows: "none",
@@ -181,27 +182,37 @@ export default function ShiftLog(props) {
     triggerRemoveModal();
   };
 
-  const getTableData = (page = 0, perPage = 10, search = "") => {
+  const getTableData = (page = 0, perPage = 10, search = "", filters = []) => {
     axios({
-      method: "get",
-      url: `${baseUrl}/api/shiftLog?page=${page}&perPage=${perPage}&search=${search}`,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      method: 'get',
+      url: `${baseUrl}/api/shiftLog`,
+      params: {
+        page: page,
+        perPage: perPage,
+        search: search,
+        filterData: (filterData), // Stringify the object
+      },
+      config: {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
     })
       .then(function (res) {
         //handle success
         if ((res.status = 200)) {
-
-          var columnsDbTitle = res.data.result.showedColumns.map((title) => {
+          var columnsDbTitle = res.data.result.showedColumns.map((data) => {
             var obj = {
-              name: title.key,
-              label: title.en,
+              name: data.key,
+              label: data.en,
               options: {
-                filter: true,
-                sort: true,
+                filter: data.filter,
+                sort: false,
+                filterOptions: {
+                  names: data.masterArray
+                },
               },
             };
 
-            if (title.key == "TXT_STATUS") {
+            if (data.key == "TXT_STATUS") {
               obj.options.customBodyRender = (value) => {
                 let bgColorClass = {
                   Completed: "bg-success",
@@ -228,7 +239,6 @@ export default function ShiftLog(props) {
         //handle error
         // setdbData([]);
         // updateLoader(true);
-        console.log("testsaaaaaaaaaa")
         return;
       });
   };
@@ -244,20 +254,37 @@ export default function ShiftLog(props) {
     updateLoader(true)
   }
 
+  const handleFilterChange = ({ columns, filterList }) => {
+    let filerData = {};
+    const result = filterList.map((filter, index) => {
+      if (Array.isArray(filter) && filter.length > 0) {
+        filerData[columns[index].name] = filter;
+      }
+    });
+    setFilterData(filerData);
+    updateLoader(true);
+  };
+
+
 
   const getTableCOnfig = () => {
-
     const onTableChange = (action, tableState) => {
       switch (action) {
         case 'changePage':
           changePage(tableState.page)
+          break;
+        case 'filterChange':
+          handleFilterChange(tableState);
           break;
         default:
           break;
       }
     }
 
-    const tablOptions = { ...options, count: totalRowsNumber, onTableChange: onTableChange, onSearchChange: handleSearch, onSearchOpen: () => { handleSearch("") } }
+    const tablOptions = {
+      ...options, count: totalRowsNumber, onTableChange: (action, tableState) => onTableChange(action, tableState),
+      onSearchChange: handleSearch, onSearchOpen: () => { handleSearch("") }
+    }
     const tableConfig = {
       actions: [
         {
@@ -345,14 +372,12 @@ export default function ShiftLog(props) {
           message={"Confirm Delete"}
           title={"Confirm"}
         />
-
+        <h2> Word Order Details</h2>
         <DataTable
-          title={"Corrective Maintenance Log"}
+          title={"Corrective Maintenance Work Order"}
           tableConfig={tableConfig}
           data={dbData}
         />
-
-
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import ChartHandler from "../components/charts";
 import Cards from "../components/charts/Cards";
 
 
-
 var app = {};
 
 const posList = [
