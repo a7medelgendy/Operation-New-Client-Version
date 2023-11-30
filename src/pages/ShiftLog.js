@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Checkbox, Chip, FormControl, InputLabel, ListItemText, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
@@ -12,6 +12,7 @@ import ConfirmModal from "../components/modal/confirm";
 import FormModal from "../components/modal/FormModal";
 
 import { baseUrl } from "../shared/staticData";
+import user from "../shared/user";
 import "../styles/shift_log/shiftlog.css";
 
 const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
@@ -117,12 +118,7 @@ const modalFormTypes = {
   },
 };
 
-
-
 export default function ShiftLog(props) {
-
-
-
   const [error, setError] = useState("");
   const [tableConfig, setTableConfig] = useState({});
   const [dbData, setdbData] = useState([]);
@@ -265,8 +261,6 @@ export default function ShiftLog(props) {
     updateLoader(true);
   };
 
-
-
   const getTableCOnfig = () => {
     const onTableChange = (action, tableState) => {
       switch (action) {
@@ -285,8 +279,17 @@ export default function ShiftLog(props) {
       ...options, count: totalRowsNumber, onTableChange: (action, tableState) => onTableChange(action, tableState),
       onSearchChange: handleSearch, onSearchOpen: () => { handleSearch("") }
     }
-    const tableConfig = {
-      actions: [
+
+    let actions = [];
+    actions.push({
+      type: "view",
+      clickEvent: (rowData, dataIndex) => {
+        handleMode("view", rowData);
+      },
+    })
+
+    if (user.userData.ROLE !== "engineering") {
+      actions.push(
         {
           type: "edit",
           clickEvent: (rowData, dataIndex) => {
@@ -300,19 +303,14 @@ export default function ShiftLog(props) {
             // triggerRemoveModal();
             // setCurrentIdx(rowIndex);
           },
-        },
-        {
-          type: "view",
-          clickEvent: (rowData, dataIndex) => {
-            handleMode("view", rowData);
-          },
-        },
-      ], // table button actions
+        });
+    }
+    const tableConfig = {
+      actions: actions, // table button actions
 
       columns: dbColumns,
       options: tablOptions,
     };
-
     return tableConfig;
   };
 
@@ -325,17 +323,23 @@ export default function ShiftLog(props) {
     <div className="container-fluid">
       <div className="row mb-3">
         <div className="col d-flex justify-content-end">
-          <Button
-            onClick={() => {
-              handleMode("add");
-            }}
-            startIcon={<AddIcon />}
-            variant="contained"
-            color="primary"
-            className="add-button"
-          >
-            {"Add Shift Log"}
-          </Button>
+          {user.userData.ROLE !== 'engineering' ? (
+            <Fragment>
+              <Button
+                onClick={() => {
+                  handleMode("add");
+                }}
+                startIcon={<AddIcon />}
+                variant="contained"
+                color="primary"
+                className="add-button"
+              >
+                {"Add Shift Log"}
+              </Button>
+
+            </Fragment>
+          ) : ""}
+
           <FormModal
             open={controlModalIsOpen}
             cancleClick={triggerControllModal}
