@@ -288,7 +288,7 @@ export default function ShiftLog(props) {
       },
     })
 
-    if (user.userData.ROLE !== "engineering") {
+    if (user.userData.PRIVILEGE !== "engineering") {
       actions.push(
         {
           type: "edit",
@@ -310,6 +310,7 @@ export default function ShiftLog(props) {
 
       columns: dbColumns,
       options: tablOptions,
+      responsive: "standard",
     };
     return tableConfig;
   };
@@ -322,8 +323,11 @@ export default function ShiftLog(props) {
   return (
     <div className="container-fluid">
       <div className="row mb-3">
-        <div className="col d-flex justify-content-end">
-          {user.userData.ROLE !== 'engineering' ? (
+        <h2 className="col-md-6 mb-0" style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>
+          Corrective Maintenance Work Order
+        </h2>
+        <div className="col-md-6 d-flex justify-content-end">
+          {user.userData.PRIVILEGE !== 'engineering' ? (
             <Fragment>
               <Button
                 onClick={() => {
@@ -376,9 +380,9 @@ export default function ShiftLog(props) {
           message={"Confirm Delete"}
           title={"Confirm"}
         />
-        <h2> Word Order Details</h2>
+
         <DataTable
-          title={"Corrective Maintenance Work Order"}
+          title={""}
           tableConfig={tableConfig}
           data={dbData}
         />
