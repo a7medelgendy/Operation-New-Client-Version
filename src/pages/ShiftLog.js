@@ -6,7 +6,6 @@ import ShiftLogControlForm from "../components/shift_log/ShiftLogControlForm";
 import { useToasts } from "react-toast-notifications";
 import ConfirmModal from "../components/modal/confirm";
 import FormModal from "../components/modal/FormModal";
-import { baseUrl } from "../shared/staticData";
 import user from "../shared/user";
 import "../styles/shift_log/shiftlog.css";
 import { handleRequest } from "../utilites/handleApiRequest";
@@ -69,7 +68,7 @@ export default function ShiftLog(props) {
   const { addToast } = useToasts();
 
   const options = {
-    filter: false,
+    filter: true,
     serverSide: true,
     filterType: "dropdown",
     responsive: "standard",
@@ -83,11 +82,6 @@ export default function ShiftLog(props) {
         noMatch: dbData.length !== 0 ? 'Loading data...' : 'No matching records found',
       },
     }
-    // onColumnSortChange: (changedColumn, direction) =>
-    //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
-    // onChangeRowsPerPage: (numberOfRows) =>
-    //   //\\console.log("numberOfRows: ", numberOfRows),
-    // onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
   };
 
 
@@ -225,7 +219,7 @@ export default function ShiftLog(props) {
   };
 
   useEffect(() => {
-    getTableData(page, options.rowsPerPage, searchString);
+    getTableData();
     setTableConfig(getTableCOnfig())
   }, [isLoading]);
 
@@ -267,9 +261,7 @@ export default function ShiftLog(props) {
         <ConfirmModal
           open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={"Confirm Delete"} title={"Confirm"}
         />
-        <DataTable
-          title={""} tableConfig={tableConfig} data={dbData}
-        />
+        <DataTable title={""} tableConfig={tableConfig} data={dbData} />
       </div>
     </div>
   );
