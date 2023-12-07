@@ -587,9 +587,9 @@ export default function ShiftLogControlForm(props) {
 
           {!isReadOnlyForm && (
             <Button
-              type="submit"
               size="small"
               variant="text"
+              type="submit"
               className="rounded-btn save-btn"
             >
               Save
