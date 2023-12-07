@@ -9,7 +9,7 @@ export default function SideBar() {
         <img src={require("../assets/logo.png")} />
       </div>
 
-      <div className="row sidebar-buttons-container flex-grow-1 ">
+      <div className="d-flex sidebar-buttons-container flex-grow-1 ">
         <SideBarButtonList />
       </div>
     </div>

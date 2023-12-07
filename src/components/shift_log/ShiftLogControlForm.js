@@ -578,6 +578,7 @@ export default function ShiftLogControlForm(props) {
         <div className="col d-flex justify-content-end">
           <Button
             variant="text"
+            size="small"
             className="rounded-btn cancel-btn"
             onClick={props.onCloseForm}
           >
@@ -587,7 +588,8 @@ export default function ShiftLogControlForm(props) {
           {!isReadOnlyForm && (
             <Button
               type="submit"
-              variant="contained"
+              size="small"
+              variant="text"
               className="rounded-btn save-btn"
             >
               Save

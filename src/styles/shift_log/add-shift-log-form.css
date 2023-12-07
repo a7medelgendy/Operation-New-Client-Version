@@ -1,38 +1,31 @@
 
 .input-rounded .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-radius: 50px;
+  border-radius: 4px;
   border: 1px solid;
-
   border-color: #00000099;
 }
 
 .input-rounded
   .MuiOutlinedInput-root.Mui-focused
   .MuiOutlinedInput-notchedOutline {
-  border-radius: 50px;
+  border-radius: 4px;
   border: 1px solid;
-
-  border-color: #323484 !important;
 }
 
 .multi-line-input-rounded
   .MuiOutlinedInput-root
   .MuiOutlinedInput-notchedOutline {
-  border-radius: 20px !important;
+  border-radius: 4px !important;
   border: 1px solid;
-
   border-color: #00000099;
 }
 
 .multi-line-input-rounded
   .MuiOutlinedInput-root.Mui-focused
   .MuiOutlinedInput-notchedOutline {
-  border-radius: 50px;
+  border-radius: 4px;
   border: 1px solid;
-
-  border-color: #323484 !important;
 }
-
 
 .date-picker {
   width: 100%;
@@ -47,20 +40,29 @@
 }
 
 .rounded-btn {
-  border-radius: 50px !important;
+  border-radius: 4px !important;
   padding-left: 20px !important;
   padding-right: 20px !important;
   margin-left: 20px !important;
+  color: #e53935 !important;
 }
 
 .save-btn{
-  background-color: #323484 !important;
+ 
+  border: 1px solid #e53935 !important;
 }
 
 .cancel-btn{
-  color: #323484 !important;
+  
+  border: 1px solid #e53935 !important;
 }
 
 .save-btn:hover {
-  background-color: #645eb4 !important;
+  color: #fff !important;
+  background-color: #e53935 !important;
+}
+
+.cancel-btn:hover {
+  color: #fff !important;
+  background-color:  #e53935 !important;
 }

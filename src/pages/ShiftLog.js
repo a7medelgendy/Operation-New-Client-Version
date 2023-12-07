@@ -13,12 +13,12 @@ import { handleRequest } from "../utilites/handleApiRequest";
 const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
   const response = await handleRequest("POST", "api/shiftLog", dbOjectAdd);
   if (response) {
-    alertHandler("Shift log added successfully", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000 });
+    alertHandler("Work order added successfully!", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000 });
 
     updateLoader(true);
     return true;
   } else {
-    alertHandler("Shift log not added successfully please try again later.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
+    alertHandler("Failed to add work order. Please try again.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
   }
   return false;
 };
@@ -26,12 +26,12 @@ const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
 const handleSubmitEdit = async (dbOjectEdit, alertHandler, updateLoader) => {
   const response = await handleRequest("PUT", "api/shiftLog", dbOjectEdit);
   if (response) {
-    alertHandler("Shift log edit successfully", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000, })
+    alertHandler("Work order updated  successfully!", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000, })
 
     updateLoader(true);
     return true;
   } else {
-    alertHandler("Shift log not added successfully please try again later.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
+    alertHandler("Failed to update work order. Please review your changes and try again.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
   }
 
   return false;
@@ -73,15 +73,15 @@ export default function ShiftLog(props) {
     filterType: "dropdown",
     responsive: "standard",
     selectableRows: "none",
+
     serverSide: true,
     rowsPerPage: 10,
     rowsPerPageOptions: [],
-
     textLabels: {
       body: {
         noMatch: dbData.length !== 0 ? 'Loading data...' : 'No matching records found',
       },
-    }
+    },
   };
 
 
@@ -127,7 +127,7 @@ export default function ShiftLog(props) {
               InProgress: "bg-warning",
               Canceled: "bg-danger",
             };
-            return <Chip label={value} className={bgColorClass[value]} />;
+            return <Chip label={value} style={{ borderRadius: "4px", width: "100%" }} className={bgColorClass[value]} />;
           };
         }
         return obj;
@@ -226,15 +226,15 @@ export default function ShiftLog(props) {
   return (
     <div className="container-fluid">
       <div className="row mb-3">
-        <h2 className="col-md-6 mb-0" style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>
-          Corrective Maintenance Work Order
+        <h2 className="col-sm-8 mb-0" style={{ fontSize: '24px', fontFamily: "Roboto", fontWeight: 'bold', color: '#0c0c0c' }}>
+          Corrective Maintenance Work Orders
         </h2>
-        <div className="col-md-6 d-flex justify-content-end">
+        <div className="col-sm-4 d-flex justify-content-end">
           {user.userData.PRIVILEGE !== 'engineering' ? (
             <Fragment>
               <Button
                 onClick={() => { handleMode("add"); }}
-                startIcon={<AddIcon />} variant="contained" color="primary" className="add-button">
+                startIcon={<AddIcon />} variant="contained" size="small" className="add-button">
                 {"ADD Work Order"}
               </Button>
             </Fragment>
@@ -243,7 +243,7 @@ export default function ShiftLog(props) {
           <FormModal
             open={controlModalIsOpen} cancleClick={triggerControllModal}
             confirmClick={() => { }}
-            title={"Shift Log" + " - " + formType[0].toUpperCase() + formType.slice(1)}
+            title={"Work Order" + " - " + formType[0].toUpperCase() + formType.slice(1)}
           >
             {(() => {
               const Form = modalFormTypes[formType].form;
