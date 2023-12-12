@@ -140,10 +140,10 @@ function LoginFormToast() {
           </div>
           <div className="row login-form-row">
             <Button
-              type="submit"
+              size="small"
               variant="contained"
               className="login-btn"
-              size="small"
+              type="submit"
             >
               Sign In
             </Button>

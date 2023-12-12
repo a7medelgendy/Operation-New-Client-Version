@@ -16,7 +16,7 @@ import { Autocomplete } from "@mui/material";
 function TextWrapper({ viewType, ...props }) {
   const { InputProps, ...restProps } = props;
   //InputLabelProps, InputProps,inputProps
-  console.log(props.className + "-view");
+  // console.log(props.className + "-view");
 
   const classess = props.className.map((ele) => {
     var className = ele;
@@ -70,6 +70,8 @@ export default function ShiftLogControlForm(props) {
   const [unitTags, setUnitTags] = useState([]);
   const [dropDownData, setdropDownData] = useState({});
   const [isReadOnlyForm, setIsReadOnlyForm] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const handleOnChange = (value, stateSetter) => {
     stateSetter(value);
@@ -185,7 +187,9 @@ export default function ShiftLogControlForm(props) {
       });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    setIsSubmitting(false);
+
     var dbOject = {
       groupID: groupID.CODE_SHIFT,
       area: area.CODE_AREA,
@@ -201,18 +205,20 @@ export default function ShiftLogControlForm(props) {
       timeClosed: timeClosed,
     };
 
-    //\\console.log(dbOject);
     if (props.formLoadData) {
       dbOject.id = props.formLoadData.ID;
     }
+    try {
+      const res = await props.formHandlerFuncs.onSubmit(
+        dbOject,
+        props.alertHandler,
+        props.updateLoader
+      );
+      props.onCloseForm(false);
+    } finally {
+      setIsSubmitting(true);
+    }
 
-    const res = props.formHandlerFuncs.onSubmit(
-      dbOject,
-      props.alertHandler,
-      props.updateLoader
-    );
-
-    props.onCloseForm();
   };
 
   return (
@@ -580,17 +586,19 @@ export default function ShiftLogControlForm(props) {
             variant="text"
             size="small"
             className="rounded-btn cancel-btn"
-            onClick={props.onCloseForm}
+            onClick={() => { props.onCloseForm(false) }}
           >
             Cancel
           </Button>
 
           {!isReadOnlyForm && (
             <Button
+              id="saveBtn"
               size="small"
               variant="text"
               type="submit"
               className="rounded-btn save-btn"
+              disabled={isSubmitting}
             >
               Save
             </Button>

@@ -15,7 +15,7 @@ export default function FormModal(props) {
       open={open}
       onSubmit={confirmClick}
       title={title}
-      onClose={cancleClick}
+      onClose={() => { cancleClick(false) }}
       className={"custome-modal-size-md"}
     >
       <div className="container-fluid">

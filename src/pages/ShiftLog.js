@@ -85,14 +85,14 @@ export default function ShiftLog(props) {
   };
 
 
-  const triggerControllModal = () => {
-    setControlModalIsOpen(!controlModalIsOpen);
+  const triggerControllModal = (status) => {
+    setControlModalIsOpen(status);
   };
 
   const handleMode = (type, LoadedData = null) => {
     setFormType(type);
     setFormLoadData(LoadedData);
-    triggerControllModal();
+    triggerControllModal(true);
   };
 
   const triggerRemoveModal = () => {
