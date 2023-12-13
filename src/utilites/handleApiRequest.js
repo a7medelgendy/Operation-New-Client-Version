@@ -6,7 +6,6 @@ const BASE_URL = "http://10.10.5.28:8000";
 export const handleRequest = async (method, endpoint, paramsOrData = null) => {
     try {
         // Configure the Axios request
-        console.log('herere');
         const axiosConfig = {
             method,
             url: `${BASE_URL}/${endpoint}`,

@@ -148,7 +148,7 @@ function LoginFormToast() {
               Sign In
             </Button>
           </div>
-          <p className="copyRight">Copyright © ANRPC SoftWare Engineering Department</p>
+          <p className="copyRight">Copyright © ANRPC Software Engineer @2022</p>
         </div>
 
 

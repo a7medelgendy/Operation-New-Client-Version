@@ -173,7 +173,6 @@ export default function Dashboard(props) {
                         setCardsData(data.cards);
                     }
 
-
                     if (data.hasOwnProperty("charts")) {
                         const colors = ["#2e7d32", '#ed6c02', '#d32f2f'];
                         let charts = data.charts;
@@ -194,6 +193,7 @@ export default function Dashboard(props) {
                             });
 
                             let chart = {
+                                title: "Maintenance work orders according to the execution department.",
                                 xAxis: charts.departementChart.edarat,
                                 legend: charts.departementChart.status,
                                 series: series,
@@ -203,29 +203,33 @@ export default function Dashboard(props) {
                         }
                         if (charts.hasOwnProperty("topEquipmentChart")) {
                             let chart = {
-                                text: "Top Equipment Chart",
+                                text: "Top equipments have work orders",
                                 subtext: "",
                                 values: charts.topEquipmentChart,
-                                radius: "70%"
+                                radius: "65%",
+                                customClass: "top-equipments",
+                                left: "center",
                             }
                             setTopEquipmentChart(chart);
                         }
                         if (charts.hasOwnProperty("shiftLogChart")) {
                             let chart = {
-                                text: "   Total Work Orders Per Shift",
+                                text: "   Total work orders per shift",
                                 subtext: "",
                                 values: charts.shiftLogChart,
-                                radius: "40%"
+                                radius: ['40%', '60%'],
+                                left: "center",
                             }
                             setTopOperationUnitsChart(chart);
                         }
 
                         if (charts.hasOwnProperty("operationUnitsLogsChart")) {
                             let chart = {
-                                text: " Units according All Work orders",
+                                text: " Units according all work orders",
                                 subtext: "",
                                 values: charts.operationUnitsLogsChart,
-                                radius: "40%"
+                                radius: ['40%', '60%'],
+                                left: "28%",
                             }
                             setOperationUnitsLogsChart(chart);
                         }
@@ -247,6 +251,7 @@ export default function Dashboard(props) {
                             });
 
                             let chart = {
+                                title: "Maintenance work orders according to the Units.",
                                 xAxis: charts.unitsLogChart.Units,
                                 legend: charts.unitsLogChart.status,
                                 series: series,
@@ -278,8 +283,7 @@ export default function Dashboard(props) {
             return (
                 <div key={idx} className="col card-container">
                     <Cards
-
-                        cardStyle={"card" + (idx + 1)}
+                        cardStyle={ele.TXT_STATUS}
                         title={ele.TXT_STATUS}
                         value={ele.count}
                     />
@@ -290,44 +294,36 @@ export default function Dashboard(props) {
 
     return (
         <div className="container-fluid dashboard-container">
-            <div className="row dashboard-row-distance d-flex justify-content-center align-items-center">
+            <div className="row dashboard-row-distance d-flex justify-content-center align-items-center mb-4">
                 {cards}
             </div>
 
             {departmentStatusChart && (
-                <div className="row dashboard-row-distance">
-                    <h5 className="d-flex justify-content-center ">Maintenance Work orders according to the execution department. </h5>
-                    <div className="col chart-container">
+                <div className="row dashboard-row-distance d-flex justify-content-center align-items-center mb-4">
+                    <div className="col ">
                         <ChartHandler data={departmentStatusChart} type={"bar-chart"} />
                     </div>
                 </div>
             )}
 
-
-
-
-
-            {departmentStatusChart && <div className="row dashboard-row-distance mb-3">
-                <div className="col-12  chart-container">
+            {departmentStatusChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col "  >
                     <ChartHandler data={topEquipmentChart} type={"pie-chart"} />
                 </div>
 
             </div>}
 
-
-
-            {topOperationUnitsChart && operationUnitsLogsChart && <div className="row dashboard-row-distance mb-3">
-                <div className="col-12 col-xl-6  chart-container">
+            {topOperationUnitsChart && operationUnitsLogsChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col-12 col-xl-6">
                     <ChartHandler data={topOperationUnitsChart} type={"pie-chart"} />
                 </div>
-                <div className="col-12 col-xl-6  chart-container">
+                <div className="col-12 col-xl-6">
                     <ChartHandler data={operationUnitsLogsChart} type={"pie-chart"} />
                 </div>
             </div>}
 
-            {unitsLogChart && <div className="row dashboard-row-distance mb-3">
-                <div className="col-12  chart-container">
-                    <h5 className="d-flex justify-content-center p-10 ">Maintenance Work orders according to the Units. </h5>
+            {unitsLogChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col">
                     <ChartHandler data={unitsLogChart} type={"bar-chart"} />
                 </div>
             </div>}

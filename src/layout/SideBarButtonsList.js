@@ -24,7 +24,7 @@ export default function SideBarButtonList() {
       },
     },
     {
-      name: "Shift Log",
+      name: "Work Orders",
       icon: (
         <PendingActionsIcon
           sx={{ fontSize: 27 }}
@@ -98,8 +98,8 @@ export default function SideBarButtonList() {
       </div>
       <div className="row">
         <div className="d-flex justify-content-center align-items-center">
-          <span style={{ fontSize: "14px", color: "rgb(215, 218, 255)" }}>
-            Made By ANRPC IT-Team @2022
+          <span style={{ fontSize: "12px", color: "rgb(215, 218, 255)" }}>
+            Copyright © ANRPC Software Engineer @2022
           </span>
         </div>
       </div>

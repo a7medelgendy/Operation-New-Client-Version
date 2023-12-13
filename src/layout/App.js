@@ -19,7 +19,7 @@ export default function App() {
           <SideBar />
         </div>
         <div className="col p-0">
-          <div className="page-wrapper-container">
+          <div className="page-wrapper-container" style={{ backgroundColor: "rgb(239 218 218 / 9%) !important" }}>
             <Container />
           </div>
         </div>

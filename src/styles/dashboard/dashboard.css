@@ -1,19 +1,13 @@
 .dashboard-container {
   padding-left: 45px !important;
 }
-.card-container {
-  max-width: 300px !important;
-  height: 150px !important;
-  min-height: 125px !important;
-}
-.chart-container {
-  padding-right: 70px !important;
-}
+
 .dashboard-chart {
-  width: 99% !important;
+  background-color: #dee2e6 !important;
+  width: 100% !important;
   height: 400px !important;
-  padding-top: 30px !important;
-  border-radius: 20px !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
   color: white;
   font-size: 30px !important;
 
@@ -36,32 +30,35 @@ div.dahsboard-card {
   font-weight: normal;
 }
 
-.card1 {
-  background-color: #2e7d32;
+.Total {
+  background-color: #1976d2 !important;
+}
+
+.Completed {
+  background-color: #2e7d32 !important;
+}
+
+.InProgress {
+  background-color: #ed6c02 !important;
  
 }
+.Canceled {
+  background-color: #d32f2f !important;
+ }
 
-.card2 {
-  background-color: #ed6c02;
- 
-}
-
-.card3 {
- background-color: #d32f2f;
-}
-
-.card4 {
-  background-image: linear-gradient(to right, #fdb32f, #f78356);
-  -webkit-box-shadow: 0px 5px 15px 0px rgba(247, 131, 86, 0.35);
-  -moz-box-shadow: 0px 5px 15px 0px rgba(247, 131, 86, 0.35);
-  box-shadow: 0px 5px 15px 0px rgba(247, 131, 86, 0.35);
-}
-
-.dashboard-row-distance {
-  margin-bottom: 50px !important;
+.card-status .MuiSvgIcon-root {
+  font-size: 40px !important;
 }
 
 .chart {
   width: 100% !important;
   height: 100% !important;
+}
+
+.card-status {
+  background-color: #dee2e6 !important;
+}
+
+.top-equipments {
+  height: 500px !important;
 }

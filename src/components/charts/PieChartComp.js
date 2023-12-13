@@ -9,14 +9,21 @@ export default function PieChartComp(props) {
         title: {
             text: props.data.text,
             subtext: props.data.subtext,
-            left: 'center'
+            left: props.data.left,
+            textStyle: {
+                fontSize: 24,
+                fontWeight: 'bold',
+                fontFamily: 'roboto'
+
+            },
         },
         tooltip: {
             trigger: 'item'
         },
         legend: {
             orient: 'vertical',
-            left: 'left'
+            left: 0,
+            top: 'center',
         },
         series: [
             {
@@ -24,6 +31,7 @@ export default function PieChartComp(props) {
                 type: 'pie',
                 radius: props.data.radius,
                 data: props.data.values,
+                center: ['50%', '50%'],
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -36,7 +44,7 @@ export default function PieChartComp(props) {
     }
 
     return (
-        <div className="d-flex align-items-stretch dashboard-chart">
+        <div className={`d-flex align-items-stretch dashboard-chart  ${props.data.customClass} `}>
             <ReactEChartsCore
                 ref={instance}
                 echarts={props.echarts}
