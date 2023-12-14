@@ -192,7 +192,7 @@ export default function ShiftLog(props) {
       },
     })
 
-    if (user.userData.PRIVILEGE !== "engineering") {
+    if (!user.hasRole("engineering")) {
       actions.push(
         {
           type: "edit",
@@ -230,7 +230,7 @@ export default function ShiftLog(props) {
           Corrective Maintenance Work Orders
         </h2>
         <div className="col-sm-4 d-flex justify-content-end">
-          {user.userData.PRIVILEGE !== 'engineering' ? (
+          {!user.hasRole('engineering') ? (
             <Fragment>
               <Button
                 onClick={() => { handleMode("add"); }}
