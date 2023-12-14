@@ -83,75 +83,8 @@ const labelOption = {
     },
 };
 
-
-// function ZoneChart(props) {
-//   const instance = useRef(null);
-//   // echarts.registerMap("ksia-ext-plan", { svg: MapReact });
-
-//   return (
-//     <div className="d-flex align-items-stretch dashboard-chart">
-//       <ReactEChartsCore
-//         ref={instance}
-//         echarts={echarts}
-//         option={props.option}
-//         notMerge={true}
-//         lazyUpdate={true}
-//         opts={{ renderer: "svg" }}
-//       />
-//     </div>
-//   );
-// }
-
-// function LiveChart() {
-//   const instance = useRef(null);
-//   const [option, setOption] = useState(DEFAULT_OPTION);
-
-//   let count;
-
-//   function fetchNewData() {
-//     const axisData = new Date().toLocaleTimeString().replace(/^\D*/, "");
-//     const newOption = JSON.parse(JSON.stringify(option)); // immutable
-//     newOption.title.text =
-//       "Anrpc live graph analysis." + new Date().getSeconds();
-//     const data0 = newOption.series[0].data;
-//     const data1 = newOption.series[1].data;
-//     data0.shift();
-//     data0.push(Math.round(Math.random() * 1000));
-//     data1.shift();
-//     data1.push((Math.random() * 10 + 5).toFixed(1) - 0);
-
-//     newOption.xAxis[0].data.shift();
-//     newOption.xAxis[0].data.push(axisData);
-//     newOption.xAxis[1].data.shift();
-//     newOption.xAxis[1].data.push(count++);
-
-//     setOption(newOption);
-//   }
-
-//   useEffect(() => {
-//     const timer = setInterval(() => {
-//       fetchNewData();
-//     }, 1000);
-
-//     return () => clearInterval(timer);
-//   });
-
-//   return (
-//     <div className="d-flex align-items-stretch dashboard-chart">
-//       <ReactEChartsCore
-//         ref={instance}
-//         echarts={echarts}
-//         option={option}
-//         notMerge={true}
-//         lazyUpdate={true}
-//         className="chart"
-//       />
-//     </div>
-//   );
-// }
-
 export default function Dashboard(props) {
-    const [isLoading, updateLoader] = useState(true);
+    //const [isLoading, updateLoader] = useState(true);
     const [cardsData, setCardsData] = useState(null);
     const [departmentStatusChart, setDepartmentStatusChart] = useState(null);
     const [topEquipmentChart, setTopEquipmentChart] = useState(null);
@@ -208,7 +141,6 @@ export default function Dashboard(props) {
                                 values: charts.topEquipmentChart,
                                 radius: "65%",
                                 customClass: "top-equipments",
-                                left: "center",
                             }
                             setTopEquipmentChart(chart);
                         }
@@ -218,7 +150,6 @@ export default function Dashboard(props) {
                                 subtext: "",
                                 values: charts.shiftLogChart,
                                 radius: ['40%', '60%'],
-                                left: "center",
                             }
                             setTopOperationUnitsChart(chart);
                         }
@@ -229,7 +160,8 @@ export default function Dashboard(props) {
                                 subtext: "",
                                 values: charts.operationUnitsLogsChart,
                                 radius: ['40%', '60%'],
-                                left: "28%",
+                                //left: "center", //title position (can add margin left 28%)
+                                charPosition: ["50%", "45%", "50%", "50%"],
                             }
                             setOperationUnitsLogsChart(chart);
                         }
@@ -261,7 +193,7 @@ export default function Dashboard(props) {
                         }
 
                     }
-                    updateLoader(false);
+                    // updateLoader(false);
                 } else {
                     //setError(" Error user name or password");
                 }
@@ -275,7 +207,7 @@ export default function Dashboard(props) {
 
     useEffect(() => {
         getBarChartData();
-    }, [isLoading]);
+    }, []);
 
     let cards = null;
     if (cardsData != null) {

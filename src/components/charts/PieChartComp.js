@@ -9,7 +9,7 @@ export default function PieChartComp(props) {
         title: {
             text: props.data.text,
             subtext: props.data.subtext,
-            left: props.data.left,
+            left: "center",
             textStyle: {
                 fontSize: 24,
                 fontWeight: 'bold',
@@ -21,9 +21,9 @@ export default function PieChartComp(props) {
             trigger: 'item'
         },
         legend: {
-            orient: 'vertical',
+            orient: 'horizontal',
             left: 0,
-            top: 'center',
+            top: 'bottom',
         },
         series: [
             {
@@ -31,7 +31,7 @@ export default function PieChartComp(props) {
                 type: 'pie',
                 radius: props.data.radius,
                 data: props.data.values,
-                center: ['50%', '50%'],
+                center: props.data.charPosition ? props.data.charPosition : ["50%", "50%"],
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -53,7 +53,6 @@ export default function PieChartComp(props) {
                 lazyUpdate={true}
                 className="chart"
             />
-
         </div>
     );
 };
