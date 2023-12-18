@@ -8,7 +8,16 @@
     font-family: "roboto";
     font-size: 18px;
     font-weight: bold;
+    text-align: center;
     
+  }
+
+  .MuiTableCell-body {
+    text-align: center !important;
+  }
+
+  .MuiPaper-root {
+    overflow: auto !important;
   }
   
   .tss-1cdcmys-MUIDataTable-responsiveBase{
