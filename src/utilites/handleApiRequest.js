@@ -1,14 +1,15 @@
 import axios from "axios";
+import { baseUrl } from "../shared/staticData"
 
-const BASE_URL = "http://10.10.5.28:8000";
-//export const BASE_URL = "http://172.18.8.103:8000";
+//const baseUrl = "http://10.10.5.28:8000";
+//export const baseUrl = "http://172.18.8.103:8000";
 
 export const handleRequest = async (method, endpoint, paramsOrData = null) => {
     try {
         // Configure the Axios request
         const axiosConfig = {
             method,
-            url: `${BASE_URL}/${endpoint}`,
+            url: `${baseUrl}/${endpoint}`,
             headers: {
                 'Content-Type': 'application/json',
                 // Additional headers if necessary

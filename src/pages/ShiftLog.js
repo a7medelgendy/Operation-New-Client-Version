@@ -225,7 +225,7 @@ export default function ShiftLog(props) {
 
   return (
     <div className="container-fluid">
-      <div className="row mb-3">
+      <div className="row mb-4">
         <h2 className="col-sm-8 mb-0" style={{ fontSize: '24px', fontFamily: "Roboto", fontWeight: 'bold', color: '#0c0c0c' }}>
           Corrective Maintenance Work Orders
         </h2>
