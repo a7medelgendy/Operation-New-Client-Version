@@ -148,10 +148,18 @@ export default function ShiftLog(props) {
     updateLoader(true)
   }
 
+  let searchTimeout;
   const handleSearch = (search) => {
-    setSearchString(search == null ? "" : search)
-    setPage(0)
-    updateLoader(true)
+    setSearchString(search == null ? "" : search);
+    setPage(0);
+    // Clear any existing timeout to debounce the search
+    clearTimeout(searchTimeout);
+
+    // Set a new timeout to execute the search after a delay
+    searchTimeout = setTimeout(() => {
+      //getTableData();
+      updateLoader(true);
+    }, 500);
   }
 
   const handleFilterChange = ({ columns, filterList }) => {
