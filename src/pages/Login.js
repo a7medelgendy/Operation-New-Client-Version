@@ -43,9 +43,10 @@ function LoginFormToast() {
       method: "post",
       url: baseUrl + "/api/login",
       data: { userName: states.userName, password: states.password },
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { "Content-Type": "application/json" } },
     })
       .then((res) => {
+
         //handle success
         if ((res.status = 200)) {
           user.login(res.data.result);
