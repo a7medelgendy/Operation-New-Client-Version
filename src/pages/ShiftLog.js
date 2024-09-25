@@ -243,7 +243,7 @@ export default function ShiftLog(props) {
           Corrective Maintenance Work Orders
         </h2>
         <div className='col-sm-4 d-flex justify-content-end'>
-          {!user.hasRole('engineering') ? (
+          {!user.hasGroup('engineering') ? (
             <Fragment>
               <Button
                 onClick={() => {
