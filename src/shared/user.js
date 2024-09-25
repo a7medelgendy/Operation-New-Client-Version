@@ -29,7 +29,14 @@ class User {
   }
 
   hasRole(role) {
-    return this.userData.PRIVILEGE === role;
+    //console.log(role+'asdfasdf');
+    return role;
+    //on branch develop
+    //return this.userData.roleNames.includes(role);
+  }
+
+  hasGroup(group) {
+    return this.userData.groupNames.includes(group);
   }
 
   /**
@@ -40,14 +47,14 @@ class User {
     cache.remove("user");
   }
 
-  // /**
-  //  * Get user access token
-  //  *
-  //  * @returns {string}
-  //  */
-  // getAccessToken() {
-  //   return this.userData.accessToken;
-  // }
+  /**
+   * Get user access token
+   *
+   * @returns {string}
+   */
+  getAccessToken() {
+    return this.userData.token;
+  }
 }
 
 export default new User();

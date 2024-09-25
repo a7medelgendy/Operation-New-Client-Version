@@ -3,16 +3,18 @@ import { baseUrl } from "../shared/staticData"
 
 //const baseUrl = "http://10.10.5.28:8000";
 //export const baseUrl = "http://172.18.8.103:8000";
+import user from "../shared/user.js";
 
 export const handleRequest = async (method, endpoint, paramsOrData = null) => {
     try {
         // Configure the Axios request
+        let token = user.getAccessToken();
         const axiosConfig = {
             method,
             url: `${baseUrl}/${endpoint}`,
             headers: {
                 'Content-Type': 'application/json',
-                // Additional headers if necessary
+                'Authorization': `${token}`,
             },
             data: method !== 'GET' ? paramsOrData : undefined,
             params: method === 'GET' ? paramsOrData : undefined,
