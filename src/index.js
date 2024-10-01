@@ -12,6 +12,7 @@ import reportWebVitals from "./reportWebVitals";
 import Test from "./Test";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <BrowserRouter>
     <Routes>
