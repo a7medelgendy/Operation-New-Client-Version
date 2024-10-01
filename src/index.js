@@ -9,7 +9,7 @@ import NoPage from "./pages/NoPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import reportWebVitals from "./reportWebVitals";
-import Test from "./Test";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
