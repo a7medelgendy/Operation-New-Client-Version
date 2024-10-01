@@ -12,6 +12,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import axios from "axios";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
+import { handleRequest } from "../../utilites/handleApiRequest";
 
 export default function EditForm(props) {
   //\\console.log(props.rowData);
@@ -21,12 +22,8 @@ export default function EditForm(props) {
   const [groupID, setGroupID] = useState("");
   const [area, setArea] = useState("");
   const [unit, setUnit] = useState("");
-  const [timeOpened, setTimeOpened] = useState(
-    new Date().toJSON().slice(0, 16)
-  );
-  const [timeClosed, setTimeClosed] = useState(
-    new Date().toJSON().slice(0, 16)
-  );
+  const [timeOpened, setTimeOpened] = useState(new Date().toJSON().slice(0, 16));
+  const [timeClosed, setTimeClosed] = useState(new Date().toJSON().slice(0, 16));
   const [openedBy, setOpenedBy] = useState("");
   const [closedBy, setClosedBy] = useState("");
   const [description, setDescription] = useState("");
@@ -69,59 +66,26 @@ export default function EditForm(props) {
     masterData();
     equibmentsData();
   }, []);
-  const equibmentsData = () => {
-    axios({
-      method: "get",
-      url: "api/equibments",
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          if (res.data.result.length > 0) {
-            setUnitTags(res.data.result);
-          }
-        } else {
-          // setError(" Error user name or password");
-        }
-      })
-      .catch(function (res) {
-        //handle error
-        // setError(" Error user name or password");
-        return;
-      });
+
+  const equibmentsData = async () => {
+    const response = await handleRequest("GET", "api/equibments");
+    if (response.result.length > 0) {
+      setUnitTags(response.result);
+    }
   };
 
-  const masterData = () => {
-    axios({
-      method: "get",
-      url: "api/addShift/masterData",
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          setdropDownData(res.data.result);
-        } else {
-          // setError(" Error user name or password");
-        }
-      })
-      .catch(function (res) {
-        //handle error
-        // setError(" Error user name or password");
-        return;
-      });
+  const masterData = async () => {
+    const response = await handleRequest("GET", "api/addShift/masterData");
+    if (response) {
+      setdropDownData(response.result);
+    }
   };
 
   return (
     <div className="container">
       <div className="row">
         <div className="col-4 m-2">
-          <Button
-            variant="contained"
-            endIcon={<AddCircleOutlineOutlinedIcon />}
-            onClick={handleClickOpen}
-          >
+          <Button variant="contained" endIcon={<AddCircleOutlineOutlinedIcon />} onClick={handleClickOpen}>
             EDIT
           </Button>
         </div>
@@ -129,9 +93,7 @@ export default function EditForm(props) {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>EDIT NEW SHIFT LOG</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              kindly add new work orders today.
-            </DialogContentText>
+            <DialogContentText>kindly add new work orders today.</DialogContentText>
             <Box
               component="form"
               sx={{
@@ -144,11 +106,7 @@ export default function EditForm(props) {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={
-                    dropDownData.hasOwnProperty("shiftGroups")
-                      ? dropDownData.shiftGroups.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("shiftGroups") ? dropDownData.shiftGroups.recordset : []}
                   defaultValue={{
                     TXT_SHIFT: props.rowData.TXT_SHIFT,
                     CODE_SHIFT: props.rowData.CODE_SHIFT,
@@ -161,18 +119,12 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     handleOnChange(object.CODE_SHIFT, setGroupID);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Group-ID" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Group-ID" />}
                 />
                 <Autocomplete
                   disablePortal
                   id="area"
-                  options={
-                    dropDownData.hasOwnProperty("areas")
-                      ? dropDownData.areas.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("areas") ? dropDownData.areas.recordset : []}
                   defaultValue={{
                     TXT_AREA: props.rowData.TXT_AREA,
                     CODE_AREA: props.rowData.CODE_AREA,
@@ -185,19 +137,13 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.CODE_AREA, setArea);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Area" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Area" />}
                 />
 
                 <Autocomplete
                   disablePortal
                   id="units"
-                  options={
-                    dropDownData.hasOwnProperty("units")
-                      ? dropDownData.units.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("units") ? dropDownData.units.recordset : []}
                   sx={{ width: 250 }}
                   defaultValue={{
                     TXT_UNIT: props.rowData.TXT_UNIT,
@@ -207,18 +153,14 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.CODE_UNIT, setUnit);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="UNIT" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="UNIT" />}
                 />
 
                 <VirtualizedAutoComplete
                   options={unitTags}
                   defaultValue={props.rowData.EQUIBMENT}
                   getOptionLabel={(option) => option.TAG ?? option}
-                  renderInput={(params) => (
-                    <TextField {...params} label="15,000 Tag" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="15,000 Tag" />}
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.TAG, setTag);
                   }}
@@ -228,9 +170,7 @@ export default function EditForm(props) {
                   id="timeOpened"
                   label="time opened"
                   type="datetime-local"
-                  defaultValue={new Date(props.rowData.TIME_OPEN)
-                    .toJSON()
-                    .slice(0, 16)}
+                  defaultValue={new Date(props.rowData.TIME_OPEN).toJSON().slice(0, 16)}
                   sx={{ width: 250 }}
                   onChange={(e) => {
                     handleOnChange(e.target.value, setTimeOpened);
@@ -243,9 +183,7 @@ export default function EditForm(props) {
                   id="timeClosed"
                   label="time closed"
                   type="datetime-local"
-                  defaultValue={new Date(props.rowData.TIME_CLOSE)
-                    .toJSON()
-                    .slice(0, 16)}
+                  defaultValue={new Date(props.rowData.TIME_CLOSE).toJSON().slice(0, 16)}
                   onChange={(e) => {
                     handleOnChange(e.target.value, setTimeClosed);
                   }}
@@ -257,11 +195,7 @@ export default function EditForm(props) {
                 <Autocomplete
                   disablePortal
                   id="openedBy"
-                  options={
-                    dropDownData.hasOwnProperty("users")
-                      ? dropDownData.users.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("users") ? dropDownData.users.recordset : []}
                   sx={{ width: 250 }}
                   /*                   isOptionEqualToValue={(option, value) => {
                     return option.ID === value.ID;
@@ -274,18 +208,12 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.EMPN, setOpenedBy);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Opended By" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Opended By" />}
                 />
                 <Autocomplete
                   disablePortal
                   id="closedBy"
-                  options={
-                    dropDownData.hasOwnProperty("users")
-                      ? dropDownData.users.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("users") ? dropDownData.users.recordset : []}
                   getOptionLabel={(option) => option.USER_NAME}
                   defaultValue={{
                     USER_NAME: props.rowData.CLOSED_BY,
@@ -298,27 +226,19 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.EMPN, setClosedBy);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Closed By" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Closed By" />}
                 />
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={
-                    dropDownData.hasOwnProperty("exeEdara")
-                      ? dropDownData.exeEdara.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("exeEdara") ? dropDownData.exeEdara.recordset : []}
                   sx={{ width: 250 }}
                   defaultValue={{
                     TXT_EDARA: props.rowData.TXT_EDARA,
                     CODE_EDARA: props.rowData.CODE_EDARA,
                   }}
                   getOptionLabel={(option) => option.TXT_EDARA}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Executed Edara" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Executed Edara" />}
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.CODE_EDARA, setExeEdara);
                   }}
@@ -339,11 +259,7 @@ export default function EditForm(props) {
                 <Autocomplete
                   disablePortal
                   id="status"
-                  options={
-                    dropDownData.hasOwnProperty("status")
-                      ? dropDownData.status.recordset
-                      : []
-                  }
+                  options={dropDownData.hasOwnProperty("status") ? dropDownData.status.recordset : []}
                   sx={{ width: 250 }}
                   defaultValue={{
                     TXT_STATUS: props.rowData.TXT_STATUS,
@@ -353,9 +269,7 @@ export default function EditForm(props) {
                   onChange={(_, object) => {
                     if (object) handleOnChange(object.CODE_STATUS, setStatus);
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Status" />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Status" />}
                 />
               </div>
             </Box>

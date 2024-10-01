@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
 import Form from "../form/form";
 import VirtualizedAutoComplete from "../form/VirtualizedAutoComplete";
-
 import "../../styles/shift_log/add-shift-log-form.css";
 import "../../styles/shift_log/shift-log-form-view.css";
-
-import { baseUrl } from "../../shared/staticData";
 import AutoCompleteValidator from "../form/AutoCompleteValidator";
 import { Autocomplete } from "@mui/material";
+import { handleRequest } from "../../utilites/handleApiRequest";
 
 function TextWrapper({ viewType, ...props }) {
   const { InputProps, ...restProps } = props;
@@ -143,48 +139,19 @@ export default function ShiftLogControlForm(props) {
     setIsReadOnlyForm(props.type == "view" ? true : false);
   };
 
-  const equibmentsData = () => {
-    axios({
-      method: "get",
-      url: baseUrl + "/api/equibments",
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          if (res.data.result.length > 0) {
-            setUnitTags(res.data.result);
-          }
-        } else {
-          // setError(" Error user name or password");
-        }
-      })
-      .catch(function (res) {
-        //handle error
-        // setError(" Error user name or password");
-        return;
-      });
+  const equibmentsData = async () => {
+    const response = await handleRequest("GET", "api/equibments");
+    if (response.result.length > 0) {
+      setUnitTags(response.result);
+    }
+
   };
 
-  const masterData = () => {
-    axios({
-      method: "get",
-      url: baseUrl + "/api/addShift/masterData",
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          setdropDownData(res.data.result);
-        } else {
-          // setError(" Error user name or password");
-        }
-      })
-      .catch((e) => {
-        //handle error
-        // setError(" Error user name or password");
-        return;
-      });
+  const masterData = async () => {
+    const response = await handleRequest("GET", "api/addShift/masterData");
+    if (response) {
+      setdropDownData(response.result);
+    }
   };
 
   const onSubmit = async () => {
