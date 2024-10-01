@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "../styles/dashboard/dashboard.css";
 import { baseUrl } from "../shared/staticData";
 import ChartHandler from "../components/charts";
+import Cards from "../components/charts/Cards";
+
 
 var app = {};
 
@@ -82,92 +83,15 @@ const labelOption = {
     },
 };
 
-function DashBoardCard(props) {
-    return (
-        <div
-            className={
-                "d-flex flex-column justify-content-center align-items-center dahsboard-card " +
-                props.cardStyle
-            }
-        >
-            <p>{props.title}</p>
-            <p>{props.value}</p>
-        </div>
-    );
-}
-
-// function ZoneChart(props) {
-//   const instance = useRef(null);
-//   // echarts.registerMap("ksia-ext-plan", { svg: MapReact });
-
-//   return (
-//     <div className="d-flex align-items-stretch dashboard-chart">
-//       <ReactEChartsCore
-//         ref={instance}
-//         echarts={echarts}
-//         option={props.option}
-//         notMerge={true}
-//         lazyUpdate={true}
-//         opts={{ renderer: "svg" }}
-//       />
-//     </div>
-//   );
-// }
-
-// function LiveChart() {
-//   const instance = useRef(null);
-//   const [option, setOption] = useState(DEFAULT_OPTION);
-
-//   let count;
-
-//   function fetchNewData() {
-//     const axisData = new Date().toLocaleTimeString().replace(/^\D*/, "");
-//     const newOption = JSON.parse(JSON.stringify(option)); // immutable
-//     newOption.title.text =
-//       "Anrpc live graph analysis." + new Date().getSeconds();
-//     const data0 = newOption.series[0].data;
-//     const data1 = newOption.series[1].data;
-//     data0.shift();
-//     data0.push(Math.round(Math.random() * 1000));
-//     data1.shift();
-//     data1.push((Math.random() * 10 + 5).toFixed(1) - 0);
-
-//     newOption.xAxis[0].data.shift();
-//     newOption.xAxis[0].data.push(axisData);
-//     newOption.xAxis[1].data.shift();
-//     newOption.xAxis[1].data.push(count++);
-
-//     setOption(newOption);
-//   }
-
-//   useEffect(() => {
-//     const timer = setInterval(() => {
-//       fetchNewData();
-//     }, 1000);
-
-//     return () => clearInterval(timer);
-//   });
-
-//   return (
-//     <div className="d-flex align-items-stretch dashboard-chart">
-//       <ReactEChartsCore
-//         ref={instance}
-//         echarts={echarts}
-//         option={option}
-//         notMerge={true}
-//         lazyUpdate={true}
-//         className="chart"
-//       />
-//     </div>
-//   );
-// }
-
 export default function Dashboard(props) {
-    const [isLoading, updateLoader] = useState(true);
+    //const [isLoading, updateLoader] = useState(true);
     const [cardsData, setCardsData] = useState(null);
     const [departmentStatusChart, setDepartmentStatusChart] = useState(null);
-
-    const getData = () => {
+    const [topEquipmentChart, setTopEquipmentChart] = useState(null);
+    const [topOperationUnitsChart, setTopOperationUnitsChart] = useState(null);
+    const [operationUnitsLogsChart, setOperationUnitsLogsChart] = useState(null);
+    const [unitsLogChart, setUnitsLogChart] = useState(null);
+    const getBarChartData = () => {
         axios({
             method: "get",
             url: baseUrl + "/api/dashboard",
@@ -178,11 +102,12 @@ export default function Dashboard(props) {
                 if ((res.status = 200)) {
                     let data = res.data.result;
                     if (data.hasOwnProperty("cards")) {
-                        let cards = JSON.parse(JSON.stringify(data.cards));
-                        setCardsData(cards);
+                        //let cards = JSON.parse(JSON.stringify(data.cards));
+                        setCardsData(data.cards);
                     }
 
                     if (data.hasOwnProperty("charts")) {
+                        const colors = ["#2e7d32", '#ed6c02', '#d32f2f'];
                         let charts = data.charts;
                         if (charts.hasOwnProperty("departementChart")) {
                             let series = charts.departementChart.series.map((ele, idx) => {
@@ -194,22 +119,81 @@ export default function Dashboard(props) {
                                     emphasis: {
                                         focus: "series",
                                     },
+                                    color: colors[idx]
                                 };
 
                                 return x;
                             });
 
                             let chart = {
+                                title: "Maintenance work orders according to the execution department.",
                                 xAxis: charts.departementChart.edarat,
                                 legend: charts.departementChart.status,
                                 series: series,
                             };
 
-                            chart = JSON.parse(JSON.stringify(chart));
                             setDepartmentStatusChart(chart);
                         }
+                        if (charts.hasOwnProperty("topEquipmentChart")) {
+                            let chart = {
+                                text: "Top equipments have work orders",
+                                subtext: "",
+                                values: charts.topEquipmentChart,
+                                radius: "65%",
+                                customClass: "top-equipments",
+                            }
+                            setTopEquipmentChart(chart);
+                        }
+                        if (charts.hasOwnProperty("shiftLogChart")) {
+                            let chart = {
+                                text: "   Total work orders per shift",
+                                subtext: "",
+                                values: charts.shiftLogChart,
+                                radius: ['40%', '60%'],
+                            }
+                            setTopOperationUnitsChart(chart);
+                        }
+
+                        if (charts.hasOwnProperty("operationUnitsLogsChart")) {
+                            let chart = {
+                                text: " Units according all work orders",
+                                subtext: "",
+                                values: charts.operationUnitsLogsChart,
+                                radius: ['40%', '60%'],
+                                //left: "center", //title position (can add margin left 28%)
+                                charPosition: ["50%", "45%", "50%", "50%"],
+                            }
+                            setOperationUnitsLogsChart(chart);
+                        }
+
+                        if (charts.hasOwnProperty("unitsLogChart")) {
+                            let series = charts.unitsLogChart.series.map((ele, idx) => {
+                                var x = {
+                                    ...ele,
+                                    type: "bar",
+                                    barGap: 0,
+                                    label: labelOption,
+                                    emphasis: {
+                                        focus: "series",
+                                    },
+                                    color: colors[idx]
+                                };
+
+                                return x;
+                            });
+
+                            let chart = {
+                                title: "Maintenance work orders according to the Units.",
+                                xAxis: charts.unitsLogChart.Units,
+                                legend: charts.unitsLogChart.status,
+                                series: series,
+                            };
+
+                            setUnitsLogChart(chart);
+                        }
+
                     }
-                    updateLoader(false);
+                    // updateLoader(false);
                 } else {
                     //setError(" Error user name or password");
                 }
@@ -222,16 +206,16 @@ export default function Dashboard(props) {
     };
 
     useEffect(() => {
-        getData();
-    }, [isLoading]);
+        getBarChartData();
+    }, []);
 
     let cards = null;
     if (cardsData != null) {
         cards = cardsData.map((ele, idx) => {
             return (
                 <div key={idx} className="col card-container">
-                    <DashBoardCard
-                        cardStyle={"card" + (idx + 1)}
+                    <Cards
+                        cardStyle={ele.TXT_STATUS}
                         title={ele.TXT_STATUS}
                         value={ele.count}
                     />
@@ -242,17 +226,40 @@ export default function Dashboard(props) {
 
     return (
         <div className="container-fluid dashboard-container">
-            <div className="row dashboard-row-distance d-flex justify-content-center align-items-center">
+            <div className="row dashboard-row-distance d-flex justify-content-center align-items-center mb-4">
                 {cards}
             </div>
 
             {departmentStatusChart && (
-                <div className="row dashboard-row-distance">
-                    <div className="col chart-container">
+                <div className="row dashboard-row-distance d-flex justify-content-center align-items-center mb-4">
+                    <div className="col ">
                         <ChartHandler data={departmentStatusChart} type={"bar-chart"} />
                     </div>
                 </div>
             )}
+
+            {departmentStatusChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col "  >
+                    <ChartHandler data={topEquipmentChart} type={"pie-chart"} />
+                </div>
+
+            </div>}
+
+            {topOperationUnitsChart && operationUnitsLogsChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col-12 col-xl-6">
+                    <ChartHandler data={topOperationUnitsChart} type={"pie-chart"} />
+                </div>
+                <div className="col-12 col-xl-6">
+                    <ChartHandler data={operationUnitsLogsChart} type={"pie-chart"} />
+                </div>
+            </div>}
+
+            {unitsLogChart && <div className="row dashboard-row-distance mb-4">
+                <div className="col">
+                    <ChartHandler data={unitsLogChart} type={"bar-chart"} />
+                </div>
+            </div>}
+
         </div>
     );
 }

@@ -55,10 +55,9 @@ import {
     AriaComponent,
     TransformComponent,
 } from "echarts/components";
-
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
-
 import BarChartComp from "./BarChartComp";
+import PieChartComp from "./PieChartComp";
 
 echarts.use([
     GridSimpleComponent,
@@ -123,6 +122,7 @@ function NotFound() {
 }
 const ChartTypesComp = {
     "bar-chart": BarChartComp,
+    "pie-chart": PieChartComp,
 };
 
 export default function ChartHandler({ type, ...rest }) {

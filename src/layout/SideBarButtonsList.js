@@ -24,7 +24,7 @@ export default function SideBarButtonList() {
       },
     },
     {
-      name: "Shift Log",
+      name: "Work Orders",
       icon: (
         <PendingActionsIcon
           sx={{ fontSize: 27 }}
@@ -40,7 +40,7 @@ export default function SideBarButtonList() {
 
   const SideBarListComponent = SideBarList.map((ele, idx) => {
     return (
-      <div className="row sidebar-button-container" key={idx}>
+      <div className="row sidebar-button-container " key={idx}>
         <SideBarButton
           id={idx}
           buttonName={ele.name}
@@ -52,7 +52,7 @@ export default function SideBarButtonList() {
     );
   });
   return (
-    <div className="container-fluid p-0 d-flex flex-column">
+    <div className="container-fluid p-0 d-flex flex-column justify-content-center align-items-center">
       {SideBarListComponent}
 
       <div className="row sidebar-avatar-container mt-auto">
@@ -62,7 +62,7 @@ export default function SideBarButtonList() {
               sx={{
                 width: 45,
                 height: 45,
-                bgcolor: "#D7DAFF",
+                bgcolor: "#dcd189",
                 color: "#323484",
               }}
             >
@@ -72,7 +72,7 @@ export default function SideBarButtonList() {
           </div>
 
           <div className="col-9 mt-0 p-2 d-flex align-items-center">
-            <span style={{ color: "#D7DAFF", fontSize: "18px" }}>
+            <span style={{ color: "rgb(255 215 6)", fontSize: "18px" }}>
               {user.userData.USER_NAME.split(".")[0] +
                 " " +
                 user.userData.USER_NAME.split(".")[1]}
@@ -96,10 +96,10 @@ export default function SideBarButtonList() {
           isActive={false}
         />
       </div>
-      <div className="row sidebar-button-container">
+      <div className="row">
         <div className="d-flex justify-content-center align-items-center">
-          <span style={{ fontSize: "12.5px", color: "#B2F9B2" }}>
-            Made By ANRPC IT-Team @2022
+          <span style={{ fontSize: "12px", color: "rgb(215, 218, 255)" }}>
+            Copyright © ANRPC Software Engineer @2022
           </span>
         </div>
       </div>

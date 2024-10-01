@@ -28,6 +28,10 @@ class User {
     cache.set("activeIndex", 0);
   }
 
+  hasRole(role) {
+    return this.userData.PRIVILEGE === role;
+  }
+
   /**
    * Log the user out
    */

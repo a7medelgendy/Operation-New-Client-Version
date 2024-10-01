@@ -1,103 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Button, Chip } from "@mui/material";
+import React, { Fragment, useEffect, useState } from "react";
+import { Button, Checkbox, Chip, FormControl, InputLabel, ListItemText, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import axios from "axios";
-
 import DataTable from "../components/datatable/DataTable";
 import ShiftLogControlForm from "../components/shift_log/ShiftLogControlForm";
-
 import { useToasts } from "react-toast-notifications";
-
 import ConfirmModal from "../components/modal/confirm";
 import FormModal from "../components/modal/FormModal";
-
-import { baseUrl } from "../shared/staticData";
+import user from "../shared/user";
 import "../styles/shift_log/shiftlog.css";
+import { handleRequest } from "../utilites/handleApiRequest";
 
-const handleSubmitAdd = (dbOjectAdd, alertHandler, updateLoader) => {
-  axios({
-    method: "post",
-    url: baseUrl + "/api/shiftLog",
-    data: dbOjectAdd,
-    config: { headers: { "Content-Type": "multipart/form-data" } },
-  })
-    .then((res) => {
-      //handle success
-      if (res.data.success && (res.status = 200)) {
-        alertHandler("Shift log added successfully", {
-          appearance: "success",
-          autoDismiss: true,
-          autoDismissTimeout: 2000,
-        });
+const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
+  const response = await handleRequest("POST", "api/shiftLog", dbOjectAdd);
+  if (response) {
+    alertHandler("Work order added successfully!", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000 });
 
-        updateLoader(true);
-
-        return true;
-      } else {
-        alertHandler(
-          "Shift log not added successfully please try again later.",
-          {
-            appearance: "error",
-            autoDismiss: true,
-            autoDismissTimeout: 4000,
-          }
-        );
-      }
-    })
-    .catch((e) => {
-      alertHandler(
-        "Shift log not added successfully please contact software team.",
-        {
-          appearance: "error",
-          autoDismiss: true,
-          autoDismissTimeout: 4000,
-        }
-      );
-    });
-
+    updateLoader(true);
+    return true;
+  } else {
+    alertHandler("Failed to add work order. Please try again.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
+  }
   return false;
 };
 
-const handleSubmitEdit = (dbOjectEdit, alertHandler, updateLoader) => {
-  axios({
-    method: "put",
-    url: baseUrl + "/api/shiftLog",
-    data: dbOjectEdit,
-    config: { headers: { "Content-Type": "multipart/form-data" } },
-  })
-    .then(function (res) {
-      //handle success
-      if (res.data.success && (res.status = 200)) {
-        alertHandler("Shift log edit successfully", {
-          appearance: "success",
-          autoDismiss: true,
-          autoDismissTimeout: 2000,
-        });
+const handleSubmitEdit = async (dbOjectEdit, alertHandler, updateLoader) => {
+  const response = await handleRequest("PUT", "api/shiftLog", dbOjectEdit);
+  if (response) {
+    alertHandler("Work order updated  successfully!", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000, })
 
-        updateLoader(true);
-
-        return true;
-      } else {
-        alertHandler(
-          "Shift log not added successfully please try again later.",
-          {
-            appearance: "error",
-            autoDismiss: true,
-            autoDismissTimeout: 4000,
-          }
-        );
-      }
-    })
-    .catch((e) => {
-      alertHandler(
-        "Shift log not added successfully please contact software team.",
-        {
-          appearance: "error",
-          autoDismiss: true,
-          autoDismissTimeout: 4000,
-        }
-      );
-    });
+    updateLoader(true);
+    return true;
+  } else {
+    alertHandler("Failed to update work order. Please review your changes and try again.", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 });
+  }
 
   return false;
 };
@@ -117,41 +52,47 @@ const modalFormTypes = {
   },
 };
 
-const options = {
-  filter: true,
-  filterType: "dropdown",
-  responsive: "standard",
-  selectableRows: "none",
-  // onColumnSortChange: (changedColumn, direction) =>
-  //   //\\console.log("changedColumn: ", changedColumn, "direction: ", direction),
-  // onChangeRowsPerPage: (numberOfRows) =>
-  //   //\\console.log("numberOfRows: ", numberOfRows),
-  // onChangePage: (currentPage) => //\\console.log("currentPage: ", currentPage),
-};
-
 export default function ShiftLog(props) {
-  const [error, setError] = useState("");
   const [tableConfig, setTableConfig] = useState({});
   const [dbData, setdbData] = useState([]);
   const [dbColumns, setdbColumns] = useState([]);
+  const [totalRowsNumber, setTotalRowsNumber] = useState(1)
+  const [page, setPage] = useState(0)
+  const [searchString, setSearchString] = useState("")
+  const [filterData, setFilterData] = useState([])
   let [isLoading, updateLoader] = useState(true);
-
   const [formType, setFormType] = useState("add");
   const [formLoadData, setFormLoadData] = useState(null);
-
   const [removeModalIsOpen, setRemoveModalDisplay] = useState(false);
   const [controlModalIsOpen, setControlModalIsOpen] = useState(false);
-
   const { addToast } = useToasts();
 
-  const triggerControllModal = () => {
-    setControlModalIsOpen(!controlModalIsOpen);
+  const options = {
+    filter: true,
+    serverSide: true,
+    filterType: "dropdown",
+    responsive: "standard",
+    selectableRows: "none",
+
+    serverSide: true,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [],
+    textLabels: {
+      body: {
+        noMatch: dbData.length !== 0 ? 'Loading data...' : 'No matching records found',
+      },
+    },
+  };
+
+
+  const triggerControllModal = (status) => {
+    setControlModalIsOpen(status);
   };
 
   const handleMode = (type, LoadedData = null) => {
     setFormType(type);
     setFormLoadData(LoadedData);
-    triggerControllModal();
+    triggerControllModal(true);
   };
 
   const triggerRemoveModal = () => {
@@ -162,57 +103,105 @@ export default function ShiftLog(props) {
     triggerRemoveModal();
   };
 
-  const getTableData = () => {
-    axios({
-      method: "get",
-      url: baseUrl + "/api/shiftLog",
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then(function (res) {
-        //handle success
-        if ((res.status = 200)) {
-          if (res.data.result.columnsData.length > 0) {
-            var columnsDbTitle = res.data.result.showedColumns.map((title) => {
-              var obj = {
-                name: title.key,
-                label: title.en,
-                options: {
-                  filter: true,
-                  sort: true,
-                },
-              };
+  const getTableData = async () => {
+    let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData }
+    const response = await handleRequest("GET", "api/shiftLog", data);
+    if (response) {
+      var columnsDbTitle = response.result.showedColumns.map((data) => {
+        var obj = {
+          name: data.key,
+          label: data.en,
+          options: {
+            filter: data.filter,
+            sort: false,
+            filterOptions: {
+              names: data.masterArray
+            },
+          },
+        };
 
-              if (title.key == "TXT_STATUS") {
-                obj.options.customBodyRender = (value) => {
-                  let bgColorClass = {
-                    Completed: "bg-success",
-                    InProgress: "bg-warning",
-                    Canceled: "bg-danger",
-                  };
-                  return <Chip label={value} className={bgColorClass[value]} />;
-                };
-              }
-              return obj;
-            });
-
-            setdbData(res.data.result.columnsData);
-            setdbColumns(columnsDbTitle);
-            updateLoader(false);
-          }
-        } else {
-          //setError(" Error user name or password");
+        if (data.key == "TXT_STATUS") {
+          obj.options.customBodyRender = (value) => {
+            let bgColorClass = {
+              Completed: "bg-success",
+              InProgress: "bg-warning",
+              Canceled: "bg-danger",
+            };
+            return <Chip label={value} style={{ borderRadius: "4px", width: "100%" }} className={bgColorClass[value]} />;
+          };
         }
-      })
-      .catch(function (res) {
-        //handle error
-        // setError(" Error user name or password");
-        return;
+        return obj;
       });
+
+      setdbData(response.result.columnsData);
+      setTotalRowsNumber(response.result.total)
+      setdbColumns(columnsDbTitle);
+      updateLoader(false);
+    } else {
+      addToast("Oops! It seems there was an issue, Kindly contact to support", { appearance: "error", autoDismiss: true, autoDismissTimeout: 4000 })
+      return false;
+    }
+  }
+
+  const changePage = (page) => {
+    setPage(page)
+    updateLoader(true)
+  }
+
+  let searchTimeout;
+  const handleSearch = (search) => {
+    setSearchString(search == null ? "" : search);
+    setPage(0);
+    // Clear any existing timeout to debounce the search
+    clearTimeout(searchTimeout);
+
+    // Set a new timeout to execute the search after a delay
+    searchTimeout = setTimeout(() => {
+      //getTableData();
+      updateLoader(true);
+    }, 500);
+  }
+
+  const handleFilterChange = ({ columns, filterList }) => {
+    let filerData = {};
+    const result = filterList.map((filter, index) => {
+      if (Array.isArray(filter) && filter.length > 0) {
+        filerData[columns[index].name] = filter;
+      }
+    });
+    setFilterData(filerData);
+    updateLoader(true);
   };
 
   const getTableCOnfig = () => {
-    const tableConfig = {
-      actions: [
+    const onTableChange = (action, tableState) => {
+      switch (action) {
+        case 'changePage':
+          changePage(tableState.page)
+          break;
+        case 'filterChange':
+          handleFilterChange(tableState);
+          break;
+        default:
+          break;
+      }
+    }
+
+    const tablOptions = {
+      ...options, count: totalRowsNumber, onTableChange: (action, tableState) => onTableChange(action, tableState),
+      onSearchChange: handleSearch, onSearchOpen: () => { handleSearch("") }
+    }
+
+    let actions = [];
+    actions.push({
+      type: "view",
+      clickEvent: (rowData, dataIndex) => {
+        handleMode("view", rowData);
+      },
+    })
+
+    if (!user.hasRole("engineering")) {
+      actions.push(
         {
           type: "edit",
           clickEvent: (rowData, dataIndex) => {
@@ -226,83 +215,61 @@ export default function ShiftLog(props) {
             // triggerRemoveModal();
             // setCurrentIdx(rowIndex);
           },
-        },
-        {
-          type: "view",
-          clickEvent: (rowData, dataIndex) => {
-            handleMode("view", rowData);
-          },
-        },
-      ], // table button actions
-
+        });
+    }
+    const tableConfig = {
+      actions: actions, // table button actions
       columns: dbColumns,
-      options: options,
+      options: tablOptions,
+      responsive: "standard",
     };
-
     return tableConfig;
   };
 
   useEffect(() => {
     getTableData();
-    setTableConfig(getTableCOnfig);
+    setTableConfig(getTableCOnfig())
   }, [isLoading]);
 
   return (
     <div className="container-fluid">
-      <div className="row mb-3">
-        <div className="col d-flex justify-content-end">
-          <Button
-            onClick={() => {
-              handleMode("add");
-            }}
-            startIcon={<AddIcon />}
-            variant="contained"
-            color="primary"
-            className="add-button"
-          >
-            {"Add Shift Log"}
-          </Button>
+      <div className="row mb-4">
+        <h2 className="col-sm-8 mb-0" style={{ fontSize: '24px', fontFamily: "Roboto", fontWeight: 'bold', color: '#0c0c0c' }}>
+          Corrective Maintenance Work Orders
+        </h2>
+        <div className="col-sm-4 d-flex justify-content-end">
+          {!user.hasRole('engineering') ? (
+            <Fragment>
+              <Button
+                onClick={() => { handleMode("add"); }}
+                startIcon={<AddIcon />} variant="contained" size="small" className="add-button">
+                {"ADD Work Order"}
+              </Button>
+            </Fragment>
+          ) : ""}
+
           <FormModal
-            open={controlModalIsOpen}
-            cancleClick={triggerControllModal}
-            confirmClick={() => {}}
-            title={
-              "Shift Log" +
-              " - " +
-              formType[0].toUpperCase() +
-              formType.slice(1)
-            }
+            open={controlModalIsOpen} cancleClick={triggerControllModal}
+            confirmClick={() => { }}
+            title={"Work Order" + " - " + formType[0].toUpperCase() + formType.slice(1)}
           >
             {(() => {
               const Form = modalFormTypes[formType].form;
               return (
                 <Form
-                  formHandlerFuncs={modalFormTypes[formType].formHandlerFuncs}
-                  alertHandler={addToast}
-                  updateLoader={updateLoader}
-                  onCloseForm={triggerControllModal}
-                  formLoadData={formLoadData}
-                  type={formType}
+                  formHandlerFuncs={modalFormTypes[formType].formHandlerFuncs} alertHandler={addToast} updateLoader={updateLoader}
+                  onCloseForm={triggerControllModal} formLoadData={formLoadData} type={formType}
                 />
               );
             })()}
           </FormModal>
         </div>
       </div>
-
       <div className="row mb-3">
         <ConfirmModal
-          open={removeModalIsOpen}
-          cancleClick={triggerRemoveModal}
-          confirmClick={removeData}
-          message={"Confirm Delete"}
-          title={"Confirm"}
+          open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={"Confirm Delete"} title={"Confirm"}
         />
-        <DataTable
-          title={"Corrective Maintenance Log"}
-          tableConfig={tableConfig}
-          data={dbData}
-        />
+        <DataTable title={""} tableConfig={tableConfig} data={dbData} />
       </div>
     </div>
   );
