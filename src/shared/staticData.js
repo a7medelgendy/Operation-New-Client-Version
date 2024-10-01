@@ -49,3 +49,14 @@ export const areas = [
   { label: "area2", ID: 2 },
   { label: "area3", ID: 3 },
 ];
+
+/*     "start": "react-scripts start",
+    "build": "react-scripts build",
+
+
+
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+
+
+*/
