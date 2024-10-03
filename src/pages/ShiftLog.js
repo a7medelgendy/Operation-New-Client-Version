@@ -204,7 +204,7 @@ export default function ShiftLog(props) {
       }
     });
 
-    if (!user.hasGroup('engineering')) {
+    if (user.hasGroup('operator')) {
       actions.push(
         {
           type: 'edit',
@@ -243,7 +243,7 @@ export default function ShiftLog(props) {
           Corrective Maintenance Work Orders
         </h2>
         <div className='col-sm-4 d-flex justify-content-end'>
-          {!user.hasGroup('engineering') ? (
+          {user.hasGroup('operator') ? (
             <Fragment>
               <Button
                 onClick={() => {
