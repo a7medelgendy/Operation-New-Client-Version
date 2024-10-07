@@ -1,14 +1,13 @@
 .container-style {
-    height: 100vh;
-    padding: 0px !important;
-
+  height: 100vh;
+  padding: 0px !important;
 }
 
 .container-row {
-    background-color: white !important;
-    height: 100%;
-    padding-left: 0px !important;
-    margin:0px !important;
+  background-color: white !important;
+  height: 100%;
+  padding-left: 0px !important;
+  margin: 0px !important;
 }
 
 /* .sidebar-style {
@@ -19,36 +18,41 @@
 } */
 
 .page-wrapper-container {
-    padding-left: 10px;
-    padding-right: 0px;
-    padding-bottom: 10px;
-    padding-top: 30px;
-    display: table !important;
-    width: 100%;
-    table-layout: fixed !important;
-    height: 97.5% !important;
+  padding-left: 10px;
+  padding-right: 0px;
+  padding-bottom: 10px;
+  padding-top: 30px;
+  display: table !important;
+  width: 100%;
+  table-layout: fixed !important;
+  height: 97.5% !important;
 }
-
 
 /* Default styles for the sidebar */
 .sidebar-style {
-    width: 250px;
-    transition: width 0.3s ease; /* Add a transition effect for smooth opening/closing */
-  }
-  
-  /* Styles for the open state of the sidebar */
-  .sidebar-open {
-    width: 250px !important;
-    padding: 0px !important;
-    height: 100% !important;
-    display: grid !important;
-  }
-  
-  .sidebar-closed {
-    width: 0;
-  }
-  
-   .MuiBox-root .MuiPaper-root {
-    background-color:#495057 !important;/*  #7e7c7b */
+  width: 250px;
+  transition: width 0.3s ease; /* Add a transition effect for smooth opening/closing */
+}
 
-  }
+/* Styles for the open state of the sidebar */
+.sidebar-open {
+  width: 250px !important;
+  padding: 0px !important;
+  height: 100% !important;
+  display: grid !important;
+}
+
+.sidebar-closed {
+  width: 0;
+}
+
+.MuiBox-root .MuiPaper-root {
+  background-color: #495057 !important; /*  #7e7c7b */
+}
+
+.MuiButtonBase-root:hover {
+  background-color: #545b61 !important; /* Slightly lighter/darker color for hover */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow on hover */
+  transform: translateY(-2px); /* Adds a slight lift effect */
+  transition: all 0.3s ease; /* Smooth transition for the hover effect */
+}

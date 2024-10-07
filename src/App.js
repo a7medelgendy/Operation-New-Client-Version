@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Layout from "./components/Layout.js";
-import Login from "./components/Login";
-import axios from "axios";
-import { baseUrl } from "./shared/staticData.js";
+import React, { useState, useEffect } from 'react';
+import Layout from './components/Layout.js';
+import Login from './components/Login';
+import axios from 'axios';
+import { baseUrl } from './shared/staticData.js';
 
 export default function App() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   /*   useEffect(() => {
     fetch("/api/message")
@@ -14,15 +14,15 @@ export default function App() {
   }, []); */
 
   const funco = () => {
-    window.alert("sal;dk;lsakd;l");
-    window.alert(baseUrl + "/api/message");
+    window.alert('sal;dk;lsakd;l');
+    window.alert(baseUrl + '/api/message');
     axios({
-      method: "get",
-      url: "http://10.10.6.162:8000/api/message",
+      method: 'get',
+      url: 'http://10.10.6.162:8000/api/message',
       params: {
-        foo: "bar",
+        foo: 'bar'
       },
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { 'Content-Type': 'multipart/form-data' } }
     }).then((res) => {
       setMessage(res.data.message);
     });
@@ -32,7 +32,7 @@ export default function App() {
   });
 
   return (
-    <div className="App">
+    <div className='App'>
       <Layout />
       <h1>{message}</h1>
       <Login />

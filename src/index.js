@@ -1,25 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./index.css";
-import App from "./layout/App";
-import Login from "./pages/Login";
-import NoPage from "./pages/NoPage";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
+import App from './layout/App';
+import Login from './pages/Login';
+import NoPage from './pages/NoPage';
+import AboutUs from './pages/AboutUs';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap";
-import reportWebVitals from "./reportWebVitals";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap';
+import reportWebVitals from './reportWebVitals';
 
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/app/*" element={<App />} />
-      <Route path="*" element={<NoPage />} />
+      <Route path='/' element={<Login />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/about-us' element={<AboutUs />} />
+      <Route path='/app/*' element={<App />} />
+      <Route path='*' element={<NoPage />} />
     </Routes>
   </BrowserRouter>
 );
