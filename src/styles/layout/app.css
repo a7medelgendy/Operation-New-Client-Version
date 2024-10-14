@@ -50,9 +50,9 @@
   background-color: #495057 !important; /*  #7e7c7b */
 }
 
-.MuiButtonBase-root:hover {
-  background-color: #545b61 !important; /* Slightly lighter/darker color for hover */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow on hover */
-  transform: translateY(-2px); /* Adds a slight lift effect */
-  transition: all 0.3s ease; /* Smooth transition for the hover effect */
-}
+/* .MuiButtonBase-root:hover {
+  background-color: #545b61 !important; 
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); 
+  transform: translateY(-2px); 
+  transition: all 0.3s ease; 
+} */

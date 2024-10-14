@@ -1,41 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout.js';
-import Login from './components/Login';
-import axios from 'axios';
-import { baseUrl } from './shared/staticData.js';
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
-export default function App() {
-  const [message, setMessage] = useState('');
+import NoPage from './pages/NoPage';
+import Login from './pages/Login';
+import AppLayout from './layout/AppLayout.jsx';
+import ProtectedRoute from './utilites/ProtectedRoute.jsx';
 
-  /*   useEffect(() => {
-    fetch("/api/message")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
-  }, []); */
-
-  const funco = () => {
-    window.alert('sal;dk;lsakd;l');
-    window.alert(baseUrl + '/api/message');
-    axios({
-      method: 'get',
-      url: 'http://10.10.6.162:8000/api/message',
-      params: {
-        foo: 'bar'
-      },
-      config: { headers: { 'Content-Type': 'multipart/form-data' } }
-    }).then((res) => {
-      setMessage(res.data.message);
-    });
-  };
-  useEffect(() => {
-    funco();
-  });
-
+function App() {
   return (
-    <div className='App'>
-      <Layout />
-      <h1>{message}</h1>
-      <Login />
-    </div>
+    <>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route
+          path='/app/*'
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<NoPage />} />
+      </Routes>
+    </>
   );
 }
+
+export default App;
