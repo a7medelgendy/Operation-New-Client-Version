@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Button, Checkbox, Chip, FormControl, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
+import { Button, Chip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DataTable from '../components/datatable/DataTable';
 import ShiftLogControlForm from '../components/shift_log/ShiftLogControlForm';
@@ -73,8 +73,6 @@ export default function ShiftLog(props) {
     filterType: 'dropdown',
     responsive: 'standard',
     selectableRows: 'none',
-
-    serverSide: true,
     rowsPerPage: 10,
     rowsPerPageOptions: [],
     textLabels: {
@@ -105,6 +103,7 @@ export default function ShiftLog(props) {
   const getTableData = async () => {
     let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData };
     const response = await handleRequest('GET', 'api/shiftLog', data);
+
     if (response) {
       var columnsDbTitle = response.result.showedColumns.map((data) => {
         var obj = {
@@ -119,7 +118,7 @@ export default function ShiftLog(props) {
           }
         };
 
-        if (data.key == 'TXT_STATUS') {
+        if (data.key === 'TXT_STATUS') {
           obj.options.customBodyRender = (value) => {
             let bgColorClass = {
               Completed: 'bg-success',
