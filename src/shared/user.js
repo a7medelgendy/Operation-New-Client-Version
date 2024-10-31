@@ -48,6 +48,7 @@ class User {
   logout() {
     this.userData = null;
     cache.remove('user');
+    cache.remove('userToken');
   }
 
   /**
@@ -56,7 +57,7 @@ class User {
    * @returns {string}
    */
   getAccessToken() {
-    return this.userData.token;
+    return this.userData?.token;
   }
 }
 

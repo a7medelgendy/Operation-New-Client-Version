@@ -6,7 +6,7 @@ export default function SideBar() {
   return (
     <div className="container-fluid sidebar d-flex flex-column">
       <div className="row sidebar-logo-container">
-        <img src={require("../assets/logo.png")} />
+        <img src={require("../assets/logo.png")} alt="the logo"/>
       </div>
 
       <div className="d-flex sidebar-buttons-container flex-grow-1 ">

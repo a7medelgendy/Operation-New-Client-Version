@@ -136,7 +136,7 @@ export default function ShiftLogControlForm(props) {
 
   const equibmentsData = async () => {
     const response = await handleRequest('GET', 'api/equibments');
-    if (response.result.length > 0) {
+    if (response) {
       setUnitTags(response.result);
     }
   };

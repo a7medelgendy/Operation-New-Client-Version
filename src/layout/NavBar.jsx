@@ -7,7 +7,6 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -15,7 +14,6 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import user from '../shared/user';
 import { useNavigate, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 export default function NavBar({ onToggleSidebar }) {
@@ -56,7 +54,7 @@ export default function NavBar({ onToggleSidebar }) {
   };
 
   const handlePageClick = (page) => {
-    setActivePage(page); // Set the default active  to "About Us"
+    setActivePage(page);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -132,41 +130,47 @@ export default function NavBar({ onToggleSidebar }) {
             {isSidebarOpen ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
           <Box sx={{ display: 'flex', mr: 2 }}>
-            <Button
-              sx={{
-                mr: 1,
-                fontSize: '1.1rem',
-                fontFamily: 'amiri !important',
-                color: activePage === 'about' ? '#ffffff' : '#b0bec5', // Change font color when active (to red)
-                borderBottom: activePage === 'about' ? '4px solid #e53935' : 'none', // Add red border when active
-                '&:hover': {
-                  color: activePage === 'about' ? '#ffffff' : 'inherit' // Maintain red color on hover for active
-                }
-              }}
-              component={Link}
-              to='/app/about-us'
-              color='inherit'
-              onClick={() => handlePageClick('about')} // Set "about" as active when clicked
-            >
-              About Project
-            </Button>
-            <Button
-              sx={{
-                mr: 1,
-                fontSize: '1.05rem',
-                fontFamily: 'amiri !important',
-                color: activePage === 'work-orders' ? '#ffffff' : '#b0bec5', // Change font color when active (to red)
-                borderBottom: activePage === 'work-orders' ? '4px solid #e53935' : 'none', // Add red border when active
-                '&:hover': {
-                  color: activePage === 'work-orders' ? '#ffffff' : 'inherit' // Maintain red color on hover for active
-                }
-              }}
-              component={Link}
-              color='inherit'
-              onClick={() => handlePageClick('work-orders')}
-            >
-              Work Orders
-            </Button>
+            {!user.hasGroup('limit') && (
+              <>
+                <Button
+                  sx={{
+                    mr: 1,
+                    fontSize: '1.1rem',
+                    fontFamily: 'amiri !important',
+                    color: activePage === 'about' ? '#ffffff' : '#b0bec5',
+                    borderBottom: activePage === 'about' ? '4px solid #e53935' : 'none',
+                    '&:hover': {
+                      color: activePage === 'about' ? '#ffffff' : 'inherit'
+                    }
+                  }}
+                  component={Link}
+                  to='/app/about-us'
+                  color='inherit'
+                  onClick={() => handlePageClick('about')}
+                >
+                  About Project
+                </Button>
+
+                <Button
+                  sx={{
+                    mr: 1,
+                    fontSize: '1.05rem',
+                    fontFamily: 'amiri !important',
+                    color: activePage === 'work-orders' ? '#ffffff' : '#b0bec5',
+                    borderBottom: activePage === 'work-orders' ? '4px solid #e53935' : 'none',
+                    '&:hover': {
+                      color: activePage === 'work-orders' ? '#ffffff' : 'inherit'
+                    }
+                  }}
+                  component={Link}
+                  to='/app/work-orders' // Added route for consistency
+                  color='inherit'
+                  onClick={() => handlePageClick('work-orders')}
+                >
+                  Work Orders
+                </Button>
+              </>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />

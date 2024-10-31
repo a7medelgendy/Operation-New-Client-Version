@@ -101,9 +101,9 @@ export default function ShiftLog(props) {
   };
 
   const getTableData = async () => {
-    let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData };
-    const response = await handleRequest('GET', 'api/shiftLog', data);
+    let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData, edaraCode: user.userData.edara_code };
 
+    const response = await handleRequest('GET', 'api/shiftLog', data);
     if (response) {
       var columnsDbTitle = response.result.showedColumns.map((data) => {
         var obj = {
