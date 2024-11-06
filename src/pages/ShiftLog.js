@@ -269,7 +269,7 @@ export default function ShiftLog(props) {
         </div>
       </div>
       <div className='row mb-3'>
-        <ConfirmModal open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={'Confirm Delete'} title={'Confirm'} />
+        <ConfirmModal open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={"You don't have permission to delete ."} title={'Alert'} />
         <DataTable title={''} tableConfig={tableConfig} data={dbData} />
       </div>
     </div>

@@ -150,25 +150,6 @@ export default function NavBar({ onToggleSidebar }) {
                 >
                   About Project
                 </Button>
-
-                <Button
-                  sx={{
-                    mr: 1,
-                    fontSize: '1.05rem',
-                    fontFamily: 'amiri !important',
-                    color: activePage === 'work-orders' ? '#ffffff' : '#b0bec5',
-                    borderBottom: activePage === 'work-orders' ? '4px solid #e53935' : 'none',
-                    '&:hover': {
-                      color: activePage === 'work-orders' ? '#ffffff' : 'inherit'
-                    }
-                  }}
-                  component={Link}
-                  to='/app/work-orders' // Added route for consistency
-                  color='inherit'
-                  onClick={() => handlePageClick('work-orders')}
-                >
-                  Work Orders
-                </Button>
               </>
             )}
           </Box>

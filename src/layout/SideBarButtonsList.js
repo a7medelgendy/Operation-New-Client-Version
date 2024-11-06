@@ -77,9 +77,9 @@ export default function SideBarButtonList() {
       </div>
 
       {!user.hasGroup('limit') && (
-        <div className='row'>
-          <div className='d-flex justify-content-center align-items-center' style={{ backgroundColor: '#f0f0f0' }}>
-            <span style={{ fontSize: '12px', color: '#e53935', fontWeight: 'bold' }}>Copyright © Ahmed Elgendy Engineer @2022</span>
+        <div className='row w-100'>
+          <div className='d-flex  justify-content-center align-items-center' style={{ backgroundColor: '#f0f0f0' }}>
+            <span style={{ fontSize: '12px', color: '#e53935', fontWeight: 'bold' }}>Copyright © Eng. Ahmed Elgendy @ 2022</span>
           </div>
         </div>
       )}
