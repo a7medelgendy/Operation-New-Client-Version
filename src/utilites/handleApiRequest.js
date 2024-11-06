@@ -5,7 +5,6 @@ import { baseUrl } from '../shared/staticData';
 //export const baseUrl = "http://172.18.8.103:8000";
 import user from '../shared/user.js';
 
-
 export const handleRequest = async (method, endpoint, params = null) => {
   try {
     // Configure the Axios request
@@ -13,10 +12,10 @@ export const handleRequest = async (method, endpoint, params = null) => {
     // if (params?.token !== 'login') {
     //   token = user.getAccessToken();
     // }
-      let token = user.getAccessToken();
+    let token = user.getAccessToken();
     const axiosConfig = {
       method,
-      url: `${baseUrl}/${endpoint}`,
+      url: `${endpoint}`, //change this according to the environment development ==> `${baseUrl}/${endpoint}` production ==> `${endpoint}`
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`

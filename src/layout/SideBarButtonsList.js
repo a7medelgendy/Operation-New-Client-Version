@@ -1,53 +1,42 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import SideBarButton from "../components/sidebar/SideBarButton";
-import "../styles/layout/sidebar.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import SideBarButton from '../components/sidebar/SideBarButton';
+import '../styles/layout/sidebar.css';
 
-import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
-import PendingActionsIcon from "@mui/icons-material/PendingActions";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
-import { Avatar } from "@mui/material";
-import user from "../shared/user";
-import cache from "../shared/cache";
+import { Avatar } from '@mui/material';
+import user from '../shared/user';
+import cache from '../shared/cache';
 
 export default function SideBarButtonList() {
   const navigate = useNavigate();
 
   const SideBarList = [
     {
-      name: "Dashboard",
-      icon: <DashboardRoundedIcon style={{ marginLeft: "30px" }} />,
+      name: 'Dashboard',
+      icon: <DashboardRoundedIcon style={{ marginLeft: '30px' }} />,
       callBack: (id) => {
-        cache.set("activeIndex", id);
-        navigate("dashboard");
-      },
+        cache.set('activeIndex', id);
+        navigate('dashboard');
+      }
     },
     {
-      name: "Work Orders",
-      icon: (
-        <PendingActionsIcon
-          sx={{ fontSize: 27 }}
-          style={{ marginLeft: "30px" }}
-        />
-      ),
+      name: 'Work Orders',
+      icon: <PendingActionsIcon sx={{ fontSize: 27 }} style={{ marginLeft: '30px' }} />,
       callBack: (id) => {
-        cache.set("activeIndex", id);
-        navigate("shiftlog");
-      },
-    },
+        cache.set('activeIndex', id);
+        navigate('shiftlog');
+      }
+    }
   ];
 
   const SideBarListComponent = SideBarList.map((ele, idx) => {
     return (
-      <div className="row sidebar-button-container " key={idx}>
-        <SideBarButton
-          id={idx}
-          buttonName={ele.name}
-          startIcon={ele.icon}
-          callBack={ele.callBack}
-          isActive={cache.get("activeIndex") === idx ? true : false}
-        />
+      <div className='row sidebar-button-container ' key={idx}>
+        <SideBarButton id={idx} buttonName={ele.name} startIcon={ele.icon} callBack={ele.callBack} isActive={cache.get('activeIndex') === idx ? true : false} />
       </div>
     );
   });
@@ -87,10 +76,10 @@ export default function SideBarButtonList() {
         />
       </div>
 
-      {! user.hasGroup('limit') && (
+      {!user.hasGroup('limit') && (
         <div className='row'>
-          <div className='d-flex justify-content-center align-items-center'>
-            <span style={{ fontSize: '12px', color: 'rgb(215, 218, 255)' }}>Copyright © Ahmed Elgendy Engineer @2022</span>
+          <div className='d-flex justify-content-center align-items-center' style={{ backgroundColor: '#f0f0f0' }}>
+            <span style={{ fontSize: '12px', color: '#e53935', fontWeight: 'bold' }}>Copyright © Ahmed Elgendy Engineer @2022</span>
           </div>
         </div>
       )}
