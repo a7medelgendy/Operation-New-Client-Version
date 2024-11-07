@@ -36,7 +36,6 @@ function LoginFormToast() {
       let response = await handleRequest('post', 'api/login', { userName: states.userName, password: states.password, token: 'login' });
 
       //handle success
-      console.log(response);
       if (response) {
         user.login(response.result);
         return navigate('app/dashboard');
