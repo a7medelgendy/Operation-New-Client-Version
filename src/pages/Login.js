@@ -32,14 +32,16 @@ function LoginFormToast() {
   const { addToast } = useToasts();
 
   const checkLoginCreditional = async () => {
-    let response = await handleRequest('post', 'api/login', { userName: states.userName, password: states.password, token: 'login' });
     try {
+      let response = await handleRequest('post', 'api/login', { userName: states.userName, password: states.password, token: 'login' });
+
       //handle success
+      console.log(response);
       if (response) {
         user.login(response.result);
         return navigate('app/dashboard');
       } else {
-        addToast(' Error user name or password', {
+        addToast('Error user name or password', {
           appearance: 'error',
           autoDismiss: true,
           autoDismissTimeout: 2000

@@ -170,8 +170,7 @@ export default function ShiftLogControlForm(props) {
       dbOject.id = props.formLoadData.ID;
     }
     try {
-      console.log(dbOject);
-      const res = await props.formHandlerFuncs.onSubmit(dbOject, props.alertHandler, props.updateLoader);
+      await props.formHandlerFuncs.onSubmit(dbOject, props.alertHandler, props.updateLoader);
       props.onCloseForm(false);
     } finally {
       setIsSubmitting(true);

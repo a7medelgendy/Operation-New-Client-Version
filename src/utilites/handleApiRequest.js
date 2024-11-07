@@ -15,7 +15,7 @@ export const handleRequest = async (method, endpoint, params = null) => {
     let token = user.getAccessToken();
     const axiosConfig = {
       method,
-      url: `${endpoint}`, //change this according to the environment development ==> `${baseUrl}/${endpoint}` production ==> `${endpoint}`
+      url: `${baseUrl}/${endpoint}`, //change this according to the environment development ==> `${baseUrl}/${endpoint}` production ==> `${endpoint}`
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`
