@@ -19,26 +19,44 @@ const NoPage = () => {
             transition: 'background-color 0.3s'
           }}
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#e2e6ea'; // Lighter background on hover
+            e.target.style.backgroundColor = '#e2e6ea';
           }}
           onMouseLeave={(e) => {
-            e.target.style.backgroundColor = '#f8f9fa'; // Original background
+            e.target.style.backgroundColor = '#f8f9fa';
           }}
         >
           Back to Home
         </a>
       </div>
-      <div className='mt-5 text-center'>
-        <h2 style={{ fontSize: '2rem', fontWeight: '600' }}>Need Help?</h2>
-        <p style={{ fontSize: '1rem' }}>
-          Contact our admin for assistance:
-          <br />
-          <strong>Name:</strong> Ahmed
-          <br />
-          <strong>Email:</strong> ahmed@ANRPC.com
-          <br />
-          <strong>Phone:</strong> 1234
-        </p>
+      <div className='mt-5'>
+        <div className='text-center'>
+          <h2 style={{ fontSize: '2rem', fontWeight: '600' }}>Need Help?</h2>
+          <p style={{ fontSize: '1.2rem' }}>
+            Contact our admin for assistance:
+            <br />
+          </p>
+        </div>
+        <div className='d-flex justify-content-center'>
+          <div className='fw-normal '>
+            <div>
+              <i className='fa-solid fa-user' style={{ color: '#e53935', marginRight: '12px' }} />
+              Eng. Ahmed Elgendy
+            </div>
+            <div>
+              <i className='fa-solid fa-code fa-sm' style={{ color: '#e53935', marginRight: '8px' }} />
+              Software Engineer
+            </div>
+            <div>
+              <i className='fa-solid fa-phone' style={{ color: '#e53935', marginRight: '12px' }}></i>
+              Tel: 5634
+            </div>
+
+            <div>
+              <i className='fas fa-solid fa-mobile-alt  ' style={{ color: '#e53935', marginRight: '14px' }}></i>
+              Mobile: 01212205882
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
