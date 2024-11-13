@@ -9,6 +9,7 @@ import FormModal from '../components/modal/FormModal';
 import user from '../shared/user';
 import '../styles/shift_log/shiftlog.css';
 import { handleRequest } from '../utilites/handleApiRequest';
+import axios from 'axios';
 
 const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
   const response = await handleRequest('POST', 'api/shiftLog', dbOjectAdd);
@@ -49,6 +50,10 @@ const modalFormTypes = {
   edit: {
     form: ShiftLogControlForm,
     formHandlerFuncs: { onSubmit: handleSubmitEdit }
+  },
+  dataSheet: {
+    form: ShiftLogControlForm,
+    formHandlerFuncs: { onSubmit: handleSubmitEdit }
   }
 };
 
@@ -65,7 +70,27 @@ export default function ShiftLog(props) {
   const [formLoadData, setFormLoadData] = useState(null);
   const [removeModalIsOpen, setRemoveModalDisplay] = useState(false);
   const [controlModalIsOpen, setControlModalIsOpen] = useState(false);
+
   const { addToast } = useToasts();
+
+  const handleViewPdf = async (info) => {
+    try {
+      let pathParam = {
+        unit: info.CODE_UNIT,
+        equipmentTag: info.EQUIBMENT
+      };
+      const response = await handleRequest('POST', 'api/document/dataSheet', pathParam, 'blob');
+      const url = URL.createObjectURL(response);
+      window.open(url, '_blank');
+    } catch (error) {
+      addToast(`Oops! It seems there is no data sheet available with ID: ${info.EQUIBMENT}. Please contact support.`, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 7000
+      });
+    }
+    return true;
+  };
 
   const options = {
     filter: true,
@@ -203,6 +228,16 @@ export default function ShiftLog(props) {
       }
     });
 
+    if (user.hasGroup('control')) {
+      actions.push({
+        type: 'dataSheet',
+        clickEvent: (rowData, dataIndex) => {
+          //handleMode('dataSheet', rowData);
+          handleViewPdf(rowData);
+        }
+      });
+    }
+
     if (user.hasGroup('operator')) {
       actions.push(
         {
@@ -244,17 +279,10 @@ export default function ShiftLog(props) {
         <div className='col-sm-4 d-flex justify-content-end'>
           {user.hasGroup('operator') ? (
             <Fragment>
-              <Button
-                onClick={() => {
-                  handleMode('add');
-                }}
-                startIcon={<AddIcon />}
-                variant='contained'
-                size='small'
-                className='add-button'
-              >
-                {'ADD Work Order'}
-              </Button>
+              <button onClick={() => handleMode('add')} className='btn  d-flex align-items-center btn fw-bold btn-outline-success'>
+                <i className='fa-solid fa-file-circle-plus fa-xl me-2'></i>
+                Add Work Order
+              </button>
             </Fragment>
           ) : (
             ''
