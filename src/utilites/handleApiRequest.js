@@ -30,7 +30,7 @@ export const handleRequest = async (method, endpoint, params = null, responseTyp
 
     return response.data;
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     throw error;
   }
 };

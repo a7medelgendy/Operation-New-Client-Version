@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Button, Chip } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {  Chip } from '@mui/material';
 import DataTable from '../components/datatable/DataTable';
 import ShiftLogControlForm from '../components/shift_log/ShiftLogControlForm';
 import { useToasts } from 'react-toast-notifications';
@@ -9,7 +8,7 @@ import FormModal from '../components/modal/FormModal';
 import user from '../shared/user';
 import '../styles/shift_log/shiftlog.css';
 import { handleRequest } from '../utilites/handleApiRequest';
-import axios from 'axios';
+
 
 const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
   const response = await handleRequest('POST', 'api/shiftLog', dbOjectAdd);

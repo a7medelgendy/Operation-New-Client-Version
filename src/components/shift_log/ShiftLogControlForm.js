@@ -426,7 +426,7 @@ export default function ShiftLogControlForm(props) {
         <div className='col'>
           <TextWrapper
             className={['multi-line-input-rounded', 'multi-line-text']}
-            id='outlined-multiline-static'
+            id='outlined-multiline-static-01'
             label='Executed Notes...'
             multiline
             rows={4}
@@ -440,23 +440,21 @@ export default function ShiftLogControlForm(props) {
       </div>
 
       <div className='row'>
-        <div className='col d-flex justify-content-end'>
-          <Button
-            variant='text'
-            size='small'
-            className='rounded-btn cancel-btn'
+        <div className='col d-flex justify-content-center'>
+          {!isReadOnlyForm && (
+            <button type='submit' id='saveBtn' className='btn btn-outline-success mx-3' disabled={isSubmitting}>
+              Save
+            </button>
+          )}
+
+          <button
+            className='btn btn-outline-danger mx-3'
             onClick={() => {
               props.onCloseForm(false);
             }}
           >
             Cancel
-          </Button>
-
-          {!isReadOnlyForm && (
-            <Button id='saveBtn' size='small' variant='text' type='submit' className='rounded-btn save-btn' disabled={isSubmitting}>
-              Save
-            </Button>
-          )}
+          </button>
         </div>
       </div>
     </Form>
