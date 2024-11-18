@@ -448,6 +448,7 @@ export default function ShiftLogControlForm(props) {
           )}
 
           <button
+            type='button'
             className='btn btn-outline-danger mx-3'
             onClick={() => {
               props.onCloseForm(false);
