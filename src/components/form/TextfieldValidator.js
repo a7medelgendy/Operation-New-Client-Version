@@ -1,6 +1,6 @@
-import React from "react";
-import events from "@flk/events";
-import { TextField } from "@mui/material";
+import React from 'react';
+import events from '@flk/events';
+import { TextField } from '@mui/material';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -13,7 +13,7 @@ export default class TextFieldValidator extends React.Component {
     super(props);
     // Don't call this.setState() here!
     this.state = {
-      validationError: null,
+      validationError: null
     };
 
     setTimeout(() => {
@@ -32,7 +32,7 @@ export default class TextFieldValidator extends React.Component {
 
   setValidationError(state) {
     this.setState({
-      validationError: state,
+      validationError: state
     });
   }
 
@@ -40,24 +40,26 @@ export default class TextFieldValidator extends React.Component {
    * {@inheritdoc}
    */
   init() {
-    var inputField = this.input.children[0].children[1];
+    if (this.input) {
+      var inputField = this.input.children[0].children[1];
 
-    events.on("form.validation", (form) => {
-      // validate the input
-      var error = this.handleChange(
-        {
-          target: inputField,
-        },
-        this.props.validation_rules,
-        this.props.validation_messages
-      );
+      events.on('form.validation', (form) => {
+        // validate the input
+        var error = this.handleChange(
+          {
+            target: inputField
+          },
+          this.props.validation_rules,
+          this.props.validation_messages
+        );
 
-      this.setValidationError(error);
+        this.setValidationError(error);
 
-      if (error !== null) {
-        form.isValidForm = false;
-      }
-    });
+        if (error !== null) {
+          form.isValidForm = false;
+        }
+      });
+    }
   }
 
   /**
@@ -73,15 +75,15 @@ export default class TextFieldValidator extends React.Component {
   validator(rule, data) {
     //return true if it's valid else false
     switch (rule.toLowerCase()) {
-      case "isrequired":
+      case 'isrequired':
         return required(data.val);
-      case "isnumber":
+      case 'isnumber':
         return isNumber(data.val);
-      case "isemail":
+      case 'isemail':
         return isEmail(data.val);
-      case "minlength":
+      case 'minlength':
         return minLength(data.option)(data.val);
-      case "maxlength":
+      case 'maxlength':
         return maxLength(data.option)(data.val);
       default:
         return false;
@@ -94,16 +96,14 @@ export default class TextFieldValidator extends React.Component {
     for (var i = 0; i < validation_rules.length; i++) {
       let validate_data = {
         val: data,
-        option: validation_rules[i].hasOwnProperty("option")
-          ? validation_rules[i].option
-          : "",
+        option: validation_rules[i].hasOwnProperty('option') ? validation_rules[i].option : ''
       };
 
       if (!this.validator(validation_rules[i].rule, validate_data)) {
         if (validation_message && i < validation_message.length) {
           return validation_message[i];
         } else {
-          return "Error";
+          return 'Error';
         }
       } else {
         return null;
@@ -127,13 +127,9 @@ export default class TextFieldValidator extends React.Component {
         className={this.props.className}
         InputProps={this.props.InputProps}
         onChange={(e) => {
-          var error = this.handleChange(
-            e,
-            this.props.validation_rules,
-            this.props.validation_messages
-          );
+          var error = this.handleChange(e, this.props.validation_rules, this.props.validation_messages);
 
-          if (this.props.hasOwnProperty("custome_change")) {
+          if (this.props.hasOwnProperty('custome_change')) {
             this.props.custome_change(e);
           }
 
@@ -150,5 +146,5 @@ export default class TextFieldValidator extends React.Component {
 }
 
 TextFieldValidator.defaultProps = {
-  type: "text",
+  type: 'text'
 };

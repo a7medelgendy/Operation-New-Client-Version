@@ -1,28 +1,21 @@
-
 .input-rounded .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
   border-radius: 4px;
   border: 1px solid;
   border-color: #00000099;
 }
 
-.input-rounded
-  .MuiOutlinedInput-root.Mui-focused
-  .MuiOutlinedInput-notchedOutline {
+.input-rounded .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-radius: 4px;
   border: 1px solid;
 }
 
-.multi-line-input-rounded
-  .MuiOutlinedInput-root
-  .MuiOutlinedInput-notchedOutline {
+.multi-line-input-rounded .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
   border-radius: 4px !important;
   border: 1px solid;
   border-color: #00000099;
 }
 
-.multi-line-input-rounded
-  .MuiOutlinedInput-root.Mui-focused
-  .MuiOutlinedInput-notchedOutline {
+.multi-line-input-rounded .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-radius: 4px;
   border: 1px solid;
 }
@@ -39,15 +32,15 @@
   width: 100% !important;
 }
 
-.rounded-btn {
+/* .rounded-btn {
   border-radius: 4px !important;
   padding-left: 20px !important;
   padding-right: 20px !important;
   margin-left: 20px !important;
   color: #e53935 !important;
-}
+} 
 
-.save-btn{
+ .save-btn{
  
   border: 1px solid #e53935 !important;
 }
@@ -55,7 +48,7 @@
 .cancel-btn{
   
   border: 1px solid #e53935 !important;
-}
+} 
 
 .save-btn:hover {
   color: #fff !important;
@@ -64,5 +57,5 @@
 
 .cancel-btn:hover {
   color: #fff !important;
-  background-color:  #e53935 !important;
-}
+  background-color: #e53935 !important;
+}*/

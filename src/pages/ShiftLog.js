@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Button, Checkbox, Chip, FormControl, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {  Chip } from '@mui/material';
 import DataTable from '../components/datatable/DataTable';
 import ShiftLogControlForm from '../components/shift_log/ShiftLogControlForm';
 import { useToasts } from 'react-toast-notifications';
@@ -9,6 +8,7 @@ import FormModal from '../components/modal/FormModal';
 import user from '../shared/user';
 import '../styles/shift_log/shiftlog.css';
 import { handleRequest } from '../utilites/handleApiRequest';
+
 
 const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
   const response = await handleRequest('POST', 'api/shiftLog', dbOjectAdd);
@@ -49,6 +49,10 @@ const modalFormTypes = {
   edit: {
     form: ShiftLogControlForm,
     formHandlerFuncs: { onSubmit: handleSubmitEdit }
+  },
+  dataSheet: {
+    form: ShiftLogControlForm,
+    formHandlerFuncs: { onSubmit: handleSubmitEdit }
   }
 };
 
@@ -65,7 +69,27 @@ export default function ShiftLog(props) {
   const [formLoadData, setFormLoadData] = useState(null);
   const [removeModalIsOpen, setRemoveModalDisplay] = useState(false);
   const [controlModalIsOpen, setControlModalIsOpen] = useState(false);
+
   const { addToast } = useToasts();
+
+  const handleViewPdf = async (info) => {
+    try {
+      let pathParam = {
+        unit: info.CODE_UNIT,
+        equipmentTag: info.EQUIBMENT
+      };
+      const response = await handleRequest('POST', 'api/document/dataSheet', pathParam, 'blob');
+      const url = URL.createObjectURL(response);
+      window.open(url, '_blank');
+    } catch (error) {
+      addToast(`Oops! It seems there is no data sheet available with ID: ${info.EQUIBMENT}. Please contact support.`, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 7000
+      });
+    }
+    return true;
+  };
 
   const options = {
     filter: true,
@@ -73,8 +97,6 @@ export default function ShiftLog(props) {
     filterType: 'dropdown',
     responsive: 'standard',
     selectableRows: 'none',
-
-    serverSide: true,
     rowsPerPage: 10,
     rowsPerPageOptions: [],
     textLabels: {
@@ -103,7 +125,8 @@ export default function ShiftLog(props) {
   };
 
   const getTableData = async () => {
-    let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData };
+    let data = { page: page, perPage: options.rowsPerPage, search: searchString, filterData: filterData, edaraCode: user.userData.edara_code };
+
     const response = await handleRequest('GET', 'api/shiftLog', data);
     if (response) {
       var columnsDbTitle = response.result.showedColumns.map((data) => {
@@ -119,7 +142,7 @@ export default function ShiftLog(props) {
           }
         };
 
-        if (data.key == 'TXT_STATUS') {
+        if (data.key === 'TXT_STATUS') {
           obj.options.customBodyRender = (value) => {
             let bgColorClass = {
               Completed: 'bg-success',
@@ -204,6 +227,16 @@ export default function ShiftLog(props) {
       }
     });
 
+    if (user.hasGroup('control')) {
+      actions.push({
+        type: 'dataSheet',
+        clickEvent: (rowData, dataIndex) => {
+          //handleMode('dataSheet', rowData);
+          handleViewPdf(rowData);
+        }
+      });
+    }
+
     if (user.hasGroup('operator')) {
       actions.push(
         {
@@ -245,17 +278,10 @@ export default function ShiftLog(props) {
         <div className='col-sm-4 d-flex justify-content-end'>
           {user.hasGroup('operator') ? (
             <Fragment>
-              <Button
-                onClick={() => {
-                  handleMode('add');
-                }}
-                startIcon={<AddIcon />}
-                variant='contained'
-                size='small'
-                className='add-button'
-              >
-                {'ADD Work Order'}
-              </Button>
+              <button onClick={() => handleMode('add')} className='btn  d-flex align-items-center btn fw-bold btn-outline-success'>
+                <i className='fa-solid fa-file-circle-plus fa-xl me-2'></i>
+                Add Work Order
+              </button>
             </Fragment>
           ) : (
             ''
@@ -270,7 +296,7 @@ export default function ShiftLog(props) {
         </div>
       </div>
       <div className='row mb-3'>
-        <ConfirmModal open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={'Confirm Delete'} title={'Confirm'} />
+        <ConfirmModal open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={"You don't have permission to delete ."} title={'Alert'} />
         <DataTable title={''} tableConfig={tableConfig} data={dbData} />
       </div>
     </div>

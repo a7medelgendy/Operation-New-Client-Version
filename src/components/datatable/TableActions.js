@@ -1,50 +1,55 @@
-import React from "react";
-import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-// import Tooltip from "reactor/components/tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React from 'react';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
-export function TableAddButton(props) {
+export function dataSheetButton(props) {
+  const dataSheetClick = (e) => {
+    props.onClick(e, 'data Sheet');
+  };
   return (
-    <IconButton>
-      <AddCircleIcon fontSize="large" color="primary" />
-    </IconButton>
+    <OverlayTrigger placement='top' overlay={<Tooltip id='tooltip-top'>Data sheet</Tooltip>}>
+      <button onClick={dataSheetClick} className='btn px-2 border-0 action-btn'>
+        <i className='fa-regular fa-file-pdf text-danger fs-5'></i>
+      </button>
+    </OverlayTrigger>
   );
 }
 
 export function TableViewButton(props) {
   const viewClick = (e) => {
-    props.onClick(e, "view");
+    props.onClick(e, 'view');
   };
 
   return (
-    <IconButton onClick={viewClick}>
-      <VisibilityIcon />
-    </IconButton>
+    <OverlayTrigger placement='top' overlay={<Tooltip id='tooltip-top'>Veiw</Tooltip>}>
+      <button onClick={viewClick} className='btn px-2 border-0 action-btn'>
+        <i className='fa fa-eye text-muted fs-5'></i>
+      </button>
+    </OverlayTrigger>
   );
 }
 
 export function TableEditButton(props) {
   const editClick = (e) => {
-    props.onClick(e, "edit");
+    props.onClick(e, 'edit');
   };
   return (
-    <IconButton onClick={editClick}>
-      <EditIcon color="primary" />
-    </IconButton>
+    <OverlayTrigger placement='top' overlay={<Tooltip id='tooltip-top'>Edit</Tooltip>}>
+      <button className='btn px-2 border-0 action-btn' onClick={editClick}>
+        <i className='fas fa-edit text-primary fs-5'></i>
+      </button>
+    </OverlayTrigger>
   );
 }
 
 export function TableDeleteButton(props) {
   const deleteClick = (e) => {
-    props.onClick(e, "remove");
+    props.onClick(e, 'remove');
   };
   return (
-    <IconButton onClick={deleteClick}>
-      <DeleteIcon color="error" />
-    </IconButton>
+    <OverlayTrigger placement='top' overlay={<Tooltip id='tooltip-top'>Delete</Tooltip>}>
+      <button onClick={deleteClick} className='btn border-0  px-2 action-btn'>
+        <i className='fa fa-trash text-danger fs-5'></i>
+      </button>
+    </OverlayTrigger>
   );
 }

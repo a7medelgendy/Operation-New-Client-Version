@@ -58,7 +58,7 @@ export default function Modal(props) {
         disableEscapeKeyDown={!esc}
         maxWidth={size}
         onClose={(event, reason) => {
-          if (reason == "backdropClick" && !backdrop) {
+          if (reason === "backdropClick" && !backdrop) {
             return;
           } else {
             onClose();

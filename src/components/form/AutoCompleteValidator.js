@@ -1,6 +1,6 @@
-import React from "react";
-import events from "@flk/events";
-import { Autocomplete, TextField } from "@mui/material";
+import React from 'react';
+import events from '@flk/events';
+import { Autocomplete } from '@mui/material';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -13,12 +13,8 @@ export default class AutoCompleteValidator extends React.Component {
     super(props);
     // Don't call this.setState() here!
     this.state = {
-      validationError: null,
+      validationError: null
     };
-
-    setTimeout(() => {
-      this.init();
-    }, 0);
 
     this.inputReference = React.createRef(); // createRef
     this.ready = this.ready.bind(this);
@@ -28,11 +24,12 @@ export default class AutoCompleteValidator extends React.Component {
 
   componentDidMount() {
     this.ready();
+    this.init();
   }
 
   setValidationError(state) {
     this.setState({
-      validationError: state,
+      validationError: state
     });
   }
 
@@ -40,13 +37,13 @@ export default class AutoCompleteValidator extends React.Component {
    * {@inheritdoc}
    */
   init() {
-    var inputField = this.input.children[0].children[1].children[0];
+    const inputField = this.inputReference.current?.children?.[0]?.children?.[1]?.children?.[0];
 
-    events.on("form.validation", (form) => {
+    events.on('form.validation', (form) => {
       // validate the input
       var error = this.handleChange(
         {
-          target: inputField,
+          target: inputField
         },
         this.props.validation_rules,
         this.props.validation_messages
@@ -73,15 +70,15 @@ export default class AutoCompleteValidator extends React.Component {
   validator(rule, data) {
     //return true if it's valid else false
     switch (rule.toLowerCase()) {
-      case "isrequired":
+      case 'isrequired':
         return required(data.val);
-      case "isnumber":
+      case 'isnumber':
         return isNumber(data.val);
-      case "isemail":
+      case 'isemail':
         return isEmail(data.val);
-      case "minlength":
+      case 'minlength':
         return minLength(data.option)(data.val);
-      case "maxlength":
+      case 'maxlength':
         return maxLength(data.option)(data.val);
       default:
         return false;
@@ -94,16 +91,14 @@ export default class AutoCompleteValidator extends React.Component {
     for (var i = 0; i < validation_rules.length; i++) {
       let validate_data = {
         val: data,
-        option: validation_rules[i].hasOwnProperty("option")
-          ? validation_rules[i].option
-          : "",
+        option: validation_rules[i].hasOwnProperty('option') ? validation_rules[i].option : ''
       };
 
       if (!this.validator(validation_rules[i].rule, validate_data)) {
         if (validation_message && i < validation_message.length) {
           return validation_message[i];
         } else {
-          return "Error";
+          return 'Error';
         }
       } else {
         return null;
@@ -128,12 +123,8 @@ export default class AutoCompleteValidator extends React.Component {
         onChange={this.props.onChange}
         onInputChange={(e, value, reason) => {
           var event = { target: { value: value } };
-          var error = this.handleChange(
-            event,
-            this.props.validation_rules,
-            this.props.validation_messages
-          );
-          if (this.props.hasOwnProperty("custome_change")) {
+          var error = this.handleChange(event, this.props.validation_rules, this.props.validation_messages);
+          if (this.props.hasOwnProperty('custome_change')) {
             this.props.custome_change(e);
           }
           this.setValidationError(error);
@@ -149,7 +140,3 @@ export default class AutoCompleteValidator extends React.Component {
     );
   }
 }
-
-// TextFieldValidator.defaultProps = {
-//   type: "text",
-// };

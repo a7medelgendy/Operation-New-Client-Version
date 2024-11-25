@@ -1,8 +1,8 @@
-import cache from "./cache";
+import cache from './cache';
 
 class User {
   constructor() {
-    this.userData = cache.get("user");
+    this.userData = cache.get('user');
   }
 
   /**
@@ -24,15 +24,18 @@ class User {
    */
   login(userData) {
     this.userData = userData;
-    cache.set("user", userData);
-    cache.set("activeIndex", 0);
+    cache.set('user', userData);
+    cache.set('activeIndex', 0);
   }
 
   hasRole(role) {
-    //console.log(role+'asdfasdf');
-    return role;
-    //on branch develop
+    //on branch old master
     //return this.userData.roleNames.includes(role);
+    return this.userData.roleNames.includes(role);
+  }
+
+  hasSpecialRole(role) {
+    return this.userData.specialRoles.includes(role);
   }
 
   hasGroup(group) {
@@ -44,7 +47,8 @@ class User {
    */
   logout() {
     this.userData = null;
-    cache.remove("user");
+    cache.remove('user');
+    cache.remove('userToken');
   }
 
   /**
@@ -53,7 +57,7 @@ class User {
    * @returns {string}
    */
   getAccessToken() {
-    return this.userData.token;
+    return this.userData?.token;
   }
 }
 
