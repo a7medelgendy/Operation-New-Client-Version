@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { baseUrl } from '../shared/staticData';
+import React, { useEffect, useState } from 'react';
 import ChartHandler from '../components/charts';
 import Cards from '../components/charts/Cards';
 import { useToasts } from 'react-toast-notifications';
@@ -47,13 +46,13 @@ app.config = {
   position: 'insideBottom',
   distance: 15,
   onChange: function () {
-    const labelOption = {
-      rotate: app.config.rotate,
-      align: app.config.align,
-      verticalAlign: app.config.verticalAlign,
-      position: app.config.position,
-      distance: app.config.distance
-    };
+    // const labelOption = {
+    //   rotate: app.config.rotate,
+    //   align: app.config.align,
+    //   verticalAlign: app.config.verticalAlign,
+    //   position: app.config.position,
+    //   distance: app.config.distance
+    // };
   }
 };
 const labelOption = {

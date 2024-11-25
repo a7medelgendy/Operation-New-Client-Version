@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from './Modal';
-import Button from '@mui/material/Button';
 import '../../styles/modal/confirm-modal.css';
 
 export default function ConfirmModal(props) {

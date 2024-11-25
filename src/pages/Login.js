@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Checkbox, FormControlLabel, Paper, Button, InputAdornment, IconButton } from '@mui/material';
+import { Paper, Button, InputAdornment, IconButton } from '@mui/material';
 import { ToastProvider, useToasts } from 'react-toast-notifications';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import '../styles/login/login.css';
-import { baseUrl } from '../shared/staticData';
 import user from '../shared/user';
 import TextFieldValidator from '../components/form/TextfieldValidator';
 import Form from '../components/form/form';

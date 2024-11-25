@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import Form from '../form/form';
 import VirtualizedAutoComplete from '../form/VirtualizedAutoComplete';
 import '../../styles/shift_log/add-shift-log-form.css';
