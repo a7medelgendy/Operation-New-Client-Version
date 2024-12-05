@@ -196,15 +196,15 @@ export default function Dashboard(props) {
 
   return (
     <div className='container-fluid dashboard-container'>
-      {!user.hasGroup('limit') && <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>{cards}</div>}
-      {departmentStatusChart && !user.hasGroup('limit') && (
+      <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>{cards}</div>
+      {departmentStatusChart && (
         <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>
           <div className='col '>
             <ChartHandler data={departmentStatusChart} type={'bar-chart'} />
           </div>
         </div>
       )}
-      {departmentStatusChart && !user.hasGroup('limit') && (
+      {departmentStatusChart && (
         <div className='row dashboard-row-distance mb-4'>
           <div className='col '>
             <ChartHandler data={topEquipmentChart} type={'pie-chart'} />
