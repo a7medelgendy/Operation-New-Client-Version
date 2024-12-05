@@ -11,6 +11,7 @@ import user from '../shared/user';
 import TextFieldValidator from '../components/form/TextfieldValidator';
 import Form from '../components/form/form';
 import { handleRequest } from '../utilites/handleApiRequest';
+import logoImg from '../assets/images/logo512.png';
 
 function LoginFormToast() {
   const [states, setStates] = React.useState({
@@ -56,76 +57,84 @@ function LoginFormToast() {
 
   return (
     <Form onSubmit={checkLoginCreditional}>
-      <div className='Parent'>
-        <div className='child1'></div>
-        <div className='child2 d-flex  flex-column justify-content-center align-items-center'>
-          <div className='d-flex flex-column '>
-            <div className='signin-icon-parent'>
-              <svg className='signin-icon-child' focusable='false' aria-hidden='true' viewBox='0 0 24 24' data-testid='LockOutlinedIcon'>
-                <path d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z'></path>
-              </svg>
+      <div className='container-fluid'>
+        <div className='row vh-100 '>
+          <div className='child1 col-md-8'></div>
+          <div className='child2 position-relative d-flex col-md-4  flex-column justify-content-center align-items-center'>
+            <div className='d-flex logo-test  justify-content-center  position-absolute  top-0 end-0 '>
+              <img src={logoImg} alt='logo' className='logo-img pt-3 w-50' />
             </div>
-            <h2 className='css-zq6grw'>Sign In</h2>
-          </div>
-          <div className='row login-form-row'>
-            <TextFieldValidator
-              className='login-input-rounded login-input'
-              variant='outlined'
-              label={states.userName === '' ? '' : 'Username'}
-              value={states.userName}
-              placeholder='Username'
-              size='small'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <PersonRoundedIcon />
-                  </InputAdornment>
-                )
-              }}
-              setFieldState={handleChange('userName')}
-              validation_rules={[{ rule: 'isRequired' }]}
-              validation_messages={['Username is required']}
-            />
-          </div>
-          <div className='row login-form-row'>
-            <TextFieldValidator
-              className='login-input-rounded login-input'
-              label={states.password == '' ? '' : 'Password'}
-              placeholder='Password'
-              type={states.showPassword ? 'text' : 'password'}
-              value={states.password}
-              setFieldState={handleChange('password')}
-              size='small'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <LockRoundedIcon />
-                  </InputAdornment>
-                ),
+            <div className='row logo-test  col-md-12'>
+              <div className='d-flex flex-column justify-content-center align-items-center '>
+                <div className='signin-icon-parent'>
+                  <svg className='signin-icon-child' focusable='false' aria-hidden='true' viewBox='0 0 24 24' data-testid='LockOutlinedIcon'>
+                    <path d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z'></path>
+                  </svg>
+                </div>
+                <h2 className='css-zq6grw'>Sign In</h2>
+              </div>
+              <div className='pt-4'>
+                <TextFieldValidator
+                  className='login-input-rounded w-100'
+                  variant='outlined'
+                  label={states.userName === '' ? '' : 'Username'}
+                  value={states.userName}
+                  placeholder='Username'
+                  size='small'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <PersonRoundedIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                  setFieldState={handleChange('userName')}
+                  validation_rules={[{ rule: 'isRequired' }]}
+                  validation_messages={['Username is required']}
+                />
+              </div>
+              <div className=' pt-3'>
+                <TextFieldValidator
+                  className='login-input-rounded w-100'
+                  label={states.password === '' ? '' : 'Password'}
+                  placeholder='Password'
+                  type={states.showPassword ? 'text' : 'password'}
+                  value={states.password}
+                  setFieldState={handleChange('password')}
+                  size='small'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <LockRoundedIcon />
+                      </InputAdornment>
+                    ),
 
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={triggerCheck}
-                      // onMouseDown={handleMouseDownPassword}
-                      edge='end'
-                    >
-                      {states.showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-              validation_rules={[{ rule: 'isRequired' }]}
-              validation_messages={['Password is required']}
-            />
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          aria-label='toggle password visibility'
+                          onClick={triggerCheck}
+                          // onMouseDown={handleMouseDownPassword}
+                          edge='end'
+                        >
+                          {states.showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                  validation_rules={[{ rule: 'isRequired' }]}
+                  validation_messages={['Password is required']}
+                />
+              </div>
+              <div className=' py-3'>
+                <Button size='small' variant='contained' className='login-btn w-100' type='submit'>
+                  Sign In
+                </Button>
+              </div>
+            </div>
+
+            {/* <p className='copyRight'>Copyright © ANRPC Software Engineer @2022</p> */}
           </div>
-          <div className='row login-form-row'>
-            <Button size='small' variant='contained' className='login-btn' type='submit'>
-              Sign In
-            </Button>
-          </div>
-          <p className='copyRight'>Copyright © ANRPC Software Engineer @2022</p>
         </div>
       </div>
     </Form>
@@ -134,12 +143,12 @@ function LoginFormToast() {
 
 export default function Login() {
   return (
-    <div className='row login-container justify-content-center align-items-center'>
+    <>
       <ToastProvider>
-        <Paper className='login-form-wrapper' elevation={3}>
+        <Paper elevation={3}>
           <LoginFormToast />
         </Paper>
       </ToastProvider>
-    </div>
+    </>
   );
 }
