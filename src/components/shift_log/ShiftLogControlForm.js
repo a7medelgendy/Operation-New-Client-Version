@@ -147,7 +147,8 @@ export default function ShiftLogControlForm(props) {
     }
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     setIsSubmitting(false);
 
     var dbOject = {

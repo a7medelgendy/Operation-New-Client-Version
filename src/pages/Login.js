@@ -31,7 +31,8 @@ function LoginFormToast() {
   const navigate = useNavigate();
   const { addToast } = useToasts();
 
-  const checkLoginCreditional = async () => {
+  const checkLoginCreditional = async (e) => {
+    e.preventDefault();
     try {
       let response = await handleRequest('post', 'api/login', { userName: states.userName, password: states.password, token: 'login' });
 
