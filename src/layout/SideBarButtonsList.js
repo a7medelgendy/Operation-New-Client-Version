@@ -66,6 +66,7 @@ export default function SideBarButtonList() {
       </div>
       <div className='row sidebar-button-container'>
         <SideBarButton
+          id={3}
           buttonName={'Logout'}
           startIcon={<LogoutRoundedIcon sx={{ transform: 'rotate(180deg) !important' }} style={{ marginLeft: '30px' }} />}
           callBack={() => {

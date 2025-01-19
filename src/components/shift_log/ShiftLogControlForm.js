@@ -1,40 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Form from '../form/form';
-import VirtualizedAutoComplete from '../form/VirtualizedAutoComplete';
+import { Button } from '@mui/material';
 import '../../styles/shift_log/add-shift-log-form.css';
 import '../../styles/shift_log/shift-log-form-view.css';
-import AutoCompleteValidator from '../form/AutoCompleteValidator';
-import { Autocomplete } from '@mui/material';
 import { handleRequest } from '../../utilites/handleApiRequest';
 
 function TextWrapper({ viewType, ...props }) {
   const { InputProps, ...restProps } = props;
-  //InputLabelProps, InputProps,inputProps
-  // console.log(props.className + "-view");
-
   const classess = props.className.map((ele) => {
-    var className = ele;
+    let className = ele;
     if (viewType === 'view') {
       className += '-view';
     }
-
     return className;
   });
-
   const className = classess.join(' ');
 
-  return viewType === 'view' ? (
-    <TextField
-      {...restProps}
-      InputProps={{
-        readOnly: true
-      }}
-      className={className}
-    />
-  ) : (
-    <TextField {...props} className={className} />
-  );
+  return viewType === 'view' ? <TextField {...restProps} InputProps={{ readOnly: true }} className={className} /> : <TextField {...props} className={className} />;
 }
 
 export default function ShiftLogControlForm(props) {
@@ -66,8 +50,26 @@ export default function ShiftLogControlForm(props) {
   const [dropDownData, setdropDownData] = useState({});
   const [isReadOnlyForm, setIsReadOnlyForm] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({
+    groupID: null,
+    area: null,
+    unit: null,
+    exeEdara: null,
+    status: null,
+    tag: null,
+    openedBy: null,
+    closedBy: null,
+    reqDescription: null
+  });
 
-  const handleOnChange = (value, stateSetter) => {
+  const handleOnChange = (value, stateSetter, fieldName) => {
+    console.log('onChange', value);
+    console.log('fieldName', fieldName);
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: value ? null : prevErrors[fieldName]
+    }));
+
     stateSetter(value);
   };
 
@@ -83,30 +85,23 @@ export default function ShiftLogControlForm(props) {
         CODE_SHIFT: props.formLoadData.CODE_SHIFT,
         TXT_SHIFT: props.formLoadData.TXT_SHIFT
       });
-
       setArea({
         CODE_AREA: props.formLoadData.CODE_AREA,
         TXT_AREA: props.formLoadData.TXT_AREA
       });
-
       setUnit({
         CODE_UNIT: props.formLoadData.CODE_UNIT,
         TXT_UNIT: props.formLoadData.TXT_UNIT
       });
-
       setTag({
         TAG: props.formLoadData.EQUIBMENT
       });
-
       setTimeOpened(new Date(props.formLoadData.TIME_OPEN).toJSON().slice(0, 16));
-
       setTimeClosed(new Date(props.formLoadData.TIME_CLOSE).toJSON().slice(0, 16));
-
       setOpenedBy({
         EMPN: props.formLoadData.OPENED_BY_EMPN,
         USER_NAME: props.formLoadData.OPENED_BY
       });
-
       if (props.formLoadData.CLOSED_BY_EMPN) {
         setClosedBy({
           EMPN: props.formLoadData.CLOSED_BY_EMPN,
@@ -115,21 +110,17 @@ export default function ShiftLogControlForm(props) {
       } else {
         setClosedBy({ EMPN: null, USER_NAME: '' });
       }
-
       setExeEdara({
         CODE_EDARA: props.formLoadData.CODE_EDARA,
         TXT_EDARA: props.formLoadData.TXT_EDARA
       });
-
       setStatus({
         CODE_STATUS: props.formLoadData.CODE_STATUS,
         TXT_STATUS: props.formLoadData.TXT_STATUS
       });
-
       setReqDescription(props.formLoadData.DESCREPTION_REQUESTED);
       setExeDescription(props.formLoadData.DESCREPTION_RESPONSED);
     }
-
     setIsReadOnlyForm(props.type === 'view' ? true : false);
   };
 
@@ -149,9 +140,55 @@ export default function ShiftLogControlForm(props) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(false);
+    setIsSubmitting(true);
 
-    var dbOject = {
+    let formValid = true;
+    const errors = { ...validationErrors };
+
+    // Validate fields
+    if (!groupID.CODE_SHIFT) {
+      formValid = false;
+      errors.groupID = 'Group ID is required';
+    }
+    if (!area.CODE_AREA) {
+      formValid = false;
+      errors.area = 'Area is required';
+    }
+    if (!unit.CODE_UNIT) {
+      formValid = false;
+      errors.unit = 'Unit is required';
+    }
+    if (!exeEdara.CODE_EDARA) {
+      formValid = false;
+      errors.exeEdara = 'Executed Department is required';
+    }
+    if (!status.CODE_STATUS) {
+      formValid = false;
+      errors.status = 'Status is required';
+    }
+
+    if (!tag.TAG) {
+      formValid = false;
+      errors.tag = 'Equipment Tag is required';
+    }
+    if (!openedBy.EMPN) {
+      formValid = false;
+      errors.openedBy = 'Opened By is required';
+    }
+    if (!closedBy.EMPN) {
+      formValid = false;
+      errors.closedBy = 'Closed By is required';
+    }
+
+    if (!reqDescription) {
+      formValid = false;
+      errors.reqDescription = 'Requested Notes is required';
+    }
+
+    setValidationErrors(errors);
+    if (!formValid) return setIsSubmitting(false);
+
+    const dbOject = {
       groupID: groupID.CODE_SHIFT,
       area: area.CODE_AREA,
       unit: unit.CODE_UNIT,
@@ -172,8 +209,10 @@ export default function ShiftLogControlForm(props) {
     try {
       await props.formHandlerFuncs.onSubmit(dbOject, props.alertHandler, props.updateLoader);
       props.onCloseForm(false);
+    } catch (error) {
+      console.error('Submission error:', error);
     } finally {
-      setIsSubmitting(true);
+      setIsSubmitting(false);
     }
   };
 
@@ -181,92 +220,114 @@ export default function ShiftLogControlForm(props) {
     <Form onSubmit={onSubmit} className='container-fluid pt-1'>
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <AutoCompleteValidator
+          <Autocomplete
             id='shiftGroup'
-            options={dropDownData.hasOwnProperty('shiftGroups') ? dropDownData.shiftGroups.rows : []}
+            options={dropDownData?.shiftGroups?.rows || []}
             readOnly={isReadOnlyForm}
             size='small'
-            value={groupID}
-            isOptionEqualToValue={(option, value) => {
-              return option.CODE_SHIFT === value.CODE_SHIFT;
-            }}
+            value={groupID?.CODE_SHIFT ? groupID : null}
+            isOptionEqualToValue={(option, value) => option.CODE_SHIFT === value.CODE_SHIFT}
             getOptionLabel={(option) => option.TXT_SHIFT}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setGroupID);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setGroupID, 'groupID');
             }}
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Group Id is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} className={['input-rounded']} label='Group Id' error={error} helperText={helperText} viewType={props.type} />;
-            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Group Id'
+                error={!!validationErrors.groupID}
+                helperText={validationErrors.groupID}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
         <div className='col'>
-          <AutoCompleteValidator
-            disablePortal
+          <Autocomplete
             id='area'
+            options={dropDownData?.areas?.rows || []}
             readOnly={isReadOnlyForm}
-            options={dropDownData.hasOwnProperty('areas') ? dropDownData.areas.rows : []}
-            value={area}
-            isOptionEqualToValue={(option, value) => {
-              return option.CODE_AREA === value.CODE_AREA;
-            }}
             size='small'
+            value={area?.CODE_AREA ? area : null}
+            isOptionEqualToValue={(option, value) => option.CODE_AREA === value.CODE_AREA}
             getOptionLabel={(option) => option.TXT_AREA}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setArea);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setArea, 'area');
             }}
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Area is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} className={['input-rounded']} label='Area' error={error} helperText={helperText} viewType={props.type} />;
-            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Area'
+                error={!!validationErrors.area}
+                helperText={validationErrors.area}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
       </div>
 
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <AutoCompleteValidator
-            disablePortal
-            id='units'
-            options={dropDownData.hasOwnProperty('units') ? dropDownData.units.rows : []}
-            readOnly={isReadOnlyForm}
-            value={unit}
-            isOptionEqualToValue={(option, value) => {
-              return option.CODE_UNIT === value.CODE_UNIT;
-            }}
+          <Autocomplete
+            id='unit'
+            options={dropDownData?.units?.rows || []}
             size='small'
+            readOnly={isReadOnlyForm}
+            value={unit?.CODE_UNIT ? unit : null}
+            isOptionEqualToValue={(option, value) => option.CODE_UNIT === value.CODE_UNIT}
             getOptionLabel={(option) => option.TXT_UNIT}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setUnit);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setUnit, 'unit');
             }}
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Unit is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} label='Unit' className={['input-rounded']} error={error} helperText={helperText} viewType={props.type} />;
-            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Unit'
+                error={!!validationErrors.unit}
+                helperText={validationErrors.unit}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
         <div className='col'>
-          <VirtualizedAutoComplete
-            id='Equipment'
-            readOnly={isReadOnlyForm}
-            options={unitTags}
-            value={tag}
-            isOptionEqualToValue={(option, value) => {
-              return option.TAG === value.TAG;
-            }}
-            getOptionLabel={(option) => option.TAG ?? option}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setTag);
-            }}
+          <Autocomplete
+            id='tag'
+            options={unitTags || []}
+            value={tag?.TAG ? tag : null}
             size='small'
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Equipment is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} label='Equipment' className={['input-rounded']} error={error} helperText={helperText} viewType={props.type} />;
+            readOnly={isReadOnlyForm}
+            isOptionEqualToValue={(option, value) => option.TAG === value.TAG}
+            getOptionLabel={(option) => option.TAG}
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setTag, 'tag');
             }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Equipment Tag'
+                error={!!validationErrors.tag}
+                helperText={validationErrors.tag}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
       </div>
@@ -284,7 +345,7 @@ export default function ShiftLogControlForm(props) {
               max: currentTime.toJSON().slice(0, 16),
             }} */
             onChange={(e) => {
-              handleOnChange(e.target.value, setTimeOpened);
+              handleOnChange(e.target.value, setTimeOpened, 'timeOpened');
             }}
             InputLabelProps={{
               shrink: true
@@ -302,7 +363,7 @@ export default function ShiftLogControlForm(props) {
             type='datetime-local'
             value={timeClosed}
             onChange={(e) => {
-              handleOnChange(e.target.value, setTimeClosed);
+              handleOnChange(e.target.value, setTimeClosed, 'timeClosed');
             }}
             size='small'
             InputLabelProps={{
@@ -316,136 +377,156 @@ export default function ShiftLogControlForm(props) {
 
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <AutoCompleteValidator
-            disablePortal
+          <Autocomplete
             id='openedBy'
-            readOnly={isReadOnlyForm}
             options={dropDownData.hasOwnProperty('users') ? dropDownData.users.rows : []}
-            value={openedBy}
-            isOptionEqualToValue={(option, value) => {
-              return option.EMPN === value.EMPN;
-            }}
+            value={openedBy?.EMPN ? openedBy : null}
+            isOptionEqualToValue={(option, value) => option.EMPN === value.EMPN}
             getOptionLabel={(option) => option.USER_NAME}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setOpenedBy);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setOpenedBy, 'openedBy');
             }}
             size='small'
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Opened by emp is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} label='Opened By' className={['input-rounded']} error={error} helperText={helperText} viewType={props.type} />;
-            }}
+            readOnly={isReadOnlyForm}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Opened By'
+                error={!!validationErrors.openedBy}
+                helperText={validationErrors.openedBy}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
-
         <div className='col'>
           <Autocomplete
-            disablePortal
             id='closedBy'
-            readOnly={isReadOnlyForm}
             options={dropDownData.hasOwnProperty('users') ? dropDownData.users.rows : []}
-            value={closedBy}
-            isOptionEqualToValue={(option, value) => {
-              return option.EMPN === value.EMPN;
-            }}
+            value={closedBy?.EMPN ? closedBy : null}
+            isOptionEqualToValue={(option, value) => option.EMPN === value.EMPN}
             getOptionLabel={(option) => option.USER_NAME}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setClosedBy);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setClosedBy, 'closedBy');
             }}
             size='small'
-            renderInput={(params) => {
-              return <TextWrapper {...params} label='Closed By' className={['input-rounded']} viewType={props.type} />;
-            }}
+            readOnly={isReadOnlyForm}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Closed By'
+                error={!!validationErrors.closedBy}
+                helperText={validationErrors.closedBy}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
       </div>
 
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <AutoCompleteValidator
-            disablePortal
+          <Autocomplete
             id='department'
-            readOnly={isReadOnlyForm}
             options={dropDownData.hasOwnProperty('exeEdara') ? dropDownData.exeEdara.rows : []}
-            value={exeEdara}
-            isOptionEqualToValue={(option, value) => {
-              return option.CODE_EDARA === value.CODE_EDARA;
-            }}
+            value={exeEdara.CODE_EDARA ? exeEdara : null}
+            isOptionEqualToValue={(option, value) => option.CODE_EDARA === value.CODE_EDARA}
             size='small'
-            getOptionLabel={(option) => option.TXT_EDARA}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setExeEdara);
-            }}
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Executed Department is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} label='Executed Department' className={['input-rounded']} error={error} helperText={helperText} viewType={props.type} />;
-            }}
-          />
-        </div>
-        <div className='col'>
-          <AutoCompleteValidator
-            disablePortal
-            id='status'
             readOnly={isReadOnlyForm}
-            options={dropDownData.hasOwnProperty('status') ? dropDownData.status.rows : []}
-            value={status}
-            isOptionEqualToValue={(option, value) => {
-              return option.CODE_STATUS === value.CODE_STATUS;
+            getOptionLabel={(option) => option.TXT_EDARA}
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setExeEdara, 'exeEdara');
             }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Executed Department'
+                error={!!validationErrors.exeEdara}
+                helperText={validationErrors.exeEdara}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
+          />
+        </div>
+        <div className='col'>
+          <Autocomplete
+            id='status'
+            options={dropDownData?.status?.rows || []}
+            value={status?.CODE_STATUS ? status : null}
+            isOptionEqualToValue={(option, value) => option.CODE_STATUS === value.CODE_STATUS}
             size='small'
+            readOnly={isReadOnlyForm}
             getOptionLabel={(option) => option.TXT_STATUS}
-            onChange={(_, object) => {
-              if (object) handleOnChange(object, setStatus);
+            onChange={(_, newValue) => {
+              if (newValue) handleOnChange(newValue, setStatus, 'status');
             }}
-            validation_rules={[{ rule: 'isRequired' }]}
-            validation_messages={['Status is required']}
-            renderInputComponent={(params, error, helperText) => {
-              return <TextWrapper {...params} label='Status' className={['input-rounded']} error={error} helperText={helperText} viewType={props.type} />;
-            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='Status'
+                error={!!validationErrors.status}
+                helperText={validationErrors.status}
+                variant='outlined'
+                InputProps={{
+                  ...params.InputProps,
+                  readOnly: isReadOnlyForm
+                }}
+              />
+            )}
           />
         </div>
       </div>
-
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <TextWrapper
-            className={['multi-line-input-rounded', 'multi-line-text']}
-            id='outlined-multiline-static'
-            label='Requested Notes...'
+          <TextField
+            id='reqDescription'
+            label='Requested Description'
             value={reqDescription}
-            onChange={(e) => {
-              handleOnChange(e.target.value, setReqDescription);
-            }}
-            viewType={props.type}
+            onChange={(e) => handleOnChange(e.target.value, setReqDescription, 'reqDescription')}
+            error={!!validationErrors.reqDescription}
+            helperText={validationErrors.reqDescription}
+            multiline
+            className='multi-line-input-rounded multi-line-text'
+            variant='outlined'
+            fullWidth
+            InputProps={{ readOnly: isReadOnlyForm }}
           />
         </div>
       </div>
-
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <TextWrapper
-            className={['multi-line-input-rounded', 'multi-line-text']}
-            id='outlined-multiline-static-01'
-            label='Executed Notes...'
+          <TextField
+            id='exeDescription'
+            label='Executed Description'
+            className='multi-line-input-rounded multi-line-text'
+            value={exeDescription}
+            onChange={(e) => setExeDescription(e.target.value)}
             multiline
             rows={4}
-            value={exeDescription}
-            onChange={(e) => {
-              handleOnChange(e.target.value, setExeDescription);
-            }}
-            viewType={props.type}
+            variant='outlined'
+            fullWidth
+            InputProps={{ readOnly: isReadOnlyForm }}
           />
         </div>
       </div>
 
-      <div className='row'>
+      <div className='row form-footer'>
         <div className='col d-flex justify-content-center'>
-          {!isReadOnlyForm && (
-            <button type='submit' id='saveBtn' className='btn btn-outline-success mx-3' disabled={isSubmitting}>
-              Save
-            </button>
-          )}
+          <button id='saveBtn' className='btn btn-outline-success mx-3' color='primary' type='submit' disabled={isSubmitting || isReadOnlyForm}>
+            {isSubmitting ? 'Saving...' : 'Save'}
+          </button>
 
           <button
             type='button'
