@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Form from '../form/form';
-import { Button } from '@mui/material';
 import '../../styles/shift_log/add-shift-log-form.css';
 import '../../styles/shift_log/shift-log-form-view.css';
 import { handleRequest } from '../../utilites/handleApiRequest';
@@ -63,8 +62,6 @@ export default function ShiftLogControlForm(props) {
   });
 
   const handleOnChange = (value, stateSetter, fieldName) => {
-    console.log('onChange', value);
-    console.log('fieldName', fieldName);
     setValidationErrors((prevErrors) => ({
       ...prevErrors,
       [fieldName]: value ? null : prevErrors[fieldName]
@@ -96,8 +93,12 @@ export default function ShiftLogControlForm(props) {
       setTag({
         TAG: props.formLoadData.EQUIBMENT
       });
-      setTimeOpened(new Date(props.formLoadData.TIME_OPEN).toJSON().slice(0, 16));
-      setTimeClosed(new Date(props.formLoadData.TIME_CLOSE).toJSON().slice(0, 16));
+      const newOpenedDate = new Date(props.formLoadData.TIME_OPEN);
+      const newClosedDate = new Date(props.formLoadData.TIME_CLOSE);
+      newOpenedDate.setHours(newOpenedDate.getHours() + 2);
+      newClosedDate.setHours(newClosedDate.getHours() + 2);
+      setTimeOpened(newOpenedDate.toJSON().slice(0, 16));
+      setTimeClosed(newClosedDate.toJSON().slice(0, 16));
       setOpenedBy({
         EMPN: props.formLoadData.OPENED_BY_EMPN,
         USER_NAME: props.formLoadData.OPENED_BY
@@ -202,7 +203,6 @@ export default function ShiftLogControlForm(props) {
       timeOpened: timeOpened,
       timeClosed: timeClosed
     };
-
     if (props.formLoadData) {
       dbOject.id = props.formLoadData.ID;
     }
@@ -225,6 +225,7 @@ export default function ShiftLogControlForm(props) {
             options={dropDownData?.shiftGroups?.rows || []}
             readOnly={isReadOnlyForm}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             value={groupID?.CODE_SHIFT ? groupID : null}
             isOptionEqualToValue={(option, value) => option.CODE_SHIFT === value.CODE_SHIFT}
             getOptionLabel={(option) => option.TXT_SHIFT}
@@ -252,6 +253,7 @@ export default function ShiftLogControlForm(props) {
             options={dropDownData?.areas?.rows || []}
             readOnly={isReadOnlyForm}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             value={area?.CODE_AREA ? area : null}
             isOptionEqualToValue={(option, value) => option.CODE_AREA === value.CODE_AREA}
             getOptionLabel={(option) => option.TXT_AREA}
@@ -281,6 +283,7 @@ export default function ShiftLogControlForm(props) {
             id='unit'
             options={dropDownData?.units?.rows || []}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             value={unit?.CODE_UNIT ? unit : null}
             isOptionEqualToValue={(option, value) => option.CODE_UNIT === value.CODE_UNIT}
@@ -309,6 +312,7 @@ export default function ShiftLogControlForm(props) {
             options={unitTags || []}
             value={tag?.TAG ? tag : null}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             isOptionEqualToValue={(option, value) => option.TAG === value.TAG}
             getOptionLabel={(option) => option.TAG}
@@ -387,6 +391,7 @@ export default function ShiftLogControlForm(props) {
               if (newValue) handleOnChange(newValue, setOpenedBy, 'openedBy');
             }}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             renderInput={(params) => (
               <TextField
@@ -414,6 +419,7 @@ export default function ShiftLogControlForm(props) {
               if (newValue) handleOnChange(newValue, setClosedBy, 'closedBy');
             }}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             renderInput={(params) => (
               <TextField
@@ -440,6 +446,7 @@ export default function ShiftLogControlForm(props) {
             value={exeEdara.CODE_EDARA ? exeEdara : null}
             isOptionEqualToValue={(option, value) => option.CODE_EDARA === value.CODE_EDARA}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             getOptionLabel={(option) => option.TXT_EDARA}
             onChange={(_, newValue) => {
@@ -467,6 +474,7 @@ export default function ShiftLogControlForm(props) {
             value={status?.CODE_STATUS ? status : null}
             isOptionEqualToValue={(option, value) => option.CODE_STATUS === value.CODE_STATUS}
             size='small'
+            className={isReadOnlyForm ? 'input-rounded-view' : ''}
             readOnly={isReadOnlyForm}
             getOptionLabel={(option) => option.TXT_STATUS}
             onChange={(_, newValue) => {
@@ -498,7 +506,7 @@ export default function ShiftLogControlForm(props) {
             error={!!validationErrors.reqDescription}
             helperText={validationErrors.reqDescription}
             multiline
-            className='multi-line-input-rounded multi-line-text'
+            className={`${isReadOnlyForm ? 'input-rounded-view' : 'multi-line-input-rounded multi-line-text'}`}
             variant='outlined'
             fullWidth
             InputProps={{ readOnly: isReadOnlyForm }}
@@ -510,7 +518,7 @@ export default function ShiftLogControlForm(props) {
           <TextField
             id='exeDescription'
             label='Executed Description'
-            className='multi-line-input-rounded multi-line-text'
+            className={`${isReadOnlyForm ? 'input-rounded-view' : 'multi-line-input-rounded multi-line-text'}`}
             value={exeDescription}
             onChange={(e) => setExeDescription(e.target.value)}
             multiline
@@ -524,10 +532,11 @@ export default function ShiftLogControlForm(props) {
 
       <div className='row form-footer'>
         <div className='col d-flex justify-content-center'>
-          <button id='saveBtn' className='btn btn-outline-success mx-3' color='primary' type='submit' disabled={isSubmitting || isReadOnlyForm}>
-            {isSubmitting ? 'Saving...' : 'Save'}
-          </button>
-
+          {!isReadOnlyForm && (
+            <button id='saveBtn' className='btn btn-outline-success mx-3' color='primary' type='submit' disabled={isSubmitting || isReadOnlyForm}>
+              {isSubmitting ? 'Saving...' : 'Save'}
+            </button>
+          )}
           <button
             type='button'
             className='btn btn-outline-danger mx-3'

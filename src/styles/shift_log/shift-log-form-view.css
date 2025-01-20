@@ -8,6 +8,10 @@
   border: 0px solid !important;
 }
 
+.input-rounded-view .MuiAutocomplete-endAdornment {
+  display: none !important;
+}
+
 .multi-line-input-rounded-view
   .MuiOutlinedInput-root
   .MuiOutlinedInput-notchedOutline {
