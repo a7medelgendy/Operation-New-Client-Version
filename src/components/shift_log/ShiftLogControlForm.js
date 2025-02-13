@@ -4,6 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Form from '../form/form';
 import '../../styles/shift_log/add-shift-log-form.css';
 import '../../styles/shift_log/shift-log-form-view.css';
+import user from '../../shared/user';
 import { handleRequest } from '../../utilites/handleApiRequest';
 
 function TextWrapper({ viewType, ...props }) {
@@ -131,6 +132,7 @@ export default function ShiftLogControlForm(props) {
 
   const masterData = async () => {
     const response = await handleRequest('GET', 'api/addShift/masterData');
+    console.log(user.userData);
     if (response) {
       setdropDownData(response.result);
     }
@@ -169,10 +171,10 @@ export default function ShiftLogControlForm(props) {
       formValid = false;
       errors.tag = 'Equipment Tag is required';
     }
-    if (!openedBy.EMPN) {
+/*     if (!openedBy.EMPN) {
       formValid = false;
       errors.openedBy = 'Opened By is required';
-    }
+    } */
     if (!closedBy.EMPN) {
       formValid = false;
       errors.closedBy = 'Closed By is required';
@@ -190,7 +192,7 @@ export default function ShiftLogControlForm(props) {
       groupID: groupID.CODE_SHIFT,
       // area: area.CODE_AREA,
       unit: unit.CODE_UNIT,
-      openedBy: openedBy.EMPN,
+      openedBy: user.userData.EMPN,
       closedBy: closedBy.EMPN,
       descriptionRequested: reqDescription,
       descriptionResponsed: exeDescription,
@@ -310,7 +312,7 @@ export default function ShiftLogControlForm(props) {
         </div>
         {/* Area */}
         <div className='col'>
-          <TextField id='area' label='Area' size='small' value={area ?area : ''} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
+          <TextField id='area' label='Area' size='small' value={area ? area : ''} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
         </div>
       </div>
 
@@ -357,35 +359,11 @@ export default function ShiftLogControlForm(props) {
         </div>
       </div>
 
-      <div className='row form-between-rows-distance'>
+      <div className='row form-between-rows-distance'>        
         <div className='col'>
-          <Autocomplete
-            id='openedBy'
-            options={dropDownData.hasOwnProperty('users') ? dropDownData.users.rows : []}
-            value={openedBy?.EMPN ? openedBy : null}
-            isOptionEqualToValue={(option, value) => option.EMPN === value.EMPN}
-            getOptionLabel={(option) => option.USER_NAME}
-            onChange={(_, newValue) => {
-              if (newValue) handleOnChange(newValue, setOpenedBy, 'openedBy');
-            }}
-            size='small'
-            className={isReadOnlyForm ? 'input-rounded-view' : ''}
-            readOnly={isReadOnlyForm}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label='Opened By'
-                error={!!validationErrors.openedBy}
-                helperText={validationErrors.openedBy}
-                variant='outlined'
-                InputProps={{
-                  ...params.InputProps,
-                  readOnly: isReadOnlyForm
-                }}
-              />
-            )}
-          />
+          <TextField id='openedBy' label='Opened By' size='small' value={user?.userData?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
         </div>
+
         <div className='col'>
           <Autocomplete
             id='closedBy'
