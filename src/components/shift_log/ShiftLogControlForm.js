@@ -22,7 +22,7 @@ function TextWrapper({ viewType, ...props }) {
 
 export default function ShiftLogControlForm(props) {
   const [groupID, setGroupID] = useState({ TXT_SHIFT: '', CODE_SHIFT: '' });
-  const [area, setArea] = useState({ TXT_AREA: '', CODE_AREA: '' });
+  const [area, setArea] = useState('');
   const [unit, setUnit] = useState({ TXT_UNIT: '', CODE_UNIT: '' });
   const [timeOpened, setTimeOpened] = useState(
     (() => {
@@ -82,10 +82,7 @@ export default function ShiftLogControlForm(props) {
         CODE_SHIFT: props.formLoadData.CODE_SHIFT,
         TXT_SHIFT: props.formLoadData.TXT_SHIFT
       });
-      setArea({
-        CODE_AREA: props.formLoadData.CODE_AREA,
-        TXT_AREA: props.formLoadData.TXT_AREA
-      });
+      setArea(props.formLoadData.area);
       setUnit({
         CODE_UNIT: props.formLoadData.CODE_UNIT,
         TXT_UNIT: props.formLoadData.TXT_UNIT
@@ -151,10 +148,10 @@ export default function ShiftLogControlForm(props) {
       formValid = false;
       errors.groupID = 'Group ID is required';
     }
-    if (!area.CODE_AREA) {
+    /*     if (!area.CODE_AREA) {
       formValid = false;
       errors.area = 'Area is required';
-    }
+    } */
     if (!unit.CODE_UNIT) {
       formValid = false;
       errors.unit = 'Unit is required';
@@ -191,7 +188,7 @@ export default function ShiftLogControlForm(props) {
 
     const dbOject = {
       groupID: groupID.CODE_SHIFT,
-      area: area.CODE_AREA,
+      // area: area.CODE_AREA,
       unit: unit.CODE_UNIT,
       openedBy: openedBy.EMPN,
       closedBy: closedBy.EMPN,
@@ -203,6 +200,7 @@ export default function ShiftLogControlForm(props) {
       timeOpened: timeOpened,
       timeClosed: timeClosed
     };
+
     if (props.formLoadData) {
       dbOject.id = props.formLoadData.ID;
     }
@@ -247,37 +245,7 @@ export default function ShiftLogControlForm(props) {
             )}
           />
         </div>
-        <div className='col'>
-          <Autocomplete
-            id='area'
-            options={dropDownData?.areas?.rows || []}
-            readOnly={isReadOnlyForm}
-            size='small'
-            className={isReadOnlyForm ? 'input-rounded-view' : ''}
-            value={area?.CODE_AREA ? area : null}
-            isOptionEqualToValue={(option, value) => option.CODE_AREA === value.CODE_AREA}
-            getOptionLabel={(option) => option.TXT_AREA}
-            onChange={(_, newValue) => {
-              if (newValue) handleOnChange(newValue, setArea, 'area');
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label='Area'
-                error={!!validationErrors.area}
-                helperText={validationErrors.area}
-                variant='outlined'
-                InputProps={{
-                  ...params.InputProps,
-                  readOnly: isReadOnlyForm
-                }}
-              />
-            )}
-          />
-        </div>
-      </div>
 
-      <div className='row form-between-rows-distance'>
         <div className='col'>
           <Autocomplete
             id='unit'
@@ -289,7 +257,10 @@ export default function ShiftLogControlForm(props) {
             isOptionEqualToValue={(option, value) => option.CODE_UNIT === value.CODE_UNIT}
             getOptionLabel={(option) => option.TXT_UNIT}
             onChange={(_, newValue) => {
-              if (newValue) handleOnChange(newValue, setUnit, 'unit');
+              if (newValue) {
+                handleOnChange(newValue, setUnit, 'unit');
+                handleOnChange(newValue.area, setArea, 'area');
+              }
             }}
             renderInput={(params) => (
               <TextField
@@ -306,6 +277,9 @@ export default function ShiftLogControlForm(props) {
             )}
           />
         </div>
+      </div>
+
+      <div className='row form-between-rows-distance'>
         <div className='col'>
           <Autocomplete
             id='tag'
@@ -333,6 +307,10 @@ export default function ShiftLogControlForm(props) {
               />
             )}
           />
+        </div>
+        {/* Area */}
+        <div className='col'>
+          <TextField id='area' label='Area' size='small' value={area ?area : ''} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
         </div>
       </div>
 
