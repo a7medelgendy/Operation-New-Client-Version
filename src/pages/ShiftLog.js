@@ -96,7 +96,7 @@ export default function ShiftLog(props) {
     filterType: 'dropdown',
     responsive: 'standard',
     selectableRows: 'none',
-    rowsPerPage: 10,
+    rowsPerPage: 20,
     rowsPerPageOptions: [],
     textLabels: {
       body: {
