@@ -132,7 +132,6 @@ export default function ShiftLogControlForm(props) {
 
   const masterData = async () => {
     const response = await handleRequest('GET', 'api/addShift/masterData');
-    console.log(user.userData);
     if (response) {
       setdropDownData(response.result);
     }
