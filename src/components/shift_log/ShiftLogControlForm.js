@@ -170,7 +170,7 @@ export default function ShiftLogControlForm(props) {
       formValid = false;
       errors.tag = 'Equipment Tag is required';
     }
-/*     if (!openedBy.EMPN) {
+    /*     if (!openedBy.EMPN) {
       formValid = false;
       errors.openedBy = 'Opened By is required';
     } */
@@ -191,7 +191,7 @@ export default function ShiftLogControlForm(props) {
       groupID: groupID.CODE_SHIFT,
       // area: area.CODE_AREA,
       unit: unit.CODE_UNIT,
-      openedBy: user.userData.EMPN,
+      openedBy:  openedBy?.EMPN?? user?.userData?.EMPN ,
       closedBy: closedBy.EMPN,
       descriptionRequested: reqDescription,
       descriptionResponsed: exeDescription,
@@ -358,9 +358,9 @@ export default function ShiftLogControlForm(props) {
         </div>
       </div>
 
-      <div className='row form-between-rows-distance'>        
+      <div className='row form-between-rows-distance'>
         <div className='col'>
-          <TextField id='openedBy' label='Opened By' size='small' value={user?.userData?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
+          <TextField id='openedBy' label='Opened By' size='small'  value={openedBy?.USER_NAME?? user?.userData?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
         </div>
 
         <div className='col'>
