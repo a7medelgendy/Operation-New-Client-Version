@@ -59,7 +59,8 @@ export default function ShiftLogControlForm(props) {
     tag: null,
     openedBy: null,
     closedBy: null,
-    reqDescription: null
+    reqDescription: null,
+    exeDescription: null
   });
 
   const handleOnChange = (value, stateSetter, fieldName) => {
@@ -67,7 +68,6 @@ export default function ShiftLogControlForm(props) {
       ...prevErrors,
       [fieldName]: value ? null : prevErrors[fieldName]
     }));
-
     stateSetter(value);
   };
 
@@ -137,8 +137,7 @@ export default function ShiftLogControlForm(props) {
     }
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     setIsSubmitting(true);
 
     let formValid = true;
@@ -166,6 +165,11 @@ export default function ShiftLogControlForm(props) {
       errors.status = 'Status is required';
     }
 
+    if (!exeDescription && status.TXT_STATUS !== 'InProgress') {
+      formValid = false;
+      errors.exeDescription = 'Executed Description is required. Please provide the reason for completion or cancellation.';
+    }
+
     if (!tag.TAG) {
       formValid = false;
       errors.tag = 'Equipment Tag is required';
@@ -183,10 +187,14 @@ export default function ShiftLogControlForm(props) {
       formValid = false;
       errors.reqDescription = 'Requested Notes is required';
     }
-
     setValidationErrors(errors);
-    if (!formValid) return setIsSubmitting(false);
+    return formValid;
+  };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    let validData = validateForm();
+    if (!validData) return setIsSubmitting(false);
     const dbOject = {
       groupID: groupID.CODE_SHIFT,
       // area: area.CODE_AREA,
@@ -364,7 +372,8 @@ export default function ShiftLogControlForm(props) {
         </div>
 
         <div className='col'>
-          <Autocomplete
+          <TextField id='closedBy' label='Closed By' size='small' value={closedBy?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
+          {/* <Autocomplete
             id='closedBy'
             options={dropDownData.hasOwnProperty('users') ? dropDownData.users.rows : []}
             value={closedBy?.EMPN ? closedBy : null}
@@ -389,7 +398,7 @@ export default function ShiftLogControlForm(props) {
                 }}
               />
             )}
-          />
+          /> */}
         </div>
       </div>
 
@@ -433,7 +442,14 @@ export default function ShiftLogControlForm(props) {
             readOnly={isReadOnlyForm}
             getOptionLabel={(option) => option.TXT_STATUS}
             onChange={(_, newValue) => {
-              if (newValue) handleOnChange(newValue, setStatus, 'status');
+              // if (newValue) handleOnChange(newValue, setStatus, 'status');
+              if (newValue) {
+                if (newValue.TXT_STATUS === 'InProgress') {
+                  setValidationErrors({ ...validationErrors, ['exeDescription']: '' });
+                }
+                handleOnChange(newValue, setStatus, 'status');
+                handleOnChange({ EMPN: user.userData.EMPN, USER_NAME: user.userData.USER_NAME }, setClosedBy, 'closedBy');
+              }
             }}
             renderInput={(params) => (
               <TextField
@@ -475,7 +491,10 @@ export default function ShiftLogControlForm(props) {
             label='Executed Description'
             className={`${isReadOnlyForm ? 'input-rounded-view' : 'multi-line-input-rounded multi-line-text'}`}
             value={exeDescription}
-            onChange={(e) => setExeDescription(e.target.value)}
+            // onChange={(e) => setExeDescription(e.target.value)}
+            onChange={(e) => handleOnChange(e.target.value, setExeDescription, 'exeDescription')}
+            error={!!validationErrors.exeDescription}
+            helperText={validationErrors.exeDescription}
             multiline
             rows={4}
             variant='outlined'
