@@ -39,7 +39,7 @@ export default function ShiftLogControlForm(props) {
       return obj.toJSON().slice(0, 16);
     })()
   );
-  const [openedBy, setOpenedBy] = useState({ EMPN: null, USER_NAME: '' });
+  const [openedBy, setOpenedBy] = useState({ EMPN: null, USER_NAME: null });
   const [closedBy, setClosedBy] = useState({ EMPN: null, USER_NAME: '' });
   const [reqDescription, setReqDescription] = useState('');
   const [exeDescription, setExeDescription] = useState('');
@@ -191,7 +191,7 @@ export default function ShiftLogControlForm(props) {
       groupID: groupID.CODE_SHIFT,
       // area: area.CODE_AREA,
       unit: unit.CODE_UNIT,
-      openedBy:  openedBy?.EMPN?? user?.userData?.EMPN ,
+      openedBy: openedBy?.EMPN ?? user?.userData?.EMPN,
       closedBy: closedBy.EMPN,
       descriptionRequested: reqDescription,
       descriptionResponsed: exeDescription,
@@ -360,7 +360,7 @@ export default function ShiftLogControlForm(props) {
 
       <div className='row form-between-rows-distance'>
         <div className='col'>
-          <TextField id='openedBy' label='Opened By' size='small'  value={openedBy?.USER_NAME?? user?.userData?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
+          <TextField id='openedBy' label='Opened By' size='small' value={openedBy?.USER_NAME ?? user?.userData?.USER_NAME} className={'input-rounded-view'} variant='outlined' readOnly={true} disabled={true} />
         </div>
 
         <div className='col'>

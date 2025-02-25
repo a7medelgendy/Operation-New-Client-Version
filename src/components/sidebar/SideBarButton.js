@@ -11,8 +11,6 @@ export default function SideBarButton(props) {
         className={'sidebar-button ' + currStyle}
         variant='text'
         onClick={() => {
-          console.log('props', props);
-          console.log('props', props.id);
           props.callBack(props.id);
         }}
       >
