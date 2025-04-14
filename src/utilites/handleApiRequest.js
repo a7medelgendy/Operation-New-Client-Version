@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from '../shared/staticData';
 import user from '../shared/user.js';
+import { DecryptResponse } from './DecryptResponse.jsx';
 
 export const handleRequest = async (method, endpoint, params = null, responseType = null) => {
   try {
@@ -10,6 +11,7 @@ export const handleRequest = async (method, endpoint, params = null, responseTyp
     // if (params?.token !== 'login') {
     //   token = user.getAccessToken();
     // }
+
     let token = user.getAccessToken();
     const axiosConfig = {
       method,
@@ -26,9 +28,11 @@ export const handleRequest = async (method, endpoint, params = null, responseTyp
     // Make the request
     const response = await axios(axiosConfig);
 
-    return response.data;
+    //  Decrypt the response 
+    let decryptResponse = DecryptResponse(method, response);
+    return decryptResponse;
   } catch (error) {
-    //console.error('Error:', error);
+    // console.log('Error:', error);
     throw error;
   }
 };

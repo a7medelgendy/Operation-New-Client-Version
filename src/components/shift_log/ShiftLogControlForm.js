@@ -6,6 +6,7 @@ import '../../styles/shift_log/add-shift-log-form.css';
 import '../../styles/shift_log/shift-log-form-view.css';
 import user from '../../shared/user';
 import { handleRequest } from '../../utilites/handleApiRequest';
+import { Status } from '../../shared/staticData';
 
 function TextWrapper({ viewType, ...props }) {
   const { InputProps, ...restProps } = props;
@@ -156,6 +157,7 @@ export default function ShiftLogControlForm(props) {
       formValid = false;
       errors.unit = 'Unit is required';
     }
+
     if (!exeEdara.CODE_EDARA) {
       formValid = false;
       errors.exeEdara = 'Executed Department is required';
@@ -165,7 +167,7 @@ export default function ShiftLogControlForm(props) {
       errors.status = 'Status is required';
     }
 
-    if (!exeDescription && status.TXT_STATUS !== 'InProgress') {
+    if (!exeDescription && status.CODE_STATUS !== Status.InProgress) {
       formValid = false;
       errors.exeDescription = 'Executed Description is required. Please provide the reason for completion or cancellation.';
     }
@@ -444,7 +446,7 @@ export default function ShiftLogControlForm(props) {
             onChange={(_, newValue) => {
               // if (newValue) handleOnChange(newValue, setStatus, 'status');
               if (newValue) {
-                if (newValue.TXT_STATUS === 'InProgress') {
+                if (newValue.CODE_STATUS === Status.InProgress) {
                   setValidationErrors({ ...validationErrors, ['exeDescription']: '' });
                 }
                 handleOnChange(newValue, setStatus, 'status');
