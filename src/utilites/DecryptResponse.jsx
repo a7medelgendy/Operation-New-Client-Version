@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js';
-const secretKey = 'superSecret123';
+// const secretKey = 'superSecret123';
+const secretKey = process.env.REACT_APP_DECRYPT_KEY;
 
 export const DecryptResponse = (method, response) => {
   if (method === 'GET') {
@@ -11,7 +12,7 @@ export const DecryptResponse = (method, response) => {
         data = { result };
         return data;
       } catch (error) {
-        throw  error;
+        throw error;
       }
     }
   } else {
