@@ -47,8 +47,14 @@ class User {
    */
   logout() {
     this.userData = null;
+    localStorage.clear();
     cache.remove('user');
     cache.remove('userToken');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('userToken');
+    cache.set('userToken', null);
+    cache.set('user', null);
+    window.location.reload();
   }
 
   /**

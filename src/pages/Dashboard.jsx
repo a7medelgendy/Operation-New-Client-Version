@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { baseUrl } from '../shared/staticData';
+import React, { useEffect, useState } from 'react';
 import ChartHandler from '../components/charts';
 import Cards from '../components/charts/Cards';
 import { useToasts } from 'react-toast-notifications';
@@ -47,13 +46,13 @@ app.config = {
   position: 'insideBottom',
   distance: 15,
   onChange: function () {
-    const labelOption = {
-      rotate: app.config.rotate,
-      align: app.config.align,
-      verticalAlign: app.config.verticalAlign,
-      position: app.config.position,
-      distance: app.config.distance
-    };
+    // const labelOption = {
+    //   rotate: app.config.rotate,
+    //   align: app.config.align,
+    //   verticalAlign: app.config.verticalAlign,
+    //   position: app.config.position,
+    //   distance: app.config.distance
+    // };
   }
 };
 const labelOption = {
@@ -197,15 +196,15 @@ export default function Dashboard(props) {
 
   return (
     <div className='container-fluid dashboard-container'>
-      {!user.hasGroup('limit') && <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>{cards}</div>}
-      {departmentStatusChart && !user.hasGroup('limit') && (
+      <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>{cards}</div>
+      {departmentStatusChart && (
         <div className='row dashboard-row-distance d-flex justify-content-center align-items-center mb-4'>
           <div className='col '>
             <ChartHandler data={departmentStatusChart} type={'bar-chart'} />
           </div>
         </div>
       )}
-      {departmentStatusChart && !user.hasGroup('limit') && (
+      {departmentStatusChart && (
         <div className='row dashboard-row-distance mb-4'>
           <div className='col '>
             <ChartHandler data={topEquipmentChart} type={'pie-chart'} />

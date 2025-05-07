@@ -1,21 +1,21 @@
 import axios from 'axios';
 import { baseUrl } from '../shared/staticData';
-
-//const baseUrl = "http://10.10.5.28:8000";
-//export const baseUrl = "http://172.18.8.103:8000";
 import user from '../shared/user.js';
+import { DecryptResponse } from './DecryptResponse.jsx';
 
 export const handleRequest = async (method, endpoint, params = null, responseType = null) => {
   try {
+    const apiUrl = process.env.REACT_APP_API_URL;
     // Configure the Axios request
     // let token = null;
     // if (params?.token !== 'login') {
     //   token = user.getAccessToken();
     // }
+
     let token = user.getAccessToken();
     const axiosConfig = {
       method,
-      url: `${baseUrl}/${endpoint}`, //change this according to the environment development ==> `${baseUrl}/${endpoint}` production ==> `${endpoint}`
+      url: `${apiUrl}${endpoint}`, //change this according to the environment development ==> `${baseUrl}/${endpoint}` production ==> `${endpoint}`
       responseType: responseType, // Ensure axios handles the response as a Blob (binary data)
       headers: {
         'Content-Type': 'application/json',
@@ -28,9 +28,11 @@ export const handleRequest = async (method, endpoint, params = null, responseTyp
     // Make the request
     const response = await axios(axiosConfig);
 
-    return response.data;
+    //  Decrypt the response 
+    let decryptResponse = DecryptResponse(method, response);
+    return decryptResponse;
   } catch (error) {
-    //console.error('Error:', error);
+    // console.log('Error:', error);
     throw error;
   }
 };

@@ -1,6 +1,13 @@
 export const baseUrl = 'http://10.11.25.8:8000';
 //export const baseUrl = 'http://172.18.6.26:8000';
 //export const baseUrl = "http://172.18.8.103:8000";
+
+export const Status = {
+  Completed: '1',
+  InProgress: '2',
+  Canceled: '3'
+};
+
 export const executedEdara = [
   { label: 'تحكم', ID: '850' },
   { label: 'كهربا', ID: '800' },

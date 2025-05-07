@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import {  Chip } from '@mui/material';
+import { Chip } from '@mui/material';
 import DataTable from '../components/datatable/DataTable';
 import ShiftLogControlForm from '../components/shift_log/ShiftLogControlForm';
 import { useToasts } from 'react-toast-notifications';
@@ -8,7 +8,6 @@ import FormModal from '../components/modal/FormModal';
 import user from '../shared/user';
 import '../styles/shift_log/shiftlog.css';
 import { handleRequest } from '../utilites/handleApiRequest';
-
 
 const handleSubmitAdd = async (dbOjectAdd, alertHandler, updateLoader) => {
   const response = await handleRequest('POST', 'api/shiftLog', dbOjectAdd);
@@ -97,7 +96,7 @@ export default function ShiftLog(props) {
     filterType: 'dropdown',
     responsive: 'standard',
     selectableRows: 'none',
-    rowsPerPage: 10,
+    rowsPerPage: 20,
     rowsPerPageOptions: [],
     textLabels: {
       body: {
@@ -297,6 +296,8 @@ export default function ShiftLog(props) {
       </div>
       <div className='row mb-3'>
         <ConfirmModal open={removeModalIsOpen} cancleClick={triggerRemoveModal} confirmClick={removeData} message={"You don't have permission to delete ."} title={'Alert'} />
+      </div>
+      <div className='row mb-4'>
         <DataTable title={''} tableConfig={tableConfig} data={dbData} />
       </div>
     </div>

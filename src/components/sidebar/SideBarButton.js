@@ -1,25 +1,23 @@
-import { Button } from "@mui/material";
-import React from "react";
-import "../../styles/layout/sidebar.css";
+import { Button } from '@mui/material';
+import React from 'react';
+import '../../styles/layout/sidebar.css';
 
 export default function SideBarButton(props) {
-  const currStyle = props.isActive ? "sidebar-button-active" :"sidebar-button-inactive"
+  const currStyle = props.isActive ? 'sidebar-button-active' : 'sidebar-button-inactive';
 
   return (
-    <div className="container-fluid">
+    <div className='container-fluid'>
       <Button
-        className={"sidebar-button " + currStyle}
-        variant="text"
+        className={'sidebar-button ' + currStyle}
+        variant='text'
         onClick={() => {
-          props.callBack(props.id)
+          props.callBack(props.id);
         }}
       >
-        <div className="container-fluid" style={{ height: "100%" }}>
-          <div className="row" style={{ height: "100%" }}>
-            <div className="col-1 d-flex justify-content-center align-items-center">
-              {props.startIcon}
-            </div>
-            <div className="col d-flex justify-content-start align-items-center" style={{ marginLeft: "20px" }}>
+        <div className='container-fluid' style={{ height: '100%' }}>
+          <div className='row' style={{ height: '100%' }}>
+            <div className='col-1 d-flex justify-content-center align-items-center'>{props.startIcon}</div>
+            <div className='col d-flex justify-content-start align-items-center' style={{ marginLeft: '20px' }}>
               <span>{props.buttonName}</span>
             </div>
           </div>
